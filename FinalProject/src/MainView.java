@@ -6,9 +6,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -20,11 +23,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class MainView extends JPanel implements ConfigImpl {
 
 	private static final long serialVersionUID = 5054965523548199842L;
+	private JPanel panel;
+	private JTextArea _debug;
 
 	public MainView() {
 		super(new GridLayout(1, 1));
@@ -67,7 +73,7 @@ public class MainView extends JPanel implements ConfigImpl {
 	public JPanel buildTab1() {
 
 		/* Gui-Elemente */
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		GridBagLayout gbl = new GridBagLayout();
 		panel.setLayout(gbl);
 
@@ -83,9 +89,7 @@ public class MainView extends JPanel implements ConfigImpl {
 		 *   NOCACHE;
 		 * */
 		JLabel label_kid = new JLabel(LABEL_KID);
-		NumberFormat format_kid = NumberFormat.getNumberInstance();
-		JTextField _kid = new JFormattedTextField(format_kid);
-		_kid.setColumns(10);
+		JTextField _kid = new JTextField(10);
 		addComponent(panel, gbl, label_kid, new Insets(0,5,0,5), 0, 1);
 		addComponent(panel, gbl, _kid, new Insets(0,5,0,5), 1, 1);
 
@@ -103,9 +107,7 @@ public class MainView extends JPanel implements ConfigImpl {
 
 		// Tel, char, 15
 		JLabel label_tel = new JLabel(LABEL_TEL);
-		NumberFormat format_tel = NumberFormat.getNumberInstance();
-		JFormattedTextField _tel = new JFormattedTextField(format_tel);
-		_tel.setColumns(10);
+		JTextField _tel = new JTextField(10);
 		addComponent(panel, gbl, label_tel, new Insets(0,5,0,5), 0, 4);
 		addComponent(panel, gbl, _tel, new Insets(0,5,0,5), 1, 4);
 
@@ -115,6 +117,7 @@ public class MainView extends JPanel implements ConfigImpl {
 		String[] nation_strings = {"Nation 1", "Nation 2", "Nation 3"};
 		JComboBox<String> _nation = new JComboBox<String>(nation_strings);
 		_nation.setSelectedIndex(0);
+		_nation.setEditable(true);
 		addComponent(panel, gbl, label_nation, new Insets(0,5,0,5), 0, 5);
 		addComponent(panel, gbl, _nation, new Insets(0,5,0,5), 1, 5);
 
@@ -140,24 +143,24 @@ public class MainView extends JPanel implements ConfigImpl {
 
 		// Debug-Output
 		JLabel label_debug = new JLabel("Debug: ");
-		JTextField _debug = new JTextField();
+		_debug = new JTextArea(100, 10);
+		_debug.setAutoscrolls(true);
 
 		List<Component> complist = getAllInputs(panel);
-		String debug_string = "Anzahl der Elemente: " +complist.size();
+		String debug_string = "Anzahl der Elemente: " + complist.size();
 		_debug.setText(debug_string);
-
-		/*for (int i=0; i<complist.size();i++){
-			if(!complist.get(i).getClass().toString().contains("javax.swing.JLabel")){
-				debug_string += "\n Element: " + complist.get(i).toString();
-				System.out.println(complist.get(i).toString());
-			}
-		}*/
-
 		addComponent(panel, gbl, label_debug, new Insets(0,5,0,5), 2, 0);
 		addComponent(panel, gbl, _debug, new Insets(0,5,0,5), 2, 1, 1, 6, 1.0, 1.0);
 
 		// Ausfuehren
 		JButton button_exec = new JButton(LABEL_EXECUTE);
+		button_exec.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Component> complist = getAllInputs(panel);
+				String debug_string = getDebugText(complist);
+				_debug.setText(debug_string);
+			}
+		});
 		addComponent(panel, gbl, button_exec, new Insets(0,5,0,5), 2, 7);
 
 		return panel;
@@ -240,8 +243,17 @@ public class MainView extends JPanel implements ConfigImpl {
 				component_list.addAll(getAllInputs((Container) comp));
 			}
 		}
-
 		return component_list;
+	}
+
+	public String getDebugText(List<Component> complist){
+		String output = "";
+		for (int i=0; i<complist.size();i++){
+			if(complist.get(i) instanceof JTextField){
+				output += "Element: " + ((JTextField) complist.get(i)).getText() + "\n";
+			}
+		}
+		return output;
 	}
 
 	public void addComponent(JPanel panel, GridBagLayout gbl,
@@ -287,7 +299,8 @@ public class MainView extends JPanel implements ConfigImpl {
 		if (imgUrl != null) {
 			return new ImageIcon(imgUrl);
 		} else {
-			System.err.println("Datei konnte nicht gefudnen werden. Pfad: " + path);
+			System.err.println("Datei konnte nicht gefudnen werden. Pfad: "
+					+ path);
 			return null;
 		}
 	}
