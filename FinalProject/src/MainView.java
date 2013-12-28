@@ -287,8 +287,7 @@ public class MainView extends JPanel implements ConfigImpl {
 		if (imgUrl != null) {
 			return new ImageIcon(imgUrl);
 		} else {
-			System.err.println("Datei konnte nicht gefudnen werden. Pfad: "
-					+ path);
+			System.err.println("Datei konnte nicht gefudnen werden. Pfad: " + path);
 			return null;
 		}
 	}
