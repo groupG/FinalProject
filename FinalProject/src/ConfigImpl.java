@@ -52,7 +52,7 @@ public interface ConfigImpl {
 
 	// Old
 	static final String LABEL_MAIN_FEEDBACK_INFO = "<html>Bitte geben Sie eine Unterkunfts-ID ein.<br /><br /></html>";
-	static final String LABEL_MAIN_FEEDBACK_WARNING = "<html>Diese ID ist ungültig. <br /> Geben Sie eine gültige Unterkunfts-ID ein.</html>";
-	static String LABEL_MAIN_FEEDBACK_SUCCESS = "<html>Ergebnisse für die Unterkunft: ###ID### <br /> Geben Sie eine weitere Unterkunfts-ID ein.</html>";
+	static final String LABEL_MAIN_FEEDBACK_WARNING = "<html>Diese ID ist ung&uuml;ltig. <br /> Geben Sie eine g&uuml;ltige Unterkunfts-ID ein.</html>";
+	static String LABEL_MAIN_FEEDBACK_SUCCESS = "<html>Ergebnisse f&uuml;r die Unterkunft: ###ID### <br /> Geben Sie eine weitere Unterkunfts-ID ein.</html>";
 	static String QUERY = "SELECT b_id,name,personen,von,bis FROM reise_tables_2013.unterkunft u JOIN reise_tables_2013.buchung b ON b.unterkunft = u.u_id WHERE u.u_id = ";
 }
