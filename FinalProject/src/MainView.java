@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -11,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -31,10 +29,13 @@ public class MainView extends JPanel implements ConfigImpl {
 	private static final long serialVersionUID = 5054965523548199842L;
 	private JPanel panel;
 	private JTextArea _debug;
+	private Controller controller;
 
+	//public MainView(Controller controller) {
 	public MainView() {
 		super(new GridLayout(1, 1));
 		add(buildGui());
+		this.controller = controller;
 	}
 
 	public Component buildGui() {
