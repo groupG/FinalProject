@@ -31,8 +31,8 @@ public class MainView extends JPanel implements ConfigImpl {
 	private JTextArea _debug;
 	private Controller controller;
 
-	//public MainView(Controller controller) {
-	public MainView() {
+	public MainView(Controller controller) {
+	//public MainView() {
 		super(new GridLayout(1, 1));
 		add(buildGui());
 		this.controller = controller;

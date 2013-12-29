@@ -22,16 +22,21 @@ public class Main implements ConfigImpl {
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
 				//UIManager.put("swing.boldMetal", Boolean.FALSE);
-				buildAndDisplayGUI();
+				try {
+					buildAndDisplayGUI();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}
 
-	public static void buildAndDisplayGUI(){
+	public static void buildAndDisplayGUI() throws Exception{
 		JFrame gui = new JFrame(TITLE);
+		Controller controller = new Controller(DRIVER, CONNECTION_THIN+"", "", "");
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setJMenuBar(new MainMenuBar().createMenuBar());
-		gui.add(new MainView(), BorderLayout.CENTER);
+		gui.add(new MainView(controller), BorderLayout.CENTER);
 		gui.setSize(800,600);
 		gui.pack();
 		gui.setVisible(true);
