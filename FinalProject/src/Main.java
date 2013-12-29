@@ -30,6 +30,7 @@ public class Main implements ConfigImpl {
 	public static void buildAndDisplayGUI(){
 		JFrame gui = new JFrame(TITLE);
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gui.setJMenuBar(new MainMenuBar().createMenuBar());
 		gui.add(new MainView(), BorderLayout.CENTER);
 		gui.setSize(800,600);
 		gui.pack();
