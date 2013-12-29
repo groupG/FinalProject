@@ -31,6 +31,9 @@ public class MainMenuBar {
 			public void actionPerformed(ActionEvent e) {
 				// Für LoginView
 				LoginView loginView = new LoginView();
+				loginView.pack();
+				loginView.setLocationRelativeTo(null);
+				loginView.setVisible(true);
 			}
 		});
 		
