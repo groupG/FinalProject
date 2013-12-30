@@ -15,4 +15,13 @@ public class Controller {
 		return this.db.checkIfElementexists(table, element, value);
 	}
 
+	public void showTables(){
+		try {
+			this.db.showTables();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

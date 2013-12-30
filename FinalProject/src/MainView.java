@@ -45,25 +45,25 @@ public class MainView extends JPanel implements ConfigImpl {
 		JComponent panel_tab_1 = buildTab1();
 		tabbedPane.addTab("Kunden/Lieferanten", panel_tab_1);
 		tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-		panel_tab_1.setPreferredSize(new Dimension(800, 200));
+		panel_tab_1.setPreferredSize(new Dimension(1024, 200));
 
 		// Tab2
 		JComponent panel_tab_2 = buildTab2();
 		tabbedPane.addTab("Produkte/Lieferungen", panel_tab_2);
 		tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
-		panel_tab_2.setPreferredSize(new Dimension(800, 200));
+		panel_tab_2.setPreferredSize(new Dimension(1024, 200));
 
 		// Tab2
 		JComponent panel_tab_3 = makeTextPanel("Bestelltransaktionen");
 		tabbedPane.addTab("Bestellungen", panel_tab_3);
 		tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
-		panel_tab_3.setPreferredSize(new Dimension(800, 200));
+		panel_tab_3.setPreferredSize(new Dimension(1024, 200));
 
 		// Tab2
 		JComponent panel_tab_4 = makeTextPanel("Produktanalyse");
 		tabbedPane.addTab("Analyse", panel_tab_4);
 		tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
-		panel_tab_4.setPreferredSize(new Dimension(800, 200));
+		panel_tab_4.setPreferredSize(new Dimension(1024, 200));
 
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 

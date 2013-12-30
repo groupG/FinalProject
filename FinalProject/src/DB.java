@@ -1,5 +1,6 @@
 import java.net.ConnectException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -74,6 +75,21 @@ public class DB {
 			}
 		}
 		return false;
+	}
+
+	public void showTables() throws SQLException{
+		String query = "Select table_name from all_tables where owner='ALTDATEN'";
+		Statement stmt = this.connection.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		while(rs.next()){
+			System.out.println(rs.getString(1));
+			query = "Select column_name from all_tab_columns where owner = 'ALTDATEN' and table_name='" +rs.getString(1)+ "'";
+			Statement stamt = this.connection.createStatement();
+			ResultSet res = stamt.executeQuery(query);
+			while(res.next()){
+				System.out.println("--"+res.getString(1));
+			}
+		}
 	}
 
 	public boolean getNations() throws SQLException {
