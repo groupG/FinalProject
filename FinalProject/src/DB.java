@@ -8,6 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.rowset.CachedRowSet;
+
+import com.sun.rowset.CachedRowSetImpl;
+
 /**
  * Klasse, welche den Verbindungsaufbau zur Oracle-Datenbank managed.
  *
@@ -114,6 +118,24 @@ public class DB {
 			columns.add(result.getString(1));
 		}
 		return columns;
+	}
+
+	public CachedRowSet getContentsOfOutputTable(String query){
+		CachedRowSet row_set = null;
+
+		try {
+			row_set = new CachedRowSetImpl();
+			row_set.setType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+			row_set.setConcurrency(ResultSet.CONCUR_UPDATABLE);
+			row_set.setUsername(getCredentials()[0]);
+			row_set.setPassword(getCredentials()[1]);
+			row_set.setUrl(getUrl());
+			row_set.setCommand(query);
+			row_set.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return row_set;
 	}
 
 	public String[] getCredentials() {

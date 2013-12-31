@@ -1,6 +1,9 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.sql.SQLException;
 import java.util.List;
+
+import javax.sql.rowset.CachedRowSet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -24,6 +27,8 @@ public class DataTree implements TreeSelectionListener {
 	private JScrollPane treescroll, jtablescroll;
 
 	private Controller controller;
+	private CachedRowSet row_set;
+	private OutputTable output_table;
 
 	public DataTree(Controller controller) {
 		this.controller = controller;
@@ -71,12 +76,24 @@ public class DataTree implements TreeSelectionListener {
 		this.tree.addTreeSelectionListener(this);
 	}
 
+	public void populateTable(String query){
+		this.row_set = this.controller.getContentsOfOutputTable(query);
+		try {
+			this.output_table = new OutputTable(this.row_set);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		this.table = new JTable();
+		this.table.setModel(this.output_table);
+	}
+
 	public JSplitPane getSplitPane() {
 		return this.splitPane;
 	}
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		this.selectedNode.setText(e.getPath().toString());
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) this.tree.getLastSelectedPathComponent();
+		this.selectedNode.setText(selectedNode.getUserObject().toString());
 	}
 }

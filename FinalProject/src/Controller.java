@@ -2,6 +2,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.sql.rowset.CachedRowSet;
+
 
 public class Controller {
 
@@ -40,5 +42,9 @@ public class Controller {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public CachedRowSet getContentsOfOutputTable(String query){
+		return this.db.getContentsOfOutputTable(query);
 	}
 }
