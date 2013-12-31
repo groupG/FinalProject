@@ -34,10 +34,10 @@ public class Main implements ConfigImpl {
 	public static void buildAndDisplayGUI() throws Exception{
 		JFrame gui = new JFrame(TITLE);
 		Controller controller = new Controller(DRIVER, CONNECTION_THIN+"", "", "");
-		controller.showTables();
+		//controller.showTables();
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setJMenuBar(new MainMenuBar().createMenuBar());
-		gui.add(new MainView(controller), BorderLayout.CENTER);
+		gui.add(new DataTree(controller).getSplitPane(), BorderLayout.CENTER);
 		gui.add(new MainView(controller), BorderLayout.SOUTH);
 		gui.setSize(new Dimension(1024,600));
 		gui.pack();

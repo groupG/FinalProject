@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Klasse, welche den Verbindungsaufbau zur Oracle-Datenbank managed.
@@ -92,9 +94,26 @@ public class DB {
 		}
 	}
 
-	public boolean getNations() throws SQLException {
+	public List<String> getTables(String owner) throws SQLException {
+		String query = "Select table_name from all_tables where owner='"+owner+"'";
+		Statement statement = this.connection.createStatement();
+		ResultSet result = statement.executeQuery(query);
+		List<String> tables = new ArrayList<String>();
+		while(result.next()){
+			tables.add(result.getString(1));
+		}
+		return tables;
+	}
 
-		return false;
+	public List<String> getColumns(String owner, String table) throws SQLException {
+		query = "Select column_name from all_tab_columns where owner = '"+owner+"' and table_name='" +table+ "'";
+		Statement statement = this.connection.createStatement();
+		ResultSet result = statement.executeQuery(query);
+		List<String> columns = new ArrayList<String>();
+		while(result.next()){
+			columns.add(result.getString(1));
+		}
+		return columns;
 	}
 
 	public String[] getCredentials() {

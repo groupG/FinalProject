@@ -1,5 +1,6 @@
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 
 public class Controller {
@@ -19,9 +20,25 @@ public class Controller {
 		try {
 			this.db.showTables();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
+	public List<String> getTables(String owner){
+		try {
+			return this.db.getTables(owner);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public List<String> getColumns(String owner, String table){
+		try {
+			return this.db.getColumns(owner, table);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
