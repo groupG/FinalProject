@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 
 /**
  * Klasse zum Starten der Anwendung. Initialisert einen LoginDialog, ueber
@@ -21,8 +22,13 @@ public class Main implements ConfigImpl {
 
 		SwingUtilities.invokeLater(new Runnable(){
 			public void run(){
-				//UIManager.put("swing.boldMetal", Boolean.FALSE);
 				try {
+					for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()){
+						if ("Nimbus".equals(info.getName())){
+							UIManager.setLookAndFeel(info.getClassName());
+							break;
+						}
+					}
 					buildAndDisplayGUI();
 				} catch (Exception e) {
 					e.printStackTrace();
