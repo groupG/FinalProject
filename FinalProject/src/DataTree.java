@@ -25,27 +25,47 @@ public class DataTree implements TreeSelectionListener {
 	private JTable table;
 	private JSplitPane splitPane;
 	private JScrollPane treescroll, jtablescroll;
+	private JPanel treePanel, dataPanel;
 
 	private Controller controller;
 	private CachedRowSet row_set;
 	private OutputTable output_table;
 
-	public DataTree(Controller controller) {
+	public DataTree(Controller controller, String owner) {
 		this.controller = controller;
-		List<String> tables = this.controller.getTables("ALTDATEN");
 
-		/*
-		 * Iterator<String> iterator = tables.iterator();
-		 * while(iterator.hasNext()){ System.out.println(iterator.next()); }
-		 */
-		this.root = new DefaultMutableTreeNode("ALTDATEN");
+		this.treePanel = buildTreePanel(owner);
+
+		//populateTable("SELECT * FROM ALTDATEN.KUNDEN WHERE ROWNUM <= 20");
+
+
+		this.jtablescroll = new JScrollPane(this.table,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+
+
+
+
+		this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.treePanel,
+				this.jtablescroll);
+		this.splitPane.setOneTouchExpandable(true);
+		this.splitPane.setDividerLocation(200);
+		this.treescroll.setMinimumSize(new Dimension(100, 50));
+		this.jtablescroll.setMinimumSize(new Dimension(100, 400));
+		this.splitPane.setPreferredSize(new Dimension(400, 400));
+		this.tree.addTreeSelectionListener(this);
+	}
+
+	public JPanel buildTreePanel(String owner) {
+		List<String> tables = this.controller.getTables(owner);
+
+		this.root = new DefaultMutableTreeNode(owner);
 		DefaultMutableTreeNode[] tableNodes = new DefaultMutableTreeNode[tables.size()];
 
 		int i = 0;
 		for (String table : tables) {
 			tableNodes[i] = new DefaultMutableTreeNode(table);
-			List<String> columns = this.controller
-					.getColumns("ALTDATEN", table);
+			List<String> columns = this.controller.getColumns(owner, table);
 			for (String column : columns) {
 				tableNodes[i].add(new DefaultMutableTreeNode(column));
 			}
@@ -55,7 +75,7 @@ public class DataTree implements TreeSelectionListener {
 
 		this.tree = new JTree(this.root);
 		this.tree.setRootVisible(false);
-		this.table = new JTable();
+
 		this.treescroll = new JScrollPane(this.tree);
 		this.selectedNode = new JLabel();
 		this.treescroll.add(this.selectedNode);
@@ -63,20 +83,15 @@ public class DataTree implements TreeSelectionListener {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(this.treescroll, BorderLayout.CENTER);
 		panel.add(this.selectedNode, BorderLayout.SOUTH);
-		this.jtablescroll = new JScrollPane(this.table,
-				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		this.splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				panel, this.jtablescroll);
-		this.splitPane.setOneTouchExpandable(true);
-		this.splitPane.setDividerLocation(200);
-		this.treescroll.setMinimumSize(new Dimension(100, 50));
-		this.jtablescroll.setMinimumSize(new Dimension(100, 400));
-		this.splitPane.setPreferredSize(new Dimension(400, 400));
-		this.tree.addTreeSelectionListener(this);
+
+		return panel;
 	}
 
-	public void populateTable(String query){
+	public JPanel buildDataPanel() {
+return null;
+	}
+
+	public void populateTable(String query) {
 		this.row_set = this.controller.getContentsOfOutputTable(query);
 		try {
 			this.output_table = new OutputTable(this.row_set);
@@ -93,7 +108,15 @@ public class DataTree implements TreeSelectionListener {
 
 	@Override
 	public void valueChanged(TreeSelectionEvent e) {
-		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) this.tree.getLastSelectedPathComponent();
+		DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) this.tree
+				.getLastSelectedPathComponent();
 		this.selectedNode.setText(selectedNode.getUserObject().toString());
+		populateTable("SELECT * FROM ALTDATEN."
+				+ selectedNode.getUserObject().toString()
+				+ " WHERE ROWNUM <= 20");
+		this.table.clearSelection();
+		this.jtablescroll.repaint();
+		this.jtablescroll.revalidate();
+
 	}
 }
