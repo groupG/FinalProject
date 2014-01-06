@@ -32,7 +32,7 @@ public interface ConfigImpl {
 	// Tab 1
 	static final String LABEL_PFLEGETRANSAKTION = "<html>Kunde anlegen und &auml;ndern</html>";
 	static final String LABEL_EXECUTE = "<html>Ausf&uuml;hren</html>";
-	static final String LABEL_BUTTON_EINBUCHEN = "<html>Einbuchen </html>";
+	static final String LABEL_BUTTON_KUNDEN_ERSTELLEN = "<html>Kunden erstellen</html>";
 	static final String LABEL_LOGOUT = "Logout";
 	static final String LABEL_KID = "Kunden-ID: ";
 	static final String LABEL_NAME = "Name: ";
