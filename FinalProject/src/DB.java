@@ -2,6 +2,7 @@ import java.net.ConnectException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,7 +16,7 @@ import com.sun.rowset.CachedRowSetImpl;
 /**
  * Klasse, welche den Verbindungsaufbau zur Oracle-Datenbank managed.
  *
- * @author borecki
+ * @author borecki, dang
  */
 public class DB {
 
@@ -181,5 +182,73 @@ public class DB {
 
 	public void setUrl(String url) {
 		this.url = url;
+
+	}
+
+	/**
+	 * Diese Methode erstellt einen neuen Kunden mit Namen, Adresse, Telefonnummer, Nation, Branche.
+	 * Der Kontostand des neuen Kunden wird mit 0.00 initialisiert.
+	 *
+	 * This method creates/inserts a new customer with own information like name, address, phone number, counter, branch.
+	 * The initial account balance is 0.00.
+	 *
+	 * KUNDE : [KID], Name, Adresse, Telefonnummer, Konto, Branche, NID
+	 *
+	 * @param kName : Name des Kunden.
+	 * @param kAdresse : Adresse des Kunden.
+	 * @param kTelefon : Telefonnummer des Kunden.
+	 * @param kBranche : Branche, in dem der Kunde tätig ist.
+	 * @param kNation : Name des Landes, in dem der Kunde lebt.
+	 * @throws SQLException
+	 */
+	public void insertKunde(String kName, String kAdresse, String kTelNr, String kBranche, String kNation) throws SQLException {
+		/*
+		 * INSERT INTO KUNDE
+		 * VALUES (kID, kName, kAdresse, kTelNr, 0.00, kBranche)
+		 */
+		PreparedStatement stmt_InsertKunde = null;
+		String query_InsertKunde = "INSERT INTO KUNDE " +
+								   "VALUES (?,?,?,?,0.00,?,?)";
+
+		Statement stmt_RetrieveNID = null;
+		String query_RetrieveNID = "SELECT nid FROM NATION " +
+								   "WHERE name = '" + kNation + "'" ;
+
+		try {
+			connection.setAutoCommit(false);
+			// Default transaction isolation level of oracle is READ COMMITED.
+
+			// Bestimme die zugehoerige NID fuer den Nationname kNation.
+			stmt_RetrieveNID = connection.createStatement();
+			ResultSet rs = stmt_RetrieveNID.executeQuery(query_RetrieveNID);
+			rs.first();
+			int kNID = rs.getInt("NID"); // NID (d.h. ID der Nation,in der der Kunde lebt).
+			rs.close();
+
+			// Bestimme die KundenID (KID) vom SEQUENCE-Objekt vorgeschlagen.
+			int kID = 0; // KID
+
+			// Fuege den neuen Kunden mit allen seinen Daten in DB ein.
+			stmt_InsertKunde = connection.prepareStatement(query_InsertKunde);
+			stmt_InsertKunde.setInt(1, kID); // KID
+			stmt_InsertKunde.setString(2, kName); // Name
+			stmt_InsertKunde.setString(3, kAdresse); // Adresse
+			stmt_InsertKunde.setString(4, kTelNr); // Telefonnummer
+			stmt_InsertKunde.setString(5, kBranche); // Branche
+			stmt_InsertKunde.setInt(6, kNID); // NID
+			stmt_InsertKunde.executeUpdate();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+			// TODO's:
+			// Variante 1: SEQUENCE-Objekt schlägt automatisch eine neue KID vor , wiederholt die Methode und erstellt einen Kunden.
+			// Variante 2: DIe Methode wird mit dem Auswerfen der Exception abgebrochen. Der User führt die Methode durch das Klicken auf Button nochmals aus.
+		} finally {
+			if ( stmt_RetrieveNID != null ) {
+				stmt_RetrieveNID.close();
+			}
+			if ( stmt_InsertKunde != null ) {
+				stmt_InsertKunde.close();
+			}
+		}
 	}
 }
