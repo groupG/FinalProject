@@ -9,8 +9,10 @@ public interface ConfigImpl {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-	static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-	static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
+	//static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+	//static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_OCI = "jdbc:oracle:oci@localhost:1521:";
 
 	// Allgemein
 	static final String BORDER_TITLE_INFO = "Info";
@@ -30,6 +32,7 @@ public interface ConfigImpl {
 	// Tab 1
 	static final String LABEL_PFLEGETRANSAKTION = "<html>Kunde anlegen und &auml;ndern</html>";
 	static final String LABEL_EXECUTE = "<html>Ausf&uuml;hren</html>";
+	static final String LABEL_BUTTON_EINBUCHEN = "<html>Einbuchen</html>";
 	static final String LABEL_LOGOUT = "Logout";
 	static final String LABEL_KID = "Kunden-ID: ";
 	static final String LABEL_NAME = "Name: ";
