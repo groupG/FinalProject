@@ -8,6 +8,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
@@ -30,6 +32,20 @@ public class MainView extends JPanel implements ConfigImpl {
 	private JPanel panel;
 	private JTextArea _debug;
 	private Controller controller;
+
+	/**
+	 * GLOBALE VARIABLEN FÜR KUNDEN IN
+	 * 		PFLEGETRANSAKTIONEN
+	 * 			TAB1
+	 */
+	JTextField _kid;
+	JTextField _name;
+	JTextField _adresse;
+	JTextField _tel;
+	JComboBox<String> _nation;
+	JFormattedTextField _konto;
+	JComboBox<String> _branche;
+
 
 	public MainView(Controller controller) {
 	//public MainView() {
@@ -70,7 +86,12 @@ public class MainView extends JPanel implements ConfigImpl {
 		return tabbedPane;
 	}
 
-	// Pflegetransaktionen
+	/**
+	 * Diese Methode baut den Panel f&uuml;r die Pflegetransaktionen auf.
+	 *
+	 * 				PLEGETRANSAKTIONEN
+	 * @return
+	 */
 	public JPanel buildTab1() {
 
 		/* Gui-Elemente */
@@ -90,25 +111,25 @@ public class MainView extends JPanel implements ConfigImpl {
 		 *   NOCACHE;
 		 * */
 		JLabel label_kid = new JLabel(LABEL_KID);
-		JTextField _kid = new JTextField(10);
+		_kid = new JTextField(10);
 		addComponent(panel, gbl, label_kid, new Insets(0,5,0,5), 0, 1);
 		addComponent(panel, gbl, _kid, new Insets(0,5,0,5), 1, 1);
 
 		// Name, string, 25
 		JLabel label_name = new JLabel(LABEL_NAME);
-		JTextField _name = new JTextField(10);
+		_name = new JTextField(10);
 		addComponent(panel, gbl, label_name, new Insets(0,5,0,5), 0, 2);
 		addComponent(panel, gbl, _name, new Insets(0,5,0,5), 1, 2);
 
 		// Adresse, char, 40
 		JLabel label_adresse = new JLabel(LABEL_ADRESSE);
-		JTextField _adresse = new JTextField(10);
+		_adresse = new JTextField(10);
 		addComponent(panel, gbl, label_adresse, new Insets(0,5,0,5), 0, 3);
 		addComponent(panel, gbl, _adresse, new Insets(0,5,0,5), 1, 3);
 
 		// Tel, char, 15
 		JLabel label_tel = new JLabel(LABEL_TEL);
-		JTextField _tel = new JTextField(10);
+		_tel = new JTextField(10);
 		addComponent(panel, gbl, label_tel, new Insets(0,5,0,5), 0, 4);
 		addComponent(panel, gbl, _tel, new Insets(0,5,0,5), 1, 4);
 
@@ -116,7 +137,7 @@ public class MainView extends JPanel implements ConfigImpl {
 		// TODO: JComboBox mit Werten aus DB
 		JLabel label_nation = new JLabel(LABEL_NATION);
 		String[] nation_strings = {"Nation 1", "Nation 2", "Nation 3"};
-		JComboBox<String> _nation = new JComboBox<String>(nation_strings);
+		_nation = new JComboBox<String>(nation_strings);
 		_nation.setSelectedIndex(0);
 		_nation.setEditable(true);
 		addComponent(panel, gbl, label_nation, new Insets(0,5,0,5), 0, 5);
@@ -126,7 +147,7 @@ public class MainView extends JPanel implements ConfigImpl {
 		JLabel label_konto = new JLabel(LABEL_KONTO);
 		NumberFormat format_konto = NumberFormat.getNumberInstance();
 		format_konto.setMinimumFractionDigits(2);
-		JFormattedTextField _konto = new JFormattedTextField(format_konto);
+		_konto = new JFormattedTextField(format_konto);
 		_konto.setValue(new Double(0.00));
 		_konto.setColumns(10);
 		_konto.setEditable(false);
@@ -136,7 +157,7 @@ public class MainView extends JPanel implements ConfigImpl {
 		// Branche, char, 10
 		JLabel label_branche = new JLabel(LABEL_BRANCHE);
 		String[] branche_strings = {"AUTOMOBILE", "BUILDING", "FURNITURE", "HOUSEHOLD", "MACHINERY"};
-		JComboBox<String> _branche = new JComboBox<String>(branche_strings);
+		_branche = new JComboBox<String>(branche_strings);
 		_branche.setSelectedIndex(0);
 		_branche.setEditable(true);
 		addComponent(panel, gbl, label_branche, new Insets(0,5,0,5), 0, 7);
@@ -164,9 +185,36 @@ public class MainView extends JPanel implements ConfigImpl {
 		});
 		addComponent(panel, gbl, button_exec, new Insets(0,5,0,5), 2, 7);
 
+		// Einbuchen Button
+		JButton button_insertKunde = new JButton(LABEL_BUTTON_KUNDEN_ERSTELLEN);
+		button_insertKunde.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed( ActionEvent evt ) {
+				btnEinbuchenActionPerformed( evt );
+			}
+		});
+		addComponent(panel, gbl, button_insertKunde, new Insets(0,5,0,5), 2, 8);
+
 		return panel;
 	}
 
+
+	private void btnEinbuchenActionPerformed( ActionEvent evt ) {
+		try {
+			this.controller.insertKunde(this._kid.getText(), this._adresse.getText(), this._tel.getText(),
+				                    (String) this._branche.getSelectedItem(), (String) this._nation.getSelectedItem());
+		} catch ( SQLException e ) {
+			JOptionPane.showMessageDialog(this, "Es existiert bereits ein Kunde mit dieser KID.");
+		}
+
+	}
+
+	/**
+	 * Diese Methode baut den Panel f&uuml;r die Profukttransaktionen auf.
+	 *
+	 * 				PRODUKTTRANSAKATIONEN
+	 * @return
+	 */
 	public JPanel buildTab2() {
 
 		/* Gui-Elemente */
