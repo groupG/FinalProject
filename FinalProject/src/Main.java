@@ -39,7 +39,7 @@ public class Main implements ConfigImpl {
 
 	public static void buildAndDisplayGUI() throws Exception{
 		JFrame gui = new JFrame(TITLE);
-		Controller controller = new Controller(DRIVER, CONNECTION_THIN+"dbprakt", "borecki", "dbprakt123open");
+		Controller controller = new Controller(DRIVER, CONNECTION_THIN+"dbprakt", "", "");
 		//controller.showTables();
 		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gui.setJMenuBar(new MainMenuBar().createMenuBar());
