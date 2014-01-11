@@ -1,3 +1,4 @@
+package master_old;
 /**
  * Interface, in welchem alle Konstanten und Strings gespeichert sind, um sie
  * zentral an einer Stelle verwalten/aendern zu koennen.
