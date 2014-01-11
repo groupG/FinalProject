@@ -83,12 +83,8 @@ public class MainController implements Configuration{
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			//client.showException(new Exception(ae.getActionCommand()));
-			if (ae.getActionCommand() == KUNDENPFLEGE_BUTTON_EXECUTE){
-
-				System.out.println("ActionEvent: " + ae);
-				System.out.println(ae.paramString());
-				
+			System.out.println("ActionEvent: " + ae);
+			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU){
 
 			}
 		}
