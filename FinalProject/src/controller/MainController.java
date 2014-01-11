@@ -12,15 +12,17 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-
+import javax.swing.JTextField;
 import model.Configuration;
 import model.DB;
 
@@ -32,10 +34,12 @@ import model.DB;
 public class MainController implements Configuration{
 	private DB db;
 	private Client client;
+	protected HashMap<String, Component> componentMap;
 
 	public MainController(DB db, Client client) {
 		this.db = db;
 		this.client = client;
+		this.componentMap = new HashMap<String, Component>();
 		addListeners(this.client.getTransactions());
 	}
 
@@ -79,13 +83,39 @@ public class MainController implements Configuration{
 		return this.db.getContentsOfOutputTable(query);
 	}
 
+	public void createComponentMap(Component component)
+	{
+		this.componentMap.put(component.getName(), component);
+		if (component instanceof Container)
+		{
+			if (((Container) component).getComponentCount() > 0){
+				for (Component child : ((Container) component).getComponents()){
+					createComponentMap(child);
+				}
+			}
+		}
+	}
+
+	public Component getComponentByName(String name) {
+		if (this.componentMap.containsKey(name)) {
+			return (Component) this.componentMap.get(name);
+		} else
+			return null;
+	}
+
 	class ActionEventListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			System.out.println("ActionEvent: " + ae);
 			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU){
-
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NAME)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_ADRESSE)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_TEL)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KONTO)).getText());
+//				System.out.println(((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NATION)).getText());
+//				System.out.println(((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_BRANCHE)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KID)).getText());
 			}
 		}
 	}

@@ -47,17 +47,14 @@ public class Transactions extends JPanel implements Configuration {
 		// Tab1 - Kundenpflege
 		JPanel panel_tab_1 = createCardKunden();
 		tabbedPane.addTab("Kundenpflege", panel_tab_1);
-		//panel_tab_1.setPreferredSize(new Dimension(600, 400));
 
 		// Tab2 - Produktverwaltung
 		JComponent panel_tab_2 = createCardProdukte();
 		tabbedPane.addTab("Produktverwaltung", panel_tab_2);
-		//panel_tab_2.setPreferredSize(new Dimension(600, 400));
 
 		// Tab3 - Bestellverwaltung
 		JComponent panel_tab_3 = createCardBestellungen();
 		tabbedPane.addTab("Bestellverwaltung", panel_tab_3);
-		//panel_tab_3.setPreferredSize(new Dimension(600, 400));
 
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabbedPane.setName(COMPONENT_TABBEDPANE_TRANSAKTIONEN);
@@ -77,7 +74,7 @@ public class Transactions extends JPanel implements Configuration {
 		JPanel cards = new JPanel(new CardLayout());
 		cards.setName(COMPONENT_PANEL_KUNDENPFLEGE);
 		cards.add(new GridBagTemplate(0, KUNDENPFLEGE_TITLE_KUNDE_NEU, COMPONENT_PANEL_KUNDENPFLEGE_NEU), KUNDENPFLEGE_COMBO_STRINGS[0]);
-		cards.add(new GridBagTemplate(1, KUNDENPFLEGE_TITLE_KUNDE_EDIT, COMPONENT_PANEL_KUNDENPFLEGE_EDIT),KUNDENPFLEGE_COMBO_STRINGS[1]);
+		cards.add(new GridBagTemplate(1, KUNDENPFLEGE_TITLE_KUNDE_EDIT, COMPONENT_PANEL_KUNDENPFLEGE_EDIT), KUNDENPFLEGE_COMBO_STRINGS[1]);
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		addComponent(panel, actions, new Insets(0, 5, 0, 5), 0, 0);
@@ -98,7 +95,7 @@ public class Transactions extends JPanel implements Configuration {
 		JPanel cards = new JPanel(new CardLayout());
 		cards.setName(COMPONENT_PANEL_PRODUKTVERWALTUNG);
 		cards.add(new GridBagTemplate(2, PRODUKTVERWALTUNG_TITLE_ZULIEFERUNG_NEU, COMPONENT_PANEL_PRODUKTVERWALTUNG_ZULIEFERUNG_NEU), PRODUKTVERWALTUNG_COMBO_STRINGS[0]);
-		cards.add(new GridBagTemplate(3, PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT, COMPONENT_PANEL_PRODUKTVERWALTUNG_BESTAND_EDIT),PRODUKTVERWALTUNG_COMBO_STRINGS[1]);
+		cards.add(new GridBagTemplate(3, PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT, COMPONENT_PANEL_PRODUKTVERWALTUNG_BESTAND_EDIT), PRODUKTVERWALTUNG_COMBO_STRINGS[1]);
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		addComponent(panel, actions, new Insets(0, 5, 0, 5), 0, 0);
