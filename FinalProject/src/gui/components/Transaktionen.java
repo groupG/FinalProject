@@ -74,7 +74,6 @@ public class Transaktionen extends JPanel implements Configuration {
 
 		JPanel cards = new JPanel(new CardLayout());
 		cards.setName(COMPONENT_PANEL_KUNDENPFLEGE);
-		//
 		cards.add(new JLabel("test"), KUNDENPFLEGE_COMBO_STRINGS[0]);
 		cards.add(new GridBagTemplate(0, KUNDENPFLEGE_TITLE_KUNDE_NEU, COMPONENT_PANEL_KUNDENPFLEGE_NEU), KUNDENPFLEGE_COMBO_STRINGS[1]);
 		cards.add(new GridBagTemplate(1, KUNDENPFLEGE_TITLE_KUNDE_EDIT, COMPONENT_PANEL_KUNDENPFLEGE_EDIT), KUNDENPFLEGE_COMBO_STRINGS[2]);

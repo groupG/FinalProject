@@ -149,7 +149,6 @@ public class MainController implements Configuration{
 	    public void itemStateChanged(ItemEvent ie) {
 	    	  CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
 	    	  cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
-	         // client.showException(new Exception((String) ((Component) ie.getSource()).getName()));
 	          System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
 
 	          if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
