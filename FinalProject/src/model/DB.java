@@ -188,6 +188,28 @@ public class DB {
 	}
 
 	/**
+	 * This method suggests a KID for a new customer.
+	 * Diese Methode schlägt eine KID fuer neuen Kunden.
+	 *
+	 * @return kid : Vorgeschlagene KID f&uuml; den neuen Kunden.
+	 */
+	public int getKundenID() {
+		int kid = -1;
+		Statement stmtKID = null;
+		String sql_query = "SELECT SEQ_KUNDE_KID FROM DUAL";
+		try {
+			stmtKID = connection.createStatement();
+			ResultSet rs = stmtKID.executeQuery(sql_query);
+			rs.first();
+			kid = rs.getInt(1);
+		}
+		catch ( SQLException e ) {
+			e.printStackTrace();
+		}
+		return kid;
+	}
+
+	/**
 	 * Diese Methode erstellt einen neuen Kunden mit Namen, Adresse, Telefonnummer, Nation, Branche.
 	 * Der Kontostand des neuen Kunden wird mit 0.00 initialisiert.
 	 *
@@ -196,6 +218,7 @@ public class DB {
 	 *
 	 * KUNDE : [KID], Name, Adresse, Telefonnummer, Konto, Branche, NID
 	 *
+	 * @param kID : KID (ID des Kunden).
 	 * @param kName : Name des Kunden.
 	 * @param kAdresse : Adresse des Kunden.
 	 * @param kTelefon : Telefonnummer des Kunden.
@@ -203,32 +226,40 @@ public class DB {
 	 * @param kNation : Name des Landes, in dem der Kunde lebt.
 	 * @throws SQLException
 	 */
-	public void insertKunde(String kName, String kAdresse, String kTelNr, String kBranche, String kNation) throws SQLException {
+	public void insertKunde(int kID, String kName, String kAdresse, String kTelNr, String kBranche, String kNation) throws SQLException {
 		/*
 		 * INSERT INTO KUNDE
-		 * VALUES (kID, kName, kAdresse, kTelNr, 0.00, kBranche)
+		 * VALUES (kID, kName, kAdresse, kTelNr, 0.00, kBranche, NID)
 		 */
 		PreparedStatement stmt_InsertKunde = null;
 		String query_InsertKunde = "INSERT INTO KUNDE " +
-								   "VALUES (?,?,?,?,0.00,?,?)";
+				   "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
 
-		Statement stmt_RetrieveNID = null;
-		String query_RetrieveNID = "SELECT nid FROM NATION " +
-								   "WHERE name = '" + kNation + "'" ;
+		// Common statement for retrieving data from the database.
+		Statement stmt_Retrieve = null;
+		String sql_query;
 
 		try {
+			// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
 			connection.setAutoCommit(false);
 			// Default transaction isolation level of oracle is READ COMMITED.
 
-			// Bestimme die zugehoerige NID fuer den Nationname kNation.
-			stmt_RetrieveNID = connection.createStatement();
-			ResultSet rs = stmt_RetrieveNID.executeQuery(query_RetrieveNID);
-			rs.first();
-			int kNID = rs.getInt("NID"); // NID (d.h. ID der Nation,in der der Kunde lebt).
-			rs.close();
+			// Create a new Statement object to retrieve data in database.
+			stmt_Retrieve = connection.createStatement();
 
-			// Bestimme die KundenID (KID) vom SEQUENCE-Objekt vorgeschlagen.
-			int kID = 0; // KID
+			// Create a ResultSet object to hold row sets obtained from a query.
+			ResultSet rs = null;
+
+			// Determine the NID for a given nation name.
+			// Bestimme die zugehoerige NID fuer den vorgegebenen Nationnamen kNation.
+			sql_query = "SELECT nid FROM NATION " +
+						"WHERE name = '" + kNation + "'";
+			rs = stmt_Retrieve.executeQuery(sql_query);
+			rs.first(); // move the cursor to the first row of ResultSet rs.
+			int kNID = rs.getInt("NID"); // NID (d.h. ID der Nation,in der der Kunde lebt).
+
+			// Close the rs cursor, since no use more.
+			rs.close();
 
 			// Fuege den neuen Kunden mit allen seinen Daten in DB ein.
 			stmt_InsertKunde = connection.prepareStatement(query_InsertKunde);
@@ -245,8 +276,8 @@ public class DB {
 			// Variante 1: SEQUENCE-Objekt schl��gt automatisch eine neue KID vor , wiederholt die Methode und erstellt einen Kunden.
 			// Variante 2: DIe Methode wird mit dem Auswerfen der Exception abgebrochen. Der User f��hrt die Methode durch das Klicken auf Button nochmals aus.
 		} finally {
-			if ( stmt_RetrieveNID != null ) {
-				stmt_RetrieveNID.close();
+			if ( stmt_Retrieve != null ) {
+				stmt_Retrieve.close();
 			}
 			if ( stmt_InsertKunde != null ) {
 				stmt_InsertKunde.close();
