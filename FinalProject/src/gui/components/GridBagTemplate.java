@@ -171,7 +171,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// Nation, char, 25
 			// TODO: JComboBox mit Werten aus DB
 			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
-			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
+			String[] nation_strings = { "Jemen", "Belize", "Neuseeland" };
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
 			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION);
 			_nation.setSelectedIndex(0);
@@ -252,6 +252,19 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		}
 			break;
 		case 4:
+			// BSTID, number, 10
+			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
+			JTextField _bstid = new JTextField(10);
+			_bstid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID);
+			addComponent(this, gbl, label_bstid, new Insets(0, 5, 0, 5), 0, 0);
+			addComponent(this, gbl, _bstid, new Insets(0, 5, 0, 5), 1, 0);
+
+			// Bestelltext, string, 256
+			JLabel label_bsttext = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTEXT);
+			JTextField _bsttext = new JTextField(10);
+			_bsttext.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT);
+			addComponent(this, gbl, label_bsttext, new Insets(0, 5, 0, 5), 0, 1);
+			addComponent(this, gbl, _bsttext, new Insets(0, 5, 0, 5), 1, 1);
 			break;
 		case 5:
 			break;
