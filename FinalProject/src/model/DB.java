@@ -27,6 +27,17 @@ public class DB {
 	private String query;
 
 	/**
+	 * Diese Variable dient als Falg und gibt an, ob der n&auml;chste KundenID (KID) berechnet werden soll.
+	 * Ist sie <b>true</b>, wird der n&auml;chster KID gerechnet.
+	 */
+	private boolean needNextKID = true;
+
+	/**
+	 * In dieser Variable wird die aktuell vorgeschlagene, noch freie KundenID (KID) zwischengespeichert.
+	 */
+	private int kid_buffered = -1;
+
+	/**
 	 * Konstruktor. Erzeugt eine neue Instanz der DB-Klasse. Es wird
 	 * gleichzeitig eine Verbindung zur Datenbank aufgebaut.
 	 *
@@ -187,38 +198,53 @@ public class DB {
 
 	}
 
+	public int getBufferedKundenID() {
+		return this.kid_buffered;
+	}
+
+	/**
+	 * Diese Methode setzt die Variable <i>needNextKID</i> auf einen boolean Wert.
+	 *
+	 * @param b : true gibt an, dass der n&auml;chste KID von DB berechnet werden soll. Bei false wird kein neuer KID berechnet.
+	 */
+	public void needNextKundenID( boolean b ) {
+		this.needNextKID = b;
+	}
+
 	/**
 	 * This method suggests a KID for a new customer.
 	 * Diese Methode schlägt eine KID fuer neuen Kunden.
 	 *
-	 * @return kid : Vorgeschlagene KID f&uuml; den neuen Kunden.
+	 * @return kid : Vorgeschlagener KID f&uuml;r den neuen Kunden.
 	 *
 	 */
 	public int getKundenID() {
-		int kid = -1;
-		Statement stmtKID = null;
-		String sql_query = "SELECT SEQ_KUNDE_KID.NEXTVAL FROM DUAL";
-		try {
-			stmtKID = connection.createStatement();
-			ResultSet rs = stmtKID.executeQuery(sql_query);
-			//rs.beforeFirst();
-			rs.next();
-			kid = rs.getInt(1);
-			rs.close();
-		}
-		catch ( SQLException e ) {
-			e.printStackTrace();
-		}
-		finally {
-			if ( stmtKID != null ) {
-				try {
-					stmtKID.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
+		if ( needNextKID ) {
+			Statement stmtKID = null;
+			String sql_query = "SELECT SEQ_KUNDE_KID2.NEXTVAL FROM DUAL";
+			try {
+				stmtKID = connection.createStatement();
+				ResultSet rs = stmtKID.executeQuery(sql_query);
+				//rs.beforeFirst();
+				rs.next();
+				kid_buffered = rs.getInt(1);
+				rs.close();
+			}
+			catch ( SQLException e ) {
+				e.printStackTrace();
+			}
+			finally {
+				if ( stmtKID != null ) {
+					try {
+						stmtKID.close();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
+				this.needNextKID = false;
 			}
 		}
-		return kid;
+		return kid_buffered;
 	}
 
 	/**
@@ -234,7 +260,7 @@ public class DB {
 	 * @param kName : Name des Kunden.
 	 * @param kAdresse : Adresse des Kunden.
 	 * @param kTelefon : Telefonnummer des Kunden.
-	 * @param kBranche : Branche, in dem der Kunde t��tig ist.
+	 * @param kBranche : Branche, in dem der Kunde t&auml;tig ist.
 	 * @param kNation : Name des Landes, in dem der Kunde lebt.
 	 * @throws SQLException
 	 */
