@@ -197,20 +197,20 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// ZID, number, 10
 			JLabel label_zlid = new JLabel(PRODUKTVERWALTUNG_LABEL_PRODUKT);
 			JTextField _zlid = new JTextField(10);
-			_zlid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_ZLID);
+			_zlid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID);
 			addComponent(this, gbl, label_zlid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _zlid, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Suchen
 			JButton button_search = new JButton(PRODUKTVERWALTUNG_BUTTON_SUCHE);
-			button_search.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN);
-			button_search.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN);
+			button_search.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_SUCHEN);
+			button_search.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_SUCHEN);
 			addComponent(this, gbl, button_search, new Insets(0, 5, 0, 5), 2, 0);
 
 			// Einbuchen
 			JButton button_exec = new JButton(PRODUKTVERWALTUNG_BUTTON_EINBUCHEN);
-			button_exec.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_EINBUCHEN);
-			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_EINBUCHEN);
+			button_exec.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN);
 			addComponent(this, gbl, button_exec, new Insets(0, 5, 0, 5), 2, 1);
 		}
 			break;
@@ -219,35 +219,35 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// Ursprungslager, number, 10
 			JLabel label_srcLager = new JLabel(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
 			JTextField _srcLager = new JTextField(10);
-			_srcLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_SRCLAGER);
+			_srcLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER);
 			addComponent(this, gbl, label_srcLager, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _srcLager, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Ziellager, number, 10
 			JLabel label_destLager = new JLabel(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
 			JTextField _destLager = new JTextField(10);
-			_destLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_DESTLAGER);
+			_destLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER);
 			addComponent(this, gbl, label_destLager, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(this, gbl, _destLager, new Insets(0, 5, 0, 5), 1, 1);
 
 			// Produkt, number, 10
 			JLabel label_pid = new JLabel(PRODUKTVERWALTUNG_LABEL_PRODUKT);
 			JTextField _pid = new JTextField(10);
-			_pid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_PRODUKT);
+			_pid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT);
 			addComponent(this, gbl, label_pid, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(this, gbl, _pid, new Insets(0, 5, 0, 5), 1, 2);
 
 			// Menge, number, 10
 			JLabel label_menge = new JLabel(PRODUKTVERWALTUNG_LABEL_MENGE);
 			JTextField _menge = new JTextField(10);
-			_menge.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_MENGE);
+			_menge.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE);
 			addComponent(this, gbl, label_menge, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _menge, new Insets(0, 5, 0, 5), 1, 3);
 
 			// Umbuchen
 			JButton button_exec = new JButton(PRODUKTVERWALTUNG_BUTTON_UMBUCHEN);
-			button_exec.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_UMBUCHEN);
-			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_UMBUCHEN);
+			button_exec.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN);
 			addComponent(this, gbl, button_exec, new Insets(0, 5, 0, 5), 2, 3);
 		}
 			break;
@@ -275,21 +275,21 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// PID, number, 10
 			JLabel label_pid = new JLabel(ANALYSE_LABEL_PID);
 			JTextField _pid = new JTextField(10);
-			_pid.setName(COMPONENT_TEXTFIELD_ANALYSE_PID);
+			_pid.setName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_PID);
 			addComponent(this, gbl, label_pid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _pid, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Typ, string, 25
 			JLabel label_typ = new JLabel(ANALYSE_LABEL_TYP);
 			JTextField _typ = new JTextField(10);
-			_typ.setName(COMPONENT_TEXTFIELD_ANALYSE_TYP);
+			_typ.setName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP);
 			addComponent(this, gbl, label_typ, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(this, gbl, _typ, new Insets(0, 5, 0, 5), 1, 1);
 
 			// Groesse, number, 10
 			JLabel label_groesse = new JLabel(ANALYSE_LABEL_GROESSE);
 			JTextField _groesse = new JTextField(10);
-			_groesse.setName(COMPONENT_TEXTFIELD_ANALYSE_GROESSE);
+			_groesse.setName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE);
 			addComponent(this, gbl, label_groesse, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(this, gbl, _groesse, new Insets(0, 5, 0, 5), 1, 2);
 		}
@@ -299,7 +299,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// PID, number, 10
 			JLabel label_pid = new JLabel(ANALYSE_LABEL_PID);
 			JTextField _pid = new JTextField(10);
-			_pid.setName(COMPONENT_TEXTFIELD_ANALYSE_PID);
+			_pid.setName(COMPONENT_TEXTFIELD_LIEFERKOSTEN_PID);
 			addComponent(this, gbl, label_pid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _pid, new Insets(0, 5, 0, 5), 1, 0);
 		}
