@@ -192,6 +192,7 @@ public class DB {
 	 * Diese Methode schlägt eine KID fuer neuen Kunden.
 	 *
 	 * @return kid : Vorgeschlagene KID f&uuml; den neuen Kunden.
+	 *
 	 */
 	public int getKundenID() {
 		int kid = -1;
