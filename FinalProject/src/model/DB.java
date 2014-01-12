@@ -192,11 +192,12 @@ public class DB {
 	 * Diese Methode schlägt eine KID fuer neuen Kunden.
 	 *
 	 * @return kid : Vorgeschlagene KID f&uuml; den neuen Kunden.
+	 *
 	 */
 	public int getKundenID() {
 		int kid = -1;
 		Statement stmtKID = null;
-		String sql_query = "SELECT SEQ_KUNDE_KID2.NEXTVAL FROM DUAL";
+		String sql_query = "SELECT SEQ_KUNDE_KID.NEXTVAL FROM DUAL";
 		try {
 			stmtKID = connection.createStatement();
 			ResultSet rs = stmtKID.executeQuery(sql_query);
