@@ -154,38 +154,35 @@ public class MainController implements Configuration{
 
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
-	    		if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).setText(""+db.getKundenID());
 	    			client.repaint();
 	    		}
-	    		System.out.println("ItemEvent: " + ie);
 	    	}
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
-	    		if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
 	    			client.repaint();
 	    		}
-	    		System.out.println("ItemEvent: " + ie);
 	    	}
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
-	    		if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
 	    			client.repaint();
 	    		}
-	    		System.out.println("ItemEvent: " + ie);
 	    	}
 	    }
 	}

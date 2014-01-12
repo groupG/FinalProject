@@ -59,6 +59,8 @@ public interface Configuration {
 	static final String PRODUKTVERWALTUNG_LABEL_ZLID = "<html>Zulieferungs-ID</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_SRCLAGER = "<html>Ursprungslager</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_DESTLAGER = "<html>Ziellager</html>";
+	static final String PRODUKTVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
+	static final String PRODUKTVERWALTUNG_LABEL_MENGE = "<html>Menge</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_SUCHE = "<html>Suchen</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_EINBUCHEN = "<html>Einbuchen</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_UMBUCHEN = "<html>Umbuchen</html>";
@@ -136,7 +138,7 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_ZLID = "textfeld_produktverwaltung_zlid";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_SRCLAGER = "textfield_produktverwaltugn_srclager";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_DESTLAGER = "textfield_produktverwaltung_destlager";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_PID = "textfield_produktverwaltung_pid";
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_PRODUKT = "textfield_produktverwaltung_pid";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_MENGE = "textfield_produktverwaltung_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_WUNSCHTERMIN = "textfield_bestellverwaltung_wunschtermin";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_POSNR = "textfield_bestellverwaltung_posnr";
@@ -165,8 +167,8 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN = "button_kundenpflege_neu";
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN = "button_kundenpflege_edit";
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN = "button_kundenpflege_suchen";
-	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU = "button_produktverwaltung_einbuchen";
-	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT = "button_produktverwaltung_umbuchen";
+	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_EINBUCHEN = "button_produktverwaltung_einbuchen";
+	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_UMBUCHEN = "button_produktverwaltung_umbuchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN = "button_produktverwaltung_suchen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_BESTELLPOS_NEU = "button_bestellverwaltung_bestellpos_neu";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_BESTELLUNG_SPEICHERN = "button_bestellverwaltung_bestellung_speichern";

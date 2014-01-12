@@ -195,16 +195,23 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		case 2: // Template: Zulieferung einbuchen
 		{
 			// ZID, number, 10
-			JLabel label_zlid = new JLabel(PRODUKTVERWALTUNG_LABEL_ZLID);
+			JLabel label_zlid = new JLabel(PRODUKTVERWALTUNG_LABEL_PRODUKT);
 			JTextField _zlid = new JTextField(10);
-			_zlid.setName(PRODUKTVERWALTUNG_LABEL_ZLID);
+			_zlid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_ZLID);
 			addComponent(this, gbl, label_zlid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _zlid, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Suchen
 			JButton button_search = new JButton(PRODUKTVERWALTUNG_BUTTON_SUCHE);
-			button_search.setName(PRODUKTVERWALTUNG_BUTTON_SUCHE);
+			button_search.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN);
+			button_search.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN);
 			addComponent(this, gbl, button_search, new Insets(0, 5, 0, 5), 2, 0);
+
+			// Einbuchen
+			JButton button_exec = new JButton(PRODUKTVERWALTUNG_BUTTON_EINBUCHEN);
+			button_exec.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_EINBUCHEN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_EINBUCHEN);
+			addComponent(this, gbl, button_exec, new Insets(0, 5, 0, 5), 2, 1);
 		}
 			break;
 		case 3: // Template: Bestand umbuchen
@@ -212,33 +219,36 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// Ursprungslager, number, 10
 			JLabel label_srcLager = new JLabel(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
 			JTextField _srcLager = new JTextField(10);
-			_srcLager.setName(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
+			_srcLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_SRCLAGER);
 			addComponent(this, gbl, label_srcLager, new Insets(0, 5, 0, 5), 0, 0);
-			addComponent(this, gbl, _srcLager, new Insets(0, 5, 0, 5), 0, 1);
+			addComponent(this, gbl, _srcLager, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Ziellager, number, 10
-			JLabel label_destLager = new JLabel(
-					PRODUKTVERWALTUNG_LABEL_DESTLAGER);
+			JLabel label_destLager = new JLabel(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
 			JTextField _destLager = new JTextField(10);
-			_srcLager.setName(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
+			_destLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_DESTLAGER);
 			addComponent(this, gbl, label_destLager, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(this, gbl, _destLager, new Insets(0, 5, 0, 5), 1, 1);
 
 			// Produkt, number, 10
-			JLabel label_pid = new JLabel(
-					PRODUKTVERWALTUNG_LABEL_DESTLAGER);
+			JLabel label_pid = new JLabel(PRODUKTVERWALTUNG_LABEL_PRODUKT);
 			JTextField _pid = new JTextField(10);
-			_pid.setName(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
+			_pid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_PRODUKT);
 			addComponent(this, gbl, label_pid, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(this, gbl, _pid, new Insets(0, 5, 0, 5), 1, 2);
 
 			// Menge, number, 10
-			JLabel label_menge = new JLabel(
-					PRODUKTVERWALTUNG_LABEL_DESTLAGER);
+			JLabel label_menge = new JLabel(PRODUKTVERWALTUNG_LABEL_MENGE);
 			JTextField _menge = new JTextField(10);
-			_menge.setName(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
+			_menge.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_MENGE);
 			addComponent(this, gbl, label_menge, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _menge, new Insets(0, 5, 0, 5), 1, 3);
+
+			// Umbuchen
+			JButton button_exec = new JButton(PRODUKTVERWALTUNG_BUTTON_UMBUCHEN);
+			button_exec.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_UMBUCHEN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_UMBUCHEN);
+			addComponent(this, gbl, button_exec, new Insets(0, 5, 0, 5), 2, 3);
 		}
 			break;
 		case 4:
