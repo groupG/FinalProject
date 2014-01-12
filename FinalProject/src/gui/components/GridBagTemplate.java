@@ -74,17 +74,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(this, gbl, label_tel, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _tel, new Insets(0, 5, 0, 5), 1, 3);
 
-			// Nation, char, 25
-			// TODO: JComboBox mit Werten aus DB
-			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
-			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
-			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
-			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION);
-			_nation.setSelectedIndex(0);
-			_nation.setEditable(true);
-			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 4);
-			addComponent(this, gbl, _nation, new Insets(0, 5, 0, 5), 1, 4);
-
 			// Konto, number, 12
 			JLabel label_konto = new JLabel(KUNDENPFLEGE_LABEL_KONTO);
 			NumberFormat format_konto = NumberFormat.getNumberInstance();
@@ -94,8 +83,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_konto.setValue(new Double(0.00));
 			_konto.setColumns(10);
 			_konto.setEditable(false);
-			addComponent(this, gbl, label_konto, new Insets(0, 5, 0, 5), 0, 5);
-			addComponent(this, gbl, _konto, new Insets(0, 5, 0, 5), 1, 5);
+			addComponent(this, gbl, label_konto, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _konto, new Insets(0, 5, 0, 5), 1, 4);
 
 			// Branche, char, 10
 			JLabel label_branche = new JLabel(KUNDENPFLEGE_LABEL_BRANCHE);
@@ -105,8 +94,19 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE);
 			_branche.setSelectedIndex(0);
 			_branche.setEditable(true);
-			addComponent(this, gbl, label_branche, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, gbl, _branche, new Insets(0, 5, 0, 5), 1, 6);
+			addComponent(this, gbl, label_branche, new Insets(0, 5, 0, 5), 0, 5);
+			addComponent(this, gbl, _branche, new Insets(0, 5, 0, 5), 1, 5);
+
+			// Nation, char, 25
+			// TODO: JComboBox mit Werten aus DB
+			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
+			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
+			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
+			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION);
+			_nation.setSelectedIndex(0);
+			_nation.setEditable(true);
+			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 6);
+			addComponent(this, gbl, _nation, new Insets(0, 5, 0, 5), 1, 6);
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
@@ -145,17 +145,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(this, gbl, label_tel, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _tel, new Insets(0, 5, 0, 5), 1, 3);
 
-			// Nation, char, 25
-			// TODO: JComboBox mit Werten aus DB
-			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
-			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
-			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
-			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION);
-			_nation.setSelectedIndex(0);
-			_nation.setEditable(true);
-			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 4);
-			addComponent(this, gbl, _nation, new Insets(0, 5, 0, 5), 1, 4);
-
 			// Konto, number, 12
 			JLabel label_konto = new JLabel(KUNDENPFLEGE_LABEL_KONTO);
 			NumberFormat format_konto = NumberFormat.getNumberInstance();
@@ -165,8 +154,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_konto.setValue(new Double(0.00));
 			_konto.setColumns(10);
 			_konto.setEditable(false);
-			addComponent(this, gbl, label_konto, new Insets(0, 5, 0, 5), 0, 5);
-			addComponent(this, gbl, _konto, new Insets(0, 5, 0, 5), 1, 5);
+			addComponent(this, gbl, label_konto, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _konto, new Insets(0, 5, 0, 5), 1, 4);
 
 			// Branche, char, 10
 			JLabel label_branche = new JLabel(KUNDENPFLEGE_LABEL_BRANCHE);
@@ -176,8 +165,19 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE);
 			_branche.setSelectedIndex(0);
 			_branche.setEditable(true);
-			addComponent(this, gbl, label_branche, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, gbl, _branche, new Insets(0, 5, 0, 5), 1, 6);
+			addComponent(this, gbl, label_branche, new Insets(0, 5, 0, 5), 0, 5);
+			addComponent(this, gbl, _branche, new Insets(0, 5, 0, 5), 1, 5);
+
+			// Nation, char, 25
+			// TODO: JComboBox mit Werten aus DB
+			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
+			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
+			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
+			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION);
+			_nation.setSelectedIndex(0);
+			_nation.setEditable(true);
+			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 6);
+			addComponent(this, gbl, _nation, new Insets(0, 5, 0, 5), 1, 6);
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
