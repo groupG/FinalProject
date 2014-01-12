@@ -196,15 +196,26 @@ public class DB {
 	public int getKundenID() {
 		int kid = -1;
 		Statement stmtKID = null;
-		String sql_query = "SELECT SEQ_KUNDE_KID FROM DUAL";
+		String sql_query = "SELECT SEQ_KUNDE_KID2.NEXTVAL FROM DUAL";
 		try {
 			stmtKID = connection.createStatement();
 			ResultSet rs = stmtKID.executeQuery(sql_query);
-			rs.first();
+			//rs.beforeFirst();
+			rs.next();
 			kid = rs.getInt(1);
+			rs.close();
 		}
 		catch ( SQLException e ) {
 			e.printStackTrace();
+		}
+		finally {
+			if ( stmtKID != null ) {
+				try {
+					stmtKID.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return kid;
 	}
@@ -232,7 +243,7 @@ public class DB {
 		 * VALUES (kID, kName, kAdresse, kTelNr, 0.00, kBranche, NID)
 		 */
 		PreparedStatement stmt_InsertKunde = null;
-		String query_InsertKunde = "INSERT INTO KUNDE " +
+		String query_InsertKunde = "INSERT INTO KUNDE2 " +
 				   "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
 
 		// Common statement for retrieving data from the database.
