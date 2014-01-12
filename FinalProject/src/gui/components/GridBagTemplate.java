@@ -177,7 +177,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_nation.setSelectedIndex(0);
 			_nation.setEditable(true);
 			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, gbl, _nation, new Insets(0, 5, 0, 5), 1,  6);
+			addComponent(this, gbl, _nation, new Insets(0, 5, 0, 5), 1, 6);
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
