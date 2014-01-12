@@ -151,6 +151,12 @@ public class MainController implements Configuration{
 	    	  cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
 	         // client.showException(new Exception((String) ((Component) ie.getSource()).getName()));
 	          System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+
+	          if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	          {
+	        	 ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("Test");
+	        	 client.repaint();
+	          }
 	          System.out.println("ItemEvent: " + ie);
 	    }
 	}
