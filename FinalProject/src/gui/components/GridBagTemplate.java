@@ -252,6 +252,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		}
 			break;
 		case 4:
+		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
 			JTextField _bstid = new JTextField(10);
@@ -265,10 +266,150 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_bsttext.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT);
 			addComponent(this, gbl, label_bsttext, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(this, gbl, _bsttext, new Insets(0, 5, 0, 5), 1, 1);
+
+			// Anleger, string, 12
+			JLabel label_anleger = new JLabel(BESTELLVERWALTUNG_LABEL_ANLEGER);
+			JTextField _anleger = new JTextField(10);
+			_anleger.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER);
+			addComponent(this, gbl, label_anleger, new Insets(0, 5, 0, 5), 0, 2);
+			addComponent(this, gbl, _anleger, new Insets(0, 5, 0, 5), 1, 2);
+
+			// Status, char, 20
+			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
+			JTextField _status = new JTextField(10);
+			_status.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_STATUS);
+			addComponent(this, gbl, label_status, new Insets(0, 5, 0, 5), 0, 3);
+			addComponent(this, gbl, _status, new Insets(0, 5, 0, 5), 1, 3);
+
+			// Anlagedatum, date
+			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
+			JTextField _anlagedatum = new JTextField(10);
+			_anlagedatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLAGEDATUM);
+			addComponent(this, gbl, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _anlagedatum, new Insets(0, 5, 0, 5), 1, 4);
+
+			// Aenderungsdatum, date
+			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
+			JTextField _aenderungsdatum = new JTextField(10);
+			_aenderungsdatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM);
+			addComponent(this, gbl, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 5);
+			addComponent(this, gbl, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 5);
+
+			// Bestelltermin, date
+			JLabel label_bsttermin = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTERMIN);
+			JTextField _bsttermin = new JTextField(10);
+			_bsttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN);
+			addComponent(this, gbl, label_bsttermin, new Insets(0, 5, 0, 5), 0, 6);
+			addComponent(this, gbl, _bsttermin, new Insets(0, 5, 0, 5), 1, 6);
+
+			// Erledigttermin, date
+			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
+			JTextField _erledigttermin = new JTextField(10);
+			_erledigttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN);
+			addComponent(this, gbl, label_erledigttermin, new Insets(0, 5, 0, 5), 0, 7);
+			addComponent(this, gbl, _erledigttermin, new Insets(0, 5, 0, 5), 1, 7);
+
+			// Speichern
+			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
+			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
+			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
+			addComponent(this, gbl, button_speichern, new Insets(0, 5, 0, 5), 2, 6);
+
+			// Bestaetigen
+			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
+			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN);
+			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN);
+			addComponent(this, gbl, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 7);
+		}
 			break;
 		case 5:
+		{
+			// BSTID, number, 10
+			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
+			JTextField _bstid = new JTextField(10);
+			_bstid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID);
+			addComponent(this, gbl, label_bstid, new Insets(0, 5, 0, 5), 0, 0);
+			addComponent(this, gbl, _bstid, new Insets(0, 5, 0, 5), 1, 0);
+
+			// Bestelltext, string, 256
+			JLabel label_bsttext = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTEXT);
+			JTextField _bsttext = new JTextField(10);
+			_bsttext.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT);
+			addComponent(this, gbl, label_bsttext, new Insets(0, 5, 0, 5), 0, 1);
+			addComponent(this, gbl, _bsttext, new Insets(0, 5, 0, 5), 1, 1);
+
+			// Anleger, string, 12
+			JLabel label_anleger = new JLabel(BESTELLVERWALTUNG_LABEL_ANLEGER);
+			JTextField _anleger = new JTextField(10);
+			_anleger.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER);
+			addComponent(this, gbl, label_anleger, new Insets(0, 5, 0, 5), 0, 2);
+			addComponent(this, gbl, _anleger, new Insets(0, 5, 0, 5), 1, 2);
+
+			// Status, char, 20
+			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
+			JTextField _status = new JTextField(10);
+			_status.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_STATUS);
+			addComponent(this, gbl, label_status, new Insets(0, 5, 0, 5), 0, 3);
+			addComponent(this, gbl, _status, new Insets(0, 5, 0, 5), 1, 3);
+
+			// Anlagedatum, date
+			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
+			JTextField _anlagedatum = new JTextField(10);
+			_anlagedatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM);
+			addComponent(this, gbl, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _anlagedatum, new Insets(0, 5, 0, 5), 1, 4);
+
+			// Aenderungsdatum, date
+			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
+			JTextField _aenderungsdatum = new JTextField(10);
+			_aenderungsdatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM);
+			addComponent(this, gbl, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 5);
+			addComponent(this, gbl, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 5);
+
+			// Bestelltermin, date
+			JLabel label_bsttermin = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTERMIN);
+			JTextField _bsttermin = new JTextField(10);
+			_bsttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN);
+			addComponent(this, gbl, label_bsttermin, new Insets(0, 5, 0, 5), 0, 6);
+			addComponent(this, gbl, _bsttermin, new Insets(0, 5, 0, 5), 1, 6);
+
+			// Erledigttermin, date
+			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
+			JTextField _erledigttermin = new JTextField(10);
+			_erledigttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN);
+			addComponent(this, gbl, label_erledigttermin, new Insets(0, 5, 0, 5), 0, 7);
+			addComponent(this, gbl, _erledigttermin, new Insets(0, 5, 0, 5), 1, 7);
+
+			// Speichern
+			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
+			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
+			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
+			addComponent(this, gbl, button_speichern, new Insets(0, 5, 0, 5), 2, 6);
+
+			// Bestaetigen
+			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
+			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
+			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
+			addComponent(this, gbl, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 7);
+		}
 			break;
 		case 6:
+		{
+			// BSTID, number, 10
+			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
+			JTextField _bstid = new JTextField(10);
+			_bstid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID);
+			addComponent(this, gbl, label_bstid, new Insets(0, 5, 0, 5), 0, 0);
+			addComponent(this, gbl, _bstid, new Insets(0, 5, 0, 5), 1, 0);
+
+			// Ausliefern
+			JButton button_ausliefern = new JButton(BESTELLVERWALTUNG_BUTTON_AUSLIEFERN);
+			button_ausliefern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN);
+			button_ausliefern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN);
+			addComponent(this, gbl, button_ausliefern, new Insets(0, 5, 0, 5), 2, 0);
+
+
+		}
 			break;
 		case 7: // Template: Produktanalyse
 		{

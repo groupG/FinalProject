@@ -86,8 +86,9 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_LABEL_PREIS = "<html>Preis</html>";
 	static final String BESTELLVERWALTUNG_LABEL_POSTEXT = "<html>Positionstext</html>";
 	static final String BESTELLVERWALTUNG_LABEL_PID = "<html>Produkt-ID</html>";
-	static final String BESTELLVERWALTUNG_BUTTON_BESTELLUNG_SPEICHERN = "<html>Speichern</html>";
-	static final String BESTELLVERWALTUNG_BUTTON_BESTELLUNG_BESTAETIGEN = "<html>Best&auml;tigen</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
 
 	// Analyse
 	static final String ANALYSE_CARD_TITLE = "<html>Bestellungen anlegen, editieren und verschicken</html>";
@@ -158,7 +159,6 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_MENGE = "textfield_bestellverwaltung_neu_bstpos_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PREIS = "textfield_bestellverwaltung_neu_bstpos_preis";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_POSTEXT = "textfield_bestellverwaltung_neu_bstpos_postext";
-
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID = "textfield_bestellverwaltung_edit_bstid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT = "textfield_bestellverwaltung_edit_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER = "textfield_bestellverwaltung_edit_anleger";
@@ -173,6 +173,7 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_MENGE = "textfield_bestellverwaltung_edit_bstpos_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_PREIS = "textfield_bestellverwaltung_edit_bstpos_preis";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_POSTEXT = "textfield_bestellverwaltung_edit_bstpos_postext";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID = "textfield_bestellverwaltung_go_bstid";
 
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_PID = "textfield_analyse_produkt";
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP = "textfield_analyse_typ";
