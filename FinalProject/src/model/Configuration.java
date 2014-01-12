@@ -103,7 +103,7 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_LABEL_MENGE = "<html>Menge</html>";
 	static final String BESTELLVERWALTUNG_LABEL_PREIS = "<html>Preis</html>";
 	static final String BESTELLVERWALTUNG_LABEL_POSTEXT = "<html>Positionstext</html>";
-	static final String BESTELLVERWALTUNG_LABEL_PID = "<html>Produkt-ID</html>";
+	static final String BESTELLVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
@@ -134,6 +134,9 @@ public interface Configuration {
 	static final String COMPONENT_PANEL_PRODUKTANALYSE = "panel_produktanalyse";
 	static final String COMPONENT_PANEL_LIEFERKOSTENSENKUNG = "panel_lieferkostensenkung";
 
+	// Container
+	static final String COMPONENT_CONTAINER_BESTELLVERWALTUNG_NEU_BSTPOS = "container_bestellverwaltung_neu_bstpos";
+	static final String COMPONENT_CONTAINER_BESTELLVERWALTUNG_EDIT_BSTPOS = "container_bestellverwaltung_edit_bstpos";
 	// ScrollPanes
 	static final String COMPONENT_SCROLLPANE_EXPLORER = "scrollpane_explorer";
 	static final String COMPONENT_SCROLLPANE_DBOUTPUT = "scrollpane_dboutput";
@@ -166,37 +169,42 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID = "textfield_bestellverwaltung_neu_bstid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT = "textfield_bestellverwaltung_neu_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER = "textfield_bestellverwaltung_neu_anleger";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLAGEDATUM = "textfield_bestellverwaltung_neu_anlagedatum";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM = "textfield_bestellverwaltung_neu_aenderungsdatum";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_STATUS = "textfield_bestellverwaltung_neu_bststatus";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN = "textfield_bestellverwaltung_neu_bsttermin";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN = "textfield_bestellverwaltung_neu_erledigttermin";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_POSNR = "textfield_bestellverwaltung_neu_bstpos_posnr";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_BSTID = "textfield_bestellverwaltung_neu_bstpos_bstid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PID = "textfield_bestellverwaltung_neu_bstpos_pid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_MENGE = "textfield_bestellverwaltung_neu_bstpos_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PREIS = "textfield_bestellverwaltung_neu_bstpos_preis";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_POSTEXT = "textfield_bestellverwaltung_neu_bstpos_postext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID = "textfield_bestellverwaltung_edit_bstid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT = "textfield_bestellverwaltung_edit_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER = "textfield_bestellverwaltung_edit_anleger";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM = "textfield_bestellverwaltung_edit_anlagedatum";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM = "textfield_bestellverwaltung_edit_aenderungsdatum";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_STATUS = "textfield_bestellverwaltung_edit_bststatus";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN = "textfield_bestellverwaltung_edit_bsttermin";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN = "textfield_bestellverwaltung_edit_erledigttermin";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_POSNR = "textfield_bestellverwaltung_edit_bstpos_posnr";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_BSTID = "textfield_bestellverwaltung_edit_bstpos_bstid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_PID = "textfield_bestellverwaltung_edit_bstpos_pid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_MENGE = "textfield_bestellverwaltung_edit_bstpos_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_PREIS = "textfield_bestellverwaltung_edit_bstpos_preis";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_POSTEXT = "textfield_bestellverwaltung_edit_bstpos_postext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID = "textfield_bestellverwaltung_go_bstid";
 
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_PID = "textfield_analyse_produkt";
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP = "textfield_analyse_typ";
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE = "textfield_analyse_groesse";
 	static final String COMPONENT_TEXTFIELD_LIEFERKOSTEN_PID = "textfield_lieferkosten_produkt";
+
+	// Textareas
+	static final String COMPONENT_TEXTAREA_BESTELLVERWALTUNG_NEU_BSTPOS_POSTEXT = "textarea_bestellverwaltung_neu_bstpos_postext";
+	static final String COMPONENT_TEXTAREA_BESTELLVERWALTUNG_EDIT_BSTPOS_POSTEXT = "textarea_bestellverwaltung_edit_bstpos_postext";
+
+
+	// Labels
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM = "label_bestellverwaltung_neu_anlagedatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM = "label_bestellverwaltung_neu_aenderungsdatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN = "label_bestellverwaltung_neu_erledigttermin";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM = "label_bestellverwaltung_edit_anlagedatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM = "label_bestellverwaltung_edit_aenderungsdatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN = "label_bestellverwaltung_edit_erledigttermin";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_BSTPOS_POSNR = "label_bestellverwaltung_neu_bstpos_posnr";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_BSTPOS_BSTID = "label_bestellverwaltung_neu_bstpos_bstid";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_BSTPOS_POSNR = "label_bestellverwaltung_edit_bstpos_posnr";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_BSTPOS_BSTID = "label_bestellverwaltung_edit_bstpos_bstid";
 
 	// Comboboxen
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS = "combo_kundenpflege_actions";

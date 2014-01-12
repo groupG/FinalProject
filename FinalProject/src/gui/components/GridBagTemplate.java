@@ -14,6 +14,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import model.Configuration;
@@ -281,31 +282,31 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(this, gbl, label_status, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _status, new Insets(0, 5, 0, 5), 1, 3);
 
-			// Anlagedatum, date
-			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
-			JTextField _anlagedatum = new JTextField(10);
-			_anlagedatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLAGEDATUM);
-			addComponent(this, gbl, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 4);
-			addComponent(this, gbl, _anlagedatum, new Insets(0, 5, 0, 5), 1, 4);
-
-			// Aenderungsdatum, date
-			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
-			JTextField _aenderungsdatum = new JTextField(10);
-			_aenderungsdatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM);
-			addComponent(this, gbl, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 5);
-			addComponent(this, gbl, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 5);
-
 			// Bestelltermin, date
 			JLabel label_bsttermin = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTERMIN);
 			JTextField _bsttermin = new JTextField(10);
 			_bsttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN);
-			addComponent(this, gbl, label_bsttermin, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, gbl, _bsttermin, new Insets(0, 5, 0, 5), 1, 6);
+			addComponent(this, gbl, label_bsttermin, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _bsttermin, new Insets(0, 5, 0, 5), 1, 4);
+
+			// Anlagedatum, date
+			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
+			JLabel _anlagedatum = new JLabel("31.12.2014");
+			_anlagedatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM);
+			addComponent(this, gbl, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 5);
+			addComponent(this, gbl, _anlagedatum, new Insets(0, 5, 0, 5), 1, 5);
+
+			// Aenderungsdatum, date
+			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
+			JLabel _aenderungsdatum = new JLabel("31.12.2014");
+			_aenderungsdatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM);
+			addComponent(this, gbl, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 6);
+			addComponent(this, gbl, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 6);
 
 			// Erledigttermin, date
 			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
-			JTextField _erledigttermin = new JTextField(10);
-			_erledigttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN);
+			JLabel _erledigttermin = new JLabel("31.12.2014");
+			_erledigttermin.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN);
 			addComponent(this, gbl, label_erledigttermin, new Insets(0, 5, 0, 5), 0, 7);
 			addComponent(this, gbl, _erledigttermin, new Insets(0, 5, 0, 5), 1, 7);
 
@@ -313,13 +314,13 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
 			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
 			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
-			addComponent(this, gbl, button_speichern, new Insets(0, 5, 0, 5), 2, 6);
+			addComponent(this, gbl, button_speichern, new Insets(0, 5, 0, 5), 1, 8);
 
 			// Bestaetigen
 			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
 			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN);
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN);
-			addComponent(this, gbl, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 7);
+			addComponent(this, gbl, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 8);
 		}
 			break;
 		case 5:
@@ -352,31 +353,31 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(this, gbl, label_status, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _status, new Insets(0, 5, 0, 5), 1, 3);
 
-			// Anlagedatum, date
-			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
-			JTextField _anlagedatum = new JTextField(10);
-			_anlagedatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM);
-			addComponent(this, gbl, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 4);
-			addComponent(this, gbl, _anlagedatum, new Insets(0, 5, 0, 5), 1, 4);
-
-			// Aenderungsdatum, date
-			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
-			JTextField _aenderungsdatum = new JTextField(10);
-			_aenderungsdatum.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM);
-			addComponent(this, gbl, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 5);
-			addComponent(this, gbl, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 5);
-
 			// Bestelltermin, date
 			JLabel label_bsttermin = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTERMIN);
 			JTextField _bsttermin = new JTextField(10);
 			_bsttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN);
-			addComponent(this, gbl, label_bsttermin, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, gbl, _bsttermin, new Insets(0, 5, 0, 5), 1, 6);
+			addComponent(this, gbl, label_bsttermin, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _bsttermin, new Insets(0, 5, 0, 5), 1, 4);
+
+			// Anlagedatum, date
+			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
+			JLabel _anlagedatum = new JLabel("31.12.2014");
+			_anlagedatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM);
+			addComponent(this, gbl, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 5);
+			addComponent(this, gbl, _anlagedatum, new Insets(0, 5, 0, 5), 1, 5);
+
+			// Aenderungsdatum, date
+			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
+			JLabel _aenderungsdatum = new JLabel("31.12.2014");
+			_aenderungsdatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM);
+			addComponent(this, gbl, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 6);
+			addComponent(this, gbl, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 6);
 
 			// Erledigttermin, date
 			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
-			JTextField _erledigttermin = new JTextField(10);
-			_erledigttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN);
+			JLabel _erledigttermin = new JLabel("31.12.2014");
+			_erledigttermin.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN);
 			addComponent(this, gbl, label_erledigttermin, new Insets(0, 5, 0, 5), 0, 7);
 			addComponent(this, gbl, _erledigttermin, new Insets(0, 5, 0, 5), 1, 7);
 
@@ -384,13 +385,13 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
 			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
 			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
-			addComponent(this, gbl, button_speichern, new Insets(0, 5, 0, 5), 2, 6);
+			addComponent(this, gbl, button_speichern, new Insets(0, 5, 0, 5), 1, 8);
 
 			// Bestaetigen
 			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
 			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
-			addComponent(this, gbl, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 7);
+			addComponent(this, gbl, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 8);
 		}
 			break;
 		case 6:
@@ -445,6 +446,44 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(this, gbl, _pid, new Insets(0, 5, 0, 5), 1, 0);
 		}
 			break;
+		case 9:
+		{
+			// POSNR, number, 10
+			JLabel label_posnr = new JLabel(BESTELLVERWALTUNG_LABEL_POSNR);
+			JLabel _posnr = new JLabel();
+			_posnr.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_BSTPOS_POSNR);
+			addComponent(this, gbl, label_posnr, new Insets(0, 5, 0, 5), 0, 0);
+			addComponent(this, gbl, _posnr, new Insets(0, 5, 0, 5), 1, 0);
+
+			// BSTID, number, 10
+			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
+			JTextField _bstid = new JTextField(10);
+			_bstid.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_BSTPOS_BSTID);
+			addComponent(this, gbl, label_bstid, new Insets(0, 5, 0, 5), 0, 1);
+			addComponent(this, gbl, _bstid, new Insets(0, 5, 0, 5), 1, 1);
+
+			// Produkt, number, 10
+			JLabel label_pid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
+			JTextField _pid = new JTextField(10);
+			_pid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PID);
+			addComponent(this, gbl, label_pid, new Insets(0, 5, 0, 5), 0, 2);
+			addComponent(this, gbl, _pid, new Insets(0, 5, 0, 5), 1, 2);
+
+			// Preis, number, 10
+			JLabel label_preis = new JLabel(BESTELLVERWALTUNG_LABEL_PREIS);
+			JTextField _preis = new JTextField(10);
+			_preis.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PREIS);
+			addComponent(this, gbl, label_preis, new Insets(0, 5, 0, 5), 0, 3);
+			addComponent(this, gbl, _preis, new Insets(0, 5, 0, 5), 1, 3);
+
+			// Positionstext, number, 10
+			JLabel label_postext = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
+			JTextArea _postext = new JTextArea(10, 10);
+			_postext.setName(COMPONENT_TEXTAREA_BESTELLVERWALTUNG_NEU_BSTPOS_POSTEXT);
+			addComponent(this, gbl, label_postext, new Insets(0, 5, 0, 5), 0, 4);
+			addComponent(this, gbl, _postext, new Insets(0, 5, 0, 5), 1, 4);
+		}
+		break;
 		default:
 			break;
 		}
@@ -488,7 +527,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 	public void addComponent(JPanel panel, GridBagLayout layout, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.fill = GridBagConstraints.BOTH;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = 1;
