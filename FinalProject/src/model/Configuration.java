@@ -11,9 +11,11 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	// static final String CONNECTION_THIN =
+	// "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
 	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
-//	 static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
+	// static final String CONNECTION_OCI =
+	// "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
 	static final String BORDER_TITLE_INFO = "Info";
@@ -36,8 +38,16 @@ public interface Configuration {
 	// Transaktionen
 	// Kundenpflege
 	static final String KUNDENPFLEGE_CARD_TITLE = "<html>Kunden anlegen und editieren</html>";
-	static final String[] KUNDENPFLEGE_COMBO_STRINGS = { "Wählen Sie eine Transaktion aus","Neuer Kunde",
+	static final String[] KUNDENPFLEGE_COMBO_STRINGS = {
+			">> Wählen Sie eine Transaktion aus <<", "Neuer Kunde",
 			"Kunde editieren" };
+	static final String KUNDENPFLEGE_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Kunden anlegen oder bearbeiten.<br>"
+			+ " <br>"
+			+ " Wenn Sie einen neuen Kunden anlegen, dann wird Ihnen vom system automatisch eine passende Kundennummer vorgeschlagen, welche Sie bei Bedarf &auml;ndern k&ouml;nnen.<br>"
+			+ " Achten Sie darauf, dass sie eine g&uuml;tige numerische Zeichenfolge eingeben, sonst wird ihre Transaktion vom System verworfen.<br>"
+			+ "<br>"
+			+ "Beachten Sie, dass Sie die Branche wahlweise aus den vorgeschlagenen Optionen aus&auml;hlen oder aber textuell eingeben k&ouml;nnen. <br>"
+			+ "</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
 	static final String KUNDENPFLEGE_LABEL_KID = "<html>Kunden-ID</html>";
@@ -53,7 +63,11 @@ public interface Configuration {
 	// Produktverwaltung
 	static final String PRODUKTVERWALTUNG_CARD_TITLE = "<html>Zulieferung einbuchen und Best&auml;nde umbuchen</html>";
 	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {
-			"Zulieferung einbuchen", "Bestand umbuchen" };
+			">> Wählen Sie eine Transaktion aus <<", "Zulieferung einbuchen",
+			"Bestand umbuchen" };
+	static final String PRODUKTVERWALTUNG_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Produkt-Zulieferungen ein- oder bereits bestehene Best&auml;nde auf ein anderes Lager umbuchen<br>"
+			+ " <br>"
+			+ "</html>";
 	static final String PRODUKTVERWALTUNG_TITLE_ZULIEFERUNG_NEU = "<html>Neue Zulieferung einbuchen</html>";
 	static final String PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT = "<html>Bestand auf ein anderes Lager umbuchen</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_ZLID = "<html>Zulieferungs-ID</html>";
@@ -69,7 +83,11 @@ public interface Configuration {
 	// Bestellverwaltung
 	static final String BESTELLVERWALTUNG_CARD_TITLE = "<html>Bestellungen anlegen, editieren &amp; ausliefern</html>";
 	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {
-			"Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
+			">> Wählen Sie eine Transaktion aus <<", "Bestellung anlegen",
+			"Bestellungen editieren", "Bestellung ausliefern" };
+	static final String BESTELLVERWALTUNG_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Bestellungen anlegen, bearbeiten und auslifern.<br>"
+			+ " <br>"
+			+ "</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU = "<html>Neue Bestellung anlegen</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT = "<html>Vorhandene Bestellung editieren</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO = "<html>Bestellung an Kunden ausliefern</html>";
