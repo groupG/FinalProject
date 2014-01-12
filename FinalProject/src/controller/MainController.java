@@ -169,7 +169,7 @@ public class MainController implements Configuration{
 					client.showException(e);
 				}
 				client.getDBOutput().addTableModel(tableModel);
-				client.getDBOutput().refreshTable();
+				client.getDBOutput().addTableToPane();
 			}
 		}
 

@@ -32,6 +32,7 @@ public class OutputTableModel implements TableModel {
 	 * @throws SQLException
 	 */
 	public OutputTableModel(CachedRowSet cached_row_set) throws SQLException {
+		if (this.row_set != null) this.row_set.release();
 		this.row_set = cached_row_set;
 		this.meta_data = this.row_set.getMetaData();
 		this.num_columns = meta_data.getColumnCount();

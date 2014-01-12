@@ -13,6 +13,7 @@ import javax.sql.rowset.CachedRowSet;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JViewport;
 import javax.swing.table.TableModel;
 
 import model.Configuration;
@@ -38,10 +39,7 @@ public class DBOutput extends JPanel implements Configuration{
 
 		this.tableModel = (OutputTableModel) populateTable(query);
 		addTableModel(this.tableModel);
-		refreshTable();
-
-		this.scrollPane = new JScrollPane(this.table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		this.scrollPane.setName(COMPONENT_SCROLLPANE_DBOUTPUT);
+		addTableToPane();
 
 		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
@@ -65,10 +63,11 @@ public class DBOutput extends JPanel implements Configuration{
 		this.table.setAutoCreateRowSorter(true);
 	}
 
-	public void refreshTable(){
-		this.table.repaint();
-		this.table.invalidate();
-		this.table.revalidate();
+	public void addTableToPane(){
+		this.scrollPane = new JScrollPane(this.table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		this.scrollPane.setName(COMPONENT_SCROLLPANE_DBOUTPUT);
+		this.scrollPane.repaint();
+		this.scrollPane.revalidate();
 	}
 
 	public void createComponentMap(Component component)
