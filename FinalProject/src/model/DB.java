@@ -215,7 +215,7 @@ public class DB {
 	 * This method suggests a KID for a new customer.
 	 * Diese Methode schlägt eine KID fuer neuen Kunden.
 	 *
-	 * @return kid : Vorgeschlagene KID f&uuml;r den neuen Kunden.
+	 * @return kid : Vorgeschlagener KID f&uuml;r den neuen Kunden.
 	 *
 	 */
 	public int getKundenID() {
