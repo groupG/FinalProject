@@ -37,7 +37,7 @@ public interface Configuration {
 	// Kundenpflege
 	static final String KUNDENPFLEGE_CARD_TITLE = "<html>Kunden anlegen und editieren</html>";
 	static final String[] KUNDENPFLEGE_COMBO_STRINGS = { "Neuer Kunde",
-			"Kunde ��ndern" };
+			"Kunde editieren" };
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
 	static final String KUNDENPFLEGE_LABEL_KID = "<html>Kunden-ID</html>";
@@ -157,6 +157,9 @@ public interface Configuration {
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE = "combo_kundenpflege_edit_branche";
 	static final String COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS = "combo_produktverwaltung_actions";
 	static final String COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS = "combo_bestellverwaltung_actions";
+
+	// Tree
+	static final String COMPONENT_TREE_EXPLORER = "tree_explorer";
 
 	// Button
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO = "button_kundenpflege_neu";

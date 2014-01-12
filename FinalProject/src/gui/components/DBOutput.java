@@ -3,6 +3,9 @@ package gui.components;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.sql.SQLException;
 import java.util.HashMap;
 
@@ -10,19 +13,18 @@ import javax.sql.rowset.CachedRowSet;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.TableModel;
 
+import model.Configuration;
 import model.DB;
 import model.OutputTableModel;
 
-import controller.MainController;
-
-public class DBOutput extends JPanel {
+public class DBOutput extends JPanel implements Configuration{
 
 	private static final long serialVersionUID = -57138235195624646L;
 	private JTable table;
 	private JScrollPane scrollPane;
 
-	private MainController controller;
 	private CachedRowSet rowset;
 	private OutputTableModel tableModel;
 
@@ -30,29 +32,43 @@ public class DBOutput extends JPanel {
 	protected HashMap<String, Component> componentMap;
 
 	public DBOutput(DB db, String query) throws SQLException {
-		super(new BorderLayout());
+		super(new GridBagLayout());
 
 		this.db = db;
 
-		populateTable(query);
+		this.tableModel = (OutputTableModel) populateTable(query);
+		addTableModel(this.tableModel);
+		refreshTable();
 
-		this.table = new JTable(this.tableModel);
-		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		this.table.setFillsViewportHeight(true);
-		this.table.setAutoCreateRowSorter(true);
 		this.scrollPane = new JScrollPane(this.table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		this.scrollPane.setName(COMPONENT_SCROLLPANE_DBOUTPUT);
 
-		this.add(scrollPane, BorderLayout.CENTER);
+		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
 		createComponentMap(this);
 	}
 
-	public void populateTable(String query) throws SQLException {
+	public TableModel populateTable(String query) throws SQLException {
 		if (query == null){
 			query = new String("");
 		}
+		if (this.rowset != null) this.rowset.release();
 		this.rowset = this.db.getContentsOfOutputTable(query);
-		this.tableModel = new OutputTableModel(this.rowset);
+		this.rowset.acceptChanges();
+		return new OutputTableModel(this.rowset);
+	}
+
+	public void addTableModel(TableModel model){
+		this.table = new JTable(model);
+		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		this.table.setFillsViewportHeight(true);
+		this.table.setAutoCreateRowSorter(true);
+	}
+
+	public void refreshTable(){
+		this.table.repaint();
+		this.table.invalidate();
+		this.table.revalidate();
 	}
 
 	public void createComponentMap(Component component)
@@ -75,13 +91,24 @@ public class DBOutput extends JPanel {
 			return null;
 	}
 
-	/* Getter und Setter */
-	public MainController getController() {
-		return this.controller;
-	}
 
-	public void setController(MainController controller) {
-		this.controller = controller;
+	public HashMap<String, Component> getComponentMap(){
+	    return this.componentMap;
+    }
+
+	public void addComponent(JPanel panel, Component c,
+			Insets insets, int x, int y) {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.NORTH;
+		constraints.gridx = x;
+		constraints.gridy = y;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		constraints.insets = insets;
+		panel.add(c, constraints);
 	}
 
 	public CachedRowSet getRowset() {

@@ -1,7 +1,12 @@
 package gui.components;
 
-import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JLabel;
@@ -11,9 +16,8 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import model.Configuration;
 import model.DB;
-
-import controller.MainController;
 
 
 /**
@@ -21,7 +25,7 @@ import controller.MainController;
  * @author borecki
  *
  */
-public class Explorer extends JPanel/*implements TreeSelectionListener */{
+public class Explorer extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 4203281741809192212L;
 	private JTree tree;
@@ -29,22 +33,65 @@ public class Explorer extends JPanel/*implements TreeSelectionListener */{
 	private JScrollPane scrollPane;
 	private JLabel selectedNode;
 
-	private MainController controller;
 	private DB db;
+	protected HashMap<String, Component> componentMap;
 
 	public Explorer(DB db, String owner) throws SQLException {
-		super(new BorderLayout());
+		super(new GridBagLayout());
 		this.db = db;
 
-		buildExplorer(owner);
-
-		this.scrollPane = new JScrollPane(this.tree);
 		this.selectedNode = new JLabel();
-		this.add(scrollPane, BorderLayout.CENTER);
-		this.add(selectedNode, BorderLayout.SOUTH);
+		addComponent(this, createExplorerPanel(owner), new Insets(0, 5, 0, 5), 0, 0);
+//		addComponent(this, this.selectedNode, new Insets(0, 5, 0, 5), 0, 1);
+
+		this.componentMap = new HashMap<String, Component>();
+		createComponentMap(this);
 	}
 
-	public void buildExplorer(String owner) throws SQLException {
+	public void addTreeSelectionListeners(Component component, TreeSelectionListener te){
+		((JTree) component).addTreeSelectionListener(te);
+	}
+
+	public void createComponentMap(Component component)
+	{
+		this.componentMap.put(component.getName(), component);
+		if (component instanceof Container)
+		{
+			if (((Container) component).getComponentCount() > 0){
+				for (Component child : ((Container) component).getComponents()){
+					createComponentMap(child);
+				}
+			}
+		}
+	}
+
+	public Component getComponentByName(String name) {
+		if (this.componentMap.containsKey(name)) {
+			return (Component) this.componentMap.get(name);
+		} else
+			return null;
+	}
+
+	public void addComponent(JPanel panel, Component c,
+			Insets insets, int x, int y) {
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.NORTH;
+		constraints.gridx = x;
+		constraints.gridy = y;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
+		constraints.insets = insets;
+		panel.add(c, constraints);
+	}
+
+	public HashMap<String, Component> getComponentMap(){
+	    return this.componentMap;
+    }
+
+	public Component createExplorerPanel(String owner) throws SQLException {
 
 		this.root = new DefaultMutableTreeNode(owner);
 		List<String> tables = this.db.getTables(owner);
@@ -64,21 +111,16 @@ public class Explorer extends JPanel/*implements TreeSelectionListener */{
 
 		this.tree = new JTree(this.root);
 		this.tree.setRootVisible(false);
-		//this.tree.addTreeSelectionListener(this);
+		this.tree.setName(COMPONENT_TREE_EXPLORER);
+		this.scrollPane = new JScrollPane(this.tree);
+		this.scrollPane.setName(COMPONENT_SCROLLPANE_EXPLORER);
+
+		return scrollPane;
 	}
 
-	public void addTreeSelectionListener(TreeSelectionListener e) {
-		this.tree.addTreeSelectionListener(e);
-	}
-
-	/* Getter und Setter */
-	public MainController getController() {
-		return this.controller;
-	}
-
-	public void setController(MainController controller) {
-		this.controller = controller;
-	}
+//	public void addTreeSelectionListener(TreeSelectionListener e) {
+//		this.tree.addTreeSelectionListener(e);
+//	}
 
 	public JTree getTree() {
 		return this.tree;

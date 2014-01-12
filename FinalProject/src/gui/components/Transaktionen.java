@@ -37,7 +37,7 @@ public class Transaktionen extends JPanel implements Configuration {
 	}
 
 	public void addItemListeners(Component component, ItemListener ie){
-		((AbstractButton) component).addItemListener(ie);
+		((JComboBox<?>) component).addItemListener(ie);
 	}
 
 	public Component createTransactionsPanel() {

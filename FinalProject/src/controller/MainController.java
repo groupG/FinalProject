@@ -1,7 +1,10 @@
 package controller;
 
 import gui.Client;
+import gui.components.Explorer;
+import gui.components.DBOutput;
 import gui.components.Transaktionen;
+import gui.components.Auswertung;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -22,9 +25,16 @@ import javax.sql.rowset.CachedRowSet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Configuration;
 import model.DB;
+import model.OutputTableModel;
 
 /**
  *
@@ -40,21 +50,34 @@ public class MainController implements Configuration{
 		this.db = db;
 		this.client = client;
 		this.componentMap = new HashMap<String, Component>();
-		addListeners(this.client.getTransaktionen());
+		addTransaktionenListeners(this.client.getTransaktionen());
+		addExplorerListeners(this.client.getExplorer());
 	}
 
-	void addListeners(Component component){
+	void addTransaktionenListeners(Component component){
 		Iterator<Entry<String, Component>> it = ((Transaktionen) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
 //			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JButton){
 //				System.out.println("Button registriert: " + pairs.getKey());
-				((JButton) pairs.getValue()).addActionListener(new ActionEventListener());
+				this.client.getTransaktionen().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 			else if (pairs.getValue() instanceof JComboBox){
 //				System.out.println("ComboBox registriert: " + pairs.getKey());
-				((JComboBox<?>) pairs.getValue()).addItemListener(new ItemEventListener());
+				this.client.getTransaktionen().addItemListeners(pairs.getValue(), new ItemEventListener());
+			}
+		}
+	}
+
+	void addExplorerListeners(Component component){
+		Iterator<Entry<String, Component>> it = ((Explorer) component).getComponentMap().entrySet().iterator();
+		while (it.hasNext()){
+			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
+			System.out.println(pairs.getKey());
+			if (pairs.getValue() instanceof JTree){
+				System.out.println("Tree registriert: " + pairs.getKey());
+				this.client.getExplorer().addTreeSelectionListeners(pairs.getValue(), new TreeEventListener());
 			}
 		}
 	}
@@ -129,6 +152,27 @@ public class MainController implements Configuration{
 	          //client.showException(new Exception((String) ie.getItem()));
 	          System.out.println("ItemEvent: " + ie);
 	    }
+	}
+
+	class TreeEventListener implements TreeSelectionListener{
+
+		@Override
+		public void valueChanged(TreeSelectionEvent te) {
+			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) client.getExplorer().getTree().getLastSelectedPathComponent();
+			System.out.println(selectedNode.getUserObject().toString());
+			if (selectedNode.getChildCount() > 0){
+				System.out.println("if: " + selectedNode.getUserObject().toString());
+				OutputTableModel tableModel = null;
+				try {
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 20");
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().refreshTable();
+			}
+		}
+
 	}
 }
 
