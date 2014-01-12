@@ -49,28 +49,28 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// KID, number, 10
 			JLabel label_kid = new JLabel(KUNDENPFLEGE_LABEL_KID);
 			JTextField _kid = new JTextField(10);
-			_kid.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KID);
+			_kid.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID);
 			addComponent(this, gbl, label_kid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _kid, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Name, string, 25
 			JLabel label_name = new JLabel(KUNDENPFLEGE_LABEL_NAME);
 			JTextField _name = new JTextField(10);
-			_name.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NAME);
+			_name.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME);
 			addComponent(this, gbl, label_name, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(this, gbl, _name, new Insets(0, 5, 0, 5), 1, 1);
 
 			// Adresse, char, 40
 			JLabel label_adresse = new JLabel(KUNDENPFLEGE_LABEL_ADRESSE);
 			JTextField _adresse = new JTextField(10);
-			_adresse.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_ADRESSE);
+			_adresse.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE);
 			addComponent(this, gbl, label_adresse, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(this, gbl, _adresse, new Insets(0, 5, 0, 5), 1, 2);
 
 			// Tel, char, 15
 			JLabel label_tel = new JLabel(KUNDENPFLEGE_LABEL_TEL);
 			JTextField _tel = new JTextField(10);
-			_tel.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_TEL);
+			_tel.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL);
 			addComponent(this, gbl, label_tel, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _tel, new Insets(0, 5, 0, 5), 1, 3);
 
@@ -79,7 +79,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
 			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
-			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NATION);
+			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION);
 			_nation.setSelectedIndex(0);
 			_nation.setEditable(true);
 			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 4);
@@ -90,7 +90,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			NumberFormat format_konto = NumberFormat.getNumberInstance();
 			format_konto.setMinimumFractionDigits(2);
 			JFormattedTextField _konto = new JFormattedTextField(format_konto);
-			_konto.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KONTO);
+			_konto.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO);
 			_konto.setValue(new Double(0.00));
 			_konto.setColumns(10);
 			_konto.setEditable(false);
@@ -102,7 +102,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			String[] branche_strings = { "AUTOMOBILE", "BUILDING", "FURNITURE",
 					"HOUSEHOLD", "MACHINERY" };
 			JComboBox<String> _branche = new JComboBox<String>(branche_strings);
-			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_BRANCHE);
+			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE);
 			_branche.setSelectedIndex(0);
 			_branche.setEditable(true);
 			addComponent(this, gbl, label_branche, new Insets(0, 5, 0, 5), 0, 6);
@@ -110,8 +110,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
-			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_NEU);
-			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_NEU);
+			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO);
+			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO);
 			addComponent(this, gbl, button_exec, new Insets(0,5,0,5), 2, 6);
 		}
 			break;
@@ -120,28 +120,28 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// KID, number, 10
 			JLabel label_kid = new JLabel(KUNDENPFLEGE_LABEL_KID);
 			JTextField _kid = new JTextField(10);
-			_kid.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KID);
+			_kid.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID);
 			addComponent(this, gbl, label_kid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(this, gbl, _kid, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Name, string, 25
 			JLabel label_name = new JLabel(KUNDENPFLEGE_LABEL_NAME);
 			JTextField _name = new JTextField(10);
-			_name.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NAME);
+			_name.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME);
 			addComponent(this, gbl, label_name, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(this, gbl, _name, new Insets(0, 5, 0, 5), 1, 1);
 
 			// Adresse, char, 40
 			JLabel label_adresse = new JLabel(KUNDENPFLEGE_LABEL_ADRESSE);
 			JTextField _adresse = new JTextField(10);
-			_adresse.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_ADRESSE);
+			_adresse.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE);
 			addComponent(this, gbl, label_adresse, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(this, gbl, _adresse, new Insets(0, 5, 0, 5), 1, 2);
 
 			// Tel, char, 15
 			JLabel label_tel = new JLabel(KUNDENPFLEGE_LABEL_TEL);
 			JTextField _tel = new JTextField(10);
-			_tel.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_TEL);
+			_tel.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL);
 			addComponent(this, gbl, label_tel, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(this, gbl, _tel, new Insets(0, 5, 0, 5), 1, 3);
 
@@ -150,7 +150,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
 			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
-			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NATION);
+			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION);
 			_nation.setSelectedIndex(0);
 			_nation.setEditable(true);
 			addComponent(this, gbl, label_nation, new Insets(0, 5, 0, 5), 0, 4);
@@ -161,7 +161,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			NumberFormat format_konto = NumberFormat.getNumberInstance();
 			format_konto.setMinimumFractionDigits(2);
 			JFormattedTextField _konto = new JFormattedTextField(format_konto);
-			_konto.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KONTO);
+			_konto.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO);
 			_konto.setValue(new Double(0.00));
 			_konto.setColumns(10);
 			_konto.setEditable(false);
@@ -173,7 +173,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			String[] branche_strings = { "AUTOMOBILE", "BUILDING", "FURNITURE",
 					"HOUSEHOLD", "MACHINERY" };
 			JComboBox<String> _branche = new JComboBox<String>(branche_strings);
-			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_BRANCHE);
+			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE);
 			_branche.setSelectedIndex(0);
 			_branche.setEditable(true);
 			addComponent(this, gbl, label_branche, new Insets(0, 5, 0, 5), 0, 6);
@@ -181,14 +181,14 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
-			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT);
-			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT);
+			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_GO);
+			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_GO);
 			addComponent(this, gbl, button_exec, new Insets(0, 5, 0, 5), 2, 6);
 
 			// Suchen
 			JButton button_search = new JButton(KUNDENPFLEGE_BUTTON_SUCHE);
-			button_search.setName(COMPONENT_BUTTON_KUNDENPFLEGE_SUCHEN);
-			button_search.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_SUCHEN);
+			button_search.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN);
+			button_search.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN);
 			addComponent(this, gbl, button_search, new Insets(0, 5, 0, 5), 2, 0);
 		}
 			break;

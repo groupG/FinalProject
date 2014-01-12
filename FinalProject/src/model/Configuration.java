@@ -11,11 +11,9 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-	// static final String CONNECTION_THIN =
-	// "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
-	// static final String CONNECTION_OCI =
-	// "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
+	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+//	 static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
 	static final String BORDER_TITLE_INFO = "Info";
@@ -39,7 +37,7 @@ public interface Configuration {
 	// Kundenpflege
 	static final String KUNDENPFLEGE_CARD_TITLE = "<html>Kunden anlegen und editieren</html>";
 	static final String[] KUNDENPFLEGE_COMBO_STRINGS = { "Neuer Kunde",
-			"Kunde ändern" };
+			"Kunde ��ndern" };
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
 	static final String KUNDENPFLEGE_LABEL_KID = "<html>Kunden-ID</html>";
@@ -125,11 +123,16 @@ public interface Configuration {
 
 	// Textfields
 	static final String COMPONENT_TEXTFIELD_DBOUTPUT_SUCHE = "textfield_dboutput_suche";
-	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_KID = "textfield_kundenpflege_kid";
-	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NAME = "textfield_kundenpflege_name";
-	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_ADRESSE = "textfield_kundenpflege_adresse";
-	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_TEL = "textfield_kundenpflege_tel";
-	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_KONTO = "textfield_kundenpflege_konto";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID = "textfield_kundenpflege_neu_kid";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME = "textfield_kundenpflege_neu_name";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE = "textfield_kundenpflege_neu_adresse";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL = "textfield_kundenpflege_neu_tel";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO = "textfield_kundenpflege_neu_konto";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID = "textfield_kundenpflege_edit_kid";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME = "textfield_kundenpflege_edit_name";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE = "textfield_kundenpflege_edit_adresse";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL = "textfield_kundenpflege_edit_tel";
+	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO = "textfield_kundenpflege_edit_konto";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_ZLID = "textfeld_produktverwaltung_zlid";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_SRCLAGER = "textfield_produktverwaltugn_srclager";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_DESTLAGER = "textfield_produktverwaltung_destlager";
@@ -148,15 +151,17 @@ public interface Configuration {
 
 	// Comboboxen
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS = "combo_kundenpflege_actions";
-	static final String COMPONENT_COMBO_KUNDENPFLEGE_NATION = "combo_kundenpflege_nation";
-	static final String COMPONENT_COMBO_KUNDENPFLEGE_BRANCHE = "combo_kundenpflege_branche";
+	static final String COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION = "combo_kundenpflege_neu_nation";
+	static final String COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE = "combo_kundenpflege_neu_branche";
+	static final String COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION = "combo_kundenpflege_edit_nation";
+	static final String COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE = "combo_kundenpflege_edit_branche";
 	static final String COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS = "combo_produktverwaltung_actions";
 	static final String COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS = "combo_bestellverwaltung_actions";
 
 	// Button
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU = "button_kundenpflege_neu";
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT = "button_kundenpflege_edit";
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_SUCHEN = "button_kundenpflege_suchen";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO = "button_kundenpflege_neu";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_GO = "button_kundenpflege_edit";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN = "button_kundenpflege_suchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU = "button_produktverwaltung_einbuchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT = "button_produktverwaltung_umbuchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN = "button_produktverwaltung_suchen";

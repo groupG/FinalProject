@@ -19,13 +19,13 @@ import javax.swing.JTabbedPane;
 
 import model.Configuration;
 
-public class Transactions extends JPanel implements Configuration {
+public class Transaktionen extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 5054965523548199842L;
 
 	protected HashMap<String, Component> componentMap;
 
-	public Transactions() {
+	public Transaktionen() {
 		super(new GridBagLayout());
 		addComponent(this, createTransactionsPanel(), new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
@@ -131,6 +131,7 @@ public class Transactions extends JPanel implements Configuration {
 			double weighty) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.NORTHWEST;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = width;
@@ -145,6 +146,7 @@ public class Transactions extends JPanel implements Configuration {
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.NORTHWEST;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = 1;

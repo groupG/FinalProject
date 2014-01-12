@@ -1,7 +1,7 @@
 package controller;
 
 import gui.Client;
-import gui.components.Transactions;
+import gui.components.Transaktionen;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -19,10 +19,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.sql.rowset.CachedRowSet;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+
 import model.Configuration;
 import model.DB;
 
@@ -40,20 +40,20 @@ public class MainController implements Configuration{
 		this.db = db;
 		this.client = client;
 		this.componentMap = new HashMap<String, Component>();
-		addListeners(this.client.getTransactions());
+		addListeners(this.client.getTransaktionen());
 	}
 
 	void addListeners(Component component){
-		Iterator<Entry<String, Component>> it = ((Transactions) component).getComponentMap().entrySet().iterator();
+		Iterator<Entry<String, Component>> it = ((Transaktionen) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-			System.out.println(pairs.getKey());
+//			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: " + pairs.getKey());
+//				System.out.println("Button registriert: " + pairs.getKey());
 				((JButton) pairs.getValue()).addActionListener(new ActionEventListener());
 			}
 			else if (pairs.getValue() instanceof JComboBox){
-				System.out.println("ComboBox registriert: " + pairs.getKey());
+//				System.out.println("ComboBox registriert: " + pairs.getKey());
 				((JComboBox<?>) pairs.getValue()).addItemListener(new ItemEventListener());
 			}
 		}
@@ -108,14 +108,15 @@ public class MainController implements Configuration{
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			System.out.println("ActionEvent: " + ae);
-			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU){
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NAME)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_ADRESSE)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_TEL)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KONTO)).getText());
-//				System.out.println(((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NATION)).getText());
-//				System.out.println(((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_BRANCHE)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_KID)).getText());
+			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO){
+				System.out.println(client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME));
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).getText());
+				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem());
+				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem());
+				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText());
 			}
 		}
 	}
@@ -123,8 +124,8 @@ public class MainController implements Configuration{
 	class ItemEventListener implements ItemListener{
 	    @Override
 	    public void itemStateChanged(ItemEvent ie) {
-	    	  CardLayout cl = (CardLayout) ((Container) client.getTransactions().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
-	    	  cl.show(((Container) client.getTransactions().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
+	    	  CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
+	    	  cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
 	          //client.showException(new Exception((String) ie.getItem()));
 	          System.out.println("ItemEvent: " + ie);
 	    }

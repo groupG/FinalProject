@@ -12,12 +12,12 @@ import javax.swing.JTabbedPane;
 
 import model.Configuration;
 
-public class Analysis extends JPanel implements Configuration {
+public class Auswertung extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 2973871514227057444L;
 	protected HashMap<String, Component> componentMap;
 
-	public Analysis() {
+	public Auswertung() {
 		super(new GridBagLayout());
 		addComponent(this, createAnalysisPanel(), new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
@@ -67,6 +67,7 @@ public class Analysis extends JPanel implements Configuration {
 			double weighty) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
+		constraints.anchor = GridBagConstraints.NORTH;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = width;
@@ -81,6 +82,7 @@ public class Analysis extends JPanel implements Configuration {
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.NORTH;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = 1;
