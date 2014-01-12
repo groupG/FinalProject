@@ -131,7 +131,7 @@ public class MainController implements Configuration{
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 			System.out.println("ActionEvent: " + ae);
-			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO){
+			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN){
 				System.out.println(client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME));
 				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText());
 				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText());

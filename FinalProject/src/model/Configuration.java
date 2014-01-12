@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
 //	 static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -162,8 +162,8 @@ public interface Configuration {
 	static final String COMPONENT_TREE_EXPLORER = "tree_explorer";
 
 	// Button
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO = "button_kundenpflege_neu";
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_GO = "button_kundenpflege_edit";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN = "button_kundenpflege_neu";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN = "button_kundenpflege_edit";
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN = "button_kundenpflege_suchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU = "button_produktverwaltung_einbuchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT = "button_produktverwaltung_umbuchen";

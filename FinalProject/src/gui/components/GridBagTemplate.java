@@ -110,8 +110,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
-			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO);
-			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_NEU_GO);
+			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN);
 			addComponent(this, gbl, button_exec, new Insets(0,5,0,5), 2, 6);
 		}
 			break;
@@ -181,8 +181,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Ausfuehren
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
-			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_GO);
-			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_GO);
+			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN);
 			addComponent(this, gbl, button_exec, new Insets(0, 5, 0, 5), 2, 6);
 
 			// Suchen
