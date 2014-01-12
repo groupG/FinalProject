@@ -36,7 +36,7 @@ public interface Configuration {
 	// Transaktionen
 	// Kundenpflege
 	static final String KUNDENPFLEGE_CARD_TITLE = "<html>Kunden anlegen und editieren</html>";
-	static final String[] KUNDENPFLEGE_COMBO_STRINGS = { "Neuer Kunde",
+	static final String[] KUNDENPFLEGE_COMBO_STRINGS = { "Wählen Sie eine Transaktion aus","Neuer Kunde",
 			"Kunde editieren" };
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
