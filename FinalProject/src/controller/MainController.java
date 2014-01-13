@@ -162,6 +162,14 @@ public class MainController implements Configuration{
 				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString();
 				String kNation = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem().toString();
 
+				String[] kundenDaten = { kName, kAdresse, kTelNr, kBranche, kNation };
+				for ( String datum : kundenDaten ) {
+					if ( datum.isEmpty() ) {
+						System.out.println("No new customer");
+						return;
+					}
+				}
+
 				try {
 					db.insertKunde(kID, kName, kAdresse, kTelNr, kBranche, kNation);
 					JOptionPane.showMessageDialog(client, "<html>Neuer Kunde mit Kunden-ID " + kID + " wurde erstellt.</html>");
@@ -169,6 +177,10 @@ public class MainController implements Configuration{
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					e.printStackTrace();
 				}
+			}
+
+			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
+				client.showDialog(new GridBagTemplate(9,null,null));
 			}
 
 			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
