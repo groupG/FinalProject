@@ -440,26 +440,25 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			break;
 		case 7: // Template: Produktanalyse
 		{
-			// PID, number, 10
-			JLabel label_pid = new JLabel(ANALYSE_LABEL_PID);
-			JTextField _pid = new JTextField(10);
-			_pid.setName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_PID);
-			addComponent(this, label_pid, new Insets(0, 5, 0, 5), 0, 0);
-			addComponent(this, _pid, new Insets(0, 5, 0, 5), 1, 0);
-
 			// Typ, string, 25
 			JLabel label_typ = new JLabel(ANALYSE_LABEL_TYP);
 			JTextField _typ = new JTextField(10);
 			_typ.setName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP);
-			addComponent(this, label_typ, new Insets(0, 5, 0, 5), 0, 1);
-			addComponent(this, _typ, new Insets(0, 5, 0, 5), 1, 1);
+			addComponent(this, label_typ, new Insets(0, 5, 0, 5), 0, 0);
+			addComponent(this, _typ, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Groesse, number, 10
 			JLabel label_groesse = new JLabel(ANALYSE_LABEL_GROESSE);
 			JTextField _groesse = new JTextField(10);
 			_groesse.setName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE);
-			addComponent(this, label_groesse, new Insets(0, 5, 0, 5), 0, 2);
-			addComponent(this, _groesse, new Insets(0, 5, 0, 5), 1, 2);
+			addComponent(this, label_groesse, new Insets(0, 5, 0, 5), 0, 1);
+			addComponent(this, _groesse, new Insets(0, 5, 0, 5), 1, 1);
+
+			// Ausfueren
+			JButton button_exec = new JButton(ANALYSE_BUTTON_AUSFUEHREN);
+			button_exec.setName(COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN);
+			addComponent(this, button_exec, new Insets(0, 5, 0, 5), 2, 1);
 		}
 			break;
 		case 8: // Template: Senkung der Lieferkosten
@@ -468,8 +467,14 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_pid = new JLabel(ANALYSE_LABEL_PID);
 			JTextField _pid = new JTextField(10);
 			_pid.setName(COMPONENT_TEXTFIELD_LIEFERKOSTEN_PID);
-			addComponent(this, label_pid, new Insets(0, 5, 0, 5), 0, 0);
-			addComponent(this, _pid, new Insets(0, 5, 0, 5), 1, 0);
+			addComponent(this, label_pid, new Insets(0, 5, 0, 5), 0, 0, 1, 1, GridBagConstraints.HORIZONTAL);
+			addComponent(this, _pid, new Insets(0, 5, 0, 5), 1, 0, 1, 1, GridBagConstraints.HORIZONTAL);
+
+			// Ausfueren
+			JButton button_exec = new JButton(ANALYSE_BUTTON_AUSFUEHREN);
+			button_exec.setName(COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN);
+			button_exec.setActionCommand(COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN);
+			addComponent(this, button_exec, new Insets(0, 5, 0, 5), 2, 0, 1, 1, GridBagConstraints.HORIZONTAL);
 		}
 			break;
 		case 9:

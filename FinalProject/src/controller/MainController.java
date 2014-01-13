@@ -203,7 +203,7 @@ public class MainController implements Configuration{
 				System.out.println("if: " + selectedNode.getUserObject().toString());
 				OutputTableModel tableModel = null;
 				try {
-				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 20");
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 10000");
 				} catch (SQLException e) {
 					client.showException(e);
 				}
