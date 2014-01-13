@@ -224,7 +224,7 @@ public class DB implements Configuration {
 	public int getKundenID() {
 		if ( needNextKID ) {
 			Statement stmtKID = null;
-			String sql_query = "SELECT SEQ_KUNDE_KID2.NEXTVAL FROM DUAL";
+			String sql_query = "SELECT " + TABLE_OWNER + ".SEQ_KUNDE_KID2.NEXTVAL FROM DUAL";
 			try {
 				stmtKID = connection.createStatement();
 				ResultSet rs = stmtKID.executeQuery(sql_query);
@@ -338,7 +338,7 @@ public class DB implements Configuration {
 	 * @param kNation : Name des Landes, in dem der Kunde lebt.
 	 * @throws SQLException
 	 */
-	public void updateKunde(int kID, String kName, String kAdresse, String kTelNr, float kKonto, String kBranche, String kNation) throws SQLException {
+	public void updateKunde(String kID, String kName, String kAdresse, String kTelNr, float kKonto, String kBranche, String kNation) throws SQLException {
 
 		// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
 		connection.setAutoCommit(false);
