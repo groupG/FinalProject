@@ -19,7 +19,7 @@ import com.sun.rowset.CachedRowSetImpl;
  *
  * @author borecki, dang
  */
-public class DB {
+public class DB implements Configuration {
 
 	private Connection connection;
 	private String url;
@@ -66,34 +66,33 @@ public class DB {
 	}
 
 	/**
-	 * Ueberprueft, ob das angegebene Element in der gesuchten Relation der
-	 * Tabelle REISE_TABLES_2013 vorhanden ist.
+	 * &Uuml;berpr&uuml;ft, ob das gesuchte <i>element</i> in der Table <i>table</i> existiert.
 	 *
-	 * @param table
-	 * @param element
-	 * @param value
-	 * @return
+	 * @param table : Table, in der nach dem Element <i>element</i> gesucht wird.
+	 * @param element : Gesuchtes Element.
+	 * @param value : Wert des gesuchten Elements.
+	 * @return <i>true</i>, falls das gesuchte Element in der Table <i>table</i> existiert,
+	 * 		   <i>false</i>, falls das gesuchte Element nicht in der Table <i>table</i> vorkommt.
 	 * @throws SQLException
 	 */
-	public boolean checkIfElementexists(String table, String element,
-			String value) throws SQLException {
+	public boolean checkIfElementExists(String table, String element, String value) throws SQLException {
 		Statement statement = null;
-		setQuery("SELECT * FROM reise_tables_2013." + table + " WHERE "
-				+ element + "=" + value);
+		String query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " +
+		               "WHERE " + element + " = " + value;
+		boolean result = false; // false : Das gesuchte Element existiert nicht.
 		try {
 			statement = this.connection.createStatement();
-			ResultSet result = statement.executeQuery(getQuery());
-			if (result.next()) {
-				return true;
-			}
+			ResultSet rs = statement.executeQuery(query);
+			result = rs.next();
+			rs.close(); // Close ResultSet object if it's not used more.
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 		} finally {
 			if (statement != null) {
 				statement.close();
 			}
 		}
-		return false;
+		return result;
 	}
 
 	public void showTables() throws SQLException{
@@ -198,6 +197,10 @@ public class DB {
 
 	}
 
+	/**
+	 * Diese Methode liefert den temporär gespeicherten Wert von Kunden-ID zur&uuml;ck.
+	 * @return kid_buffered : Den zwischengespeicherten Wert von Kunden-ID.
+	 */
 	public int getBufferedKundenID() {
 		return this.kid_buffered;
 	}
@@ -227,7 +230,7 @@ public class DB {
 				ResultSet rs = stmtKID.executeQuery(sql_query);
 				//rs.beforeFirst();
 				rs.next();
-				kid_buffered = rs.getInt(1);
+				this.kid_buffered = rs.getInt(1);
 				rs.close();
 			}
 			catch ( SQLException e ) {
@@ -241,7 +244,7 @@ public class DB {
 						e.printStackTrace();
 					}
 				}
-				this.needNextKID = false;
+				this.needNextKID = false; // ab hier werden voruebergehend keine weitere KIDs vorgeschlagen.
 			}
 		}
 		return kid_buffered;
@@ -265,23 +268,20 @@ public class DB {
 	 * @throws SQLException
 	 */
 	public void insertKunde(int kID, String kName, String kAdresse, String kTelNr, String kBranche, String kNation) throws SQLException {
-		/*
-		 * INSERT INTO KUNDE
-		 * VALUES (kID, kName, kAdresse, kTelNr, 0.00, kBranche, NID)
-		 */
+
+		// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
+		connection.setAutoCommit(false);
+		// Default transaction isolation level of oracle is READ COMMITED.
+
 		PreparedStatement stmt_InsertKunde = null;
-		String query_InsertKunde = "INSERT INTO KUNDE2 " +
-				   "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
+		String query_InsertKunde = "INSERT INTO " + TABLE_OWNER + ".KUNDE2 " +
+				   				   "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
 
 		// Common statement for retrieving data from the database.
 		Statement stmt_Retrieve = null;
 		String sql_query;
 
 		try {
-			// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
-			connection.setAutoCommit(false);
-			// Default transaction isolation level of oracle is READ COMMITED.
-
 			// Create a new Statement object to retrieve data in database.
 			stmt_Retrieve = connection.createStatement();
 
@@ -290,11 +290,11 @@ public class DB {
 
 			// Determine the NID for a given nation name.
 			// Bestimme die zugehoerige NID fuer den vorgegebenen Nationnamen kNation.
-			sql_query = "SELECT nid FROM NATION " +
+			sql_query = "SELECT nid FROM " + TABLE_OWNER + ".NATION " +
 						"WHERE name = '" + kNation + "'";
 			rs = stmt_Retrieve.executeQuery(sql_query);
-			rs.first(); // move the cursor to the first row of ResultSet rs.
-			int kNID = rs.getInt("NID"); // NID (d.h. ID der Nation,in der der Kunde lebt).
+			rs.next();
+			int kNID = rs.getInt(1); // NID
 
 			// Close the rs cursor, since no use more.
 			rs.close();
@@ -308,11 +308,10 @@ public class DB {
 			stmt_InsertKunde.setString(5, kBranche); // Branche
 			stmt_InsertKunde.setInt(6, kNID); // NID
 			stmt_InsertKunde.executeUpdate();
+
+			connection.commit();
 		} catch ( SQLException e ) {
 			e.printStackTrace();
-			// TODO's:
-			// Variante 1: SEQUENCE-Objekt schl��gt automatisch eine neue KID vor , wiederholt die Methode und erstellt einen Kunden.
-			// Variante 2: DIe Methode wird mit dem Auswerfen der Exception abgebrochen. Der User f��hrt die Methode durch das Klicken auf Button nochmals aus.
 		} finally {
 			if ( stmt_Retrieve != null ) {
 				stmt_Retrieve.close();
@@ -320,6 +319,85 @@ public class DB {
 			if ( stmt_InsertKunde != null ) {
 				stmt_InsertKunde.close();
 			}
+			connection.setAutoCommit(true);
+		}
+	}
+
+	/**
+	 * Diese Methode &auml;ndert die Daten eines Kunden.
+	 * This method alters the data of a customer.
+	 *
+	 * KUNDE : [KID], Name, Adresse, Telefonnummer, Konto, Branche, NID
+	 *
+	 * @param kID : KID (ID des Kunden).
+	 * @param kName : Name des Kunden.
+	 * @param kAdresse : Adresse des Kunden.
+	 * @param kTelefon : Telefonnummer des Kunden.
+	 * @param kKonto : Kontostand eines des Kunden.
+	 * @param kBranche : Branche, in dem der Kunde t&auml;tig ist.
+	 * @param kNation : Name des Landes, in dem der Kunde lebt.
+	 * @throws SQLException
+	 */
+	public void updateKunde(int kID, String kName, String kAdresse, String kTelNr, float kKonto, String kBranche, String kNation) throws SQLException {
+
+		// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
+		connection.setAutoCommit(false);
+		// Default transaction isolation level of oracle is READ COMMITED.
+
+		PreparedStatement p_stmt = null;
+		String query_UpdateKunde = "UPDATE " + TABLE_OWNER + ".KUNDE2 " +
+				   				   "SET kid = ?, " +
+				   				   "    name = ?, " +
+				   				   "    adresse = ?, " +
+				   				   "    telefonnummer = ?, " +
+				   				   "    konto = ?, " +
+				   				   "    branche = ?, " +
+				   				   "    nid = ? " +
+				   				   "WHERE kid = " + kID;
+
+		// Common statement for retrieving data from the database.
+		Statement stmt = null;
+		String sql_query;
+
+		try {
+			// Create a new Statement object to retrieve data in database.
+			stmt = connection.createStatement();
+
+			// Create a ResultSet object to hold row sets obtained from a query.
+			ResultSet rs = null;
+
+			// Determine the NID for a given nation name.
+			// Bestimme die zugehoerige NID fuer den vorgegebenen Nationnamen kNation.
+			sql_query = "SELECT nid FROM " + TABLE_OWNER + ".NATION " +
+						"WHERE name = '" + kNation + "'";
+			rs = stmt.executeQuery(sql_query);
+			rs.next();
+			int kNID = rs.getInt(1); // NID
+
+			// Close the rs cursor, since no use more.
+			rs.close();
+
+			// Fuege den neuen Kunden mit allen seinen Daten in DB ein.
+			p_stmt = connection.prepareStatement(query_UpdateKunde);
+			p_stmt.setString(1, kName); // Name
+			p_stmt.setString(2, kAdresse); // Adresse
+			p_stmt.setString(3, kTelNr); // Telefonnummer
+			p_stmt.setFloat(4, kKonto); // Kontostand
+			p_stmt.setString(5, kBranche); // Branche
+			p_stmt.setInt(6, kNID); // NID
+			p_stmt.executeUpdate();
+
+			connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			if ( p_stmt != null ) {
+				p_stmt.close();
+			}
+			connection.setAutoCommit(true);
 		}
 	}
 }

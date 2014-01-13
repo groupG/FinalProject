@@ -100,7 +100,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			// Nation, char, 25
 			// TODO: JComboBox mit Werten aus DB
 			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
-			String[] nation_strings = { "Nation 1", "Nation 2", "Nation 3" };
+			String[] nation_strings = { "Jemen", "Belize", "Neuseeland" };
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
 			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION);
 			_nation.setSelectedIndex(0);
