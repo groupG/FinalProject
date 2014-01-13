@@ -41,7 +41,7 @@ public class DBOutput extends JPanel implements Configuration{
 		addTableModel(this.tableModel);
 		addTableToPane();
 
-		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
+
 		this.componentMap = new HashMap<String, Component>();
 		createComponentMap(this);
 	}
@@ -66,8 +66,11 @@ public class DBOutput extends JPanel implements Configuration{
 	public void addTableToPane(){
 		this.scrollPane = new JScrollPane(this.table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		this.scrollPane.setName(COMPONENT_SCROLLPANE_DBOUTPUT);
-		this.scrollPane.repaint();
-		this.scrollPane.revalidate();
+		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
+	}
+
+	public void removeScrollPane(){
+		this.remove(this.scrollPane);
 	}
 
 	public void createComponentMap(Component component)

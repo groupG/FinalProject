@@ -207,8 +207,11 @@ public class MainController implements Configuration{
 				} catch (SQLException e) {
 					client.showException(e);
 				}
+				client.getDBOutput().removeScrollPane();
 				client.getDBOutput().addTableModel(tableModel);
 				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
 			}
 		}
 
