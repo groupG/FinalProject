@@ -88,6 +88,10 @@ public class Client extends JFrame implements Configuration {
 				e.getClass().getName() + ": ", e.getMessage() });
 	}
 
+	public void showDialog(Object obj){
+		JOptionPane.showMessageDialog(this.getContentPane(), obj);
+	}
+
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);

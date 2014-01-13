@@ -3,6 +3,7 @@ package controller;
 import gui.Client;
 import gui.components.Explorer;
 import gui.components.DBOutput;
+import gui.components.GridBagTemplate;
 import gui.components.Transaktionen;
 import gui.components.Auswertung;
 
@@ -24,6 +25,8 @@ import java.util.Map.Entry;
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -140,6 +143,9 @@ public class MainController implements Configuration{
 				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem());
 				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem());
 				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText());
+			}
+			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
+				client.showDialog(new GridBagTemplate(9,null,null));
 			}
 		}
 	}
