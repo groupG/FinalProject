@@ -3,6 +3,7 @@ package controller;
 import gui.Client;
 import gui.components.Explorer;
 import gui.components.DBOutput;
+import gui.components.GridBagTemplate;
 import gui.components.Transaktionen;
 import gui.components.Auswertung;
 
@@ -20,10 +21,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
 import javax.swing.JTree;
@@ -38,7 +42,7 @@ import model.OutputTableModel;
 
 /**
  *
- * @author borecki
+ * @author borecki, dang
  *
  */
 public class MainController implements Configuration{
@@ -130,16 +134,47 @@ public class MainController implements Configuration{
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-			System.out.println("ActionEvent: " + ae);
-			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN){
-				System.out.println(client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME));
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).getText());
-				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem());
-				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem());
-				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText());
+//			System.out.println("ActionEvent: " + ae);
+//			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN){
+//				System.out.println(client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME));
+//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText());
+//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText());
+//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText());
+//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).getText());
+//				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem().toString());
+//				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString());
+//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText());
+//			}
+
+			// KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN ) {
+				String str_kid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText();
+				if ( !Pattern.matches("\\d*", str_kid) ) {
+					JOptionPane.showMessageDialog(client, "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 2, 6, 89, 432 ...</html>");
+					return;
+				}
+
+				int kID = Integer.parseInt(str_kid);
+				if ( kID == db.getBufferedKundenID() )
+					db.needNextKundenID(true); // DB darf wieder naechsten KID liefern.
+
+				String kName = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText();
+				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText();
+				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText();
+				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString();
+				String kNation = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem().toString();
+
+				try {
+					db.insertKunde(kID, kName, kAdresse, kTelNr, kBranche, kNation);
+					JOptionPane.showMessageDialog(client, "<html>Neuer Kunde mit Kunden-ID " + kID + " wurde erstellt.</html>");
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+
+			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
+				client.showDialog(new GridBagTemplate(9,null,null));
 			}
 		}
 	}
@@ -154,39 +189,39 @@ public class MainController implements Configuration{
 
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
-	    		if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).setText(""+db.getKundenID());
 	    			client.repaint();
+
 	    		}
 	    		System.out.println("ItemEvent: " + ie);
 	    	}
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
-	    		if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
 	    			client.repaint();
 	    		}
-	    		System.out.println("ItemEvent: " + ie);
 	    	}
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox) ie.getSource()).getSelectedIndex());
+	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
-	    		if ((int) ((JComboBox) ie.getSource()).getSelectedIndex() == 1)
+	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
 	    			client.repaint();
 	    		}
-	    		System.out.println("ItemEvent: " + ie);
 	    	}
+
 	    }
 	}
 
@@ -200,12 +235,15 @@ public class MainController implements Configuration{
 				System.out.println("if: " + selectedNode.getUserObject().toString());
 				OutputTableModel tableModel = null;
 				try {
-				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 20");
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 10000");
 				} catch (SQLException e) {
 					client.showException(e);
 				}
+				client.getDBOutput().removeScrollPane();
 				client.getDBOutput().addTableModel(tableModel);
 				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
 			}
 		}
 
