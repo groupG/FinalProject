@@ -66,34 +66,33 @@ public class DB implements Configuration {
 	}
 
 	/**
-	 * Ueberprueft, ob das angegebene Element in der gesuchten Relation der
-	 * Tabelle REISE_TABLES_2013 vorhanden ist.
+	 * &Uuml;berpr&uuml;ft, ob das gesuchte <i>element</i> in der Table <i>table</i> existiert.
 	 *
-	 * @param table
-	 * @param element
-	 * @param value
-	 * @return
+	 * @param table : Table, in der nach dem Element <i>element</i> gesucht wird.
+	 * @param element : Gesuchtes Element.
+	 * @param value : Wert des gesuchten Elements.
+	 * @return <i>true</i>, falls das gesuchte Element in der Table <i>table</i> existiert,
+	 * 		   <i>false</i>, falls das gesuchte Element nicht in der Table <i>table</i> vorkommt.
 	 * @throws SQLException
 	 */
-	public boolean checkIfElementexists(String table, String element,
-			String value) throws SQLException {
+	public boolean checkIfElementExists(String table, String element, String value) throws SQLException {
 		Statement statement = null;
-		setQuery("SELECT * FROM reise_tables_2013." + table + " WHERE "
-				+ element + "=" + value);
+		String query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " +
+		               "WHERE " + element + " = " + value;
+		boolean result = false; // false : Das gesuchte Element existiert nicht.
 		try {
 			statement = this.connection.createStatement();
-			ResultSet result = statement.executeQuery(getQuery());
-			if (result.next()) {
-				return true;
-			}
+			ResultSet rs = statement.executeQuery(query);
+			result = rs.next();
+			rs.close(); // Close ResultSet object if it's not used more.
 		} catch (SQLException e) {
-
+			e.printStackTrace();
 		} finally {
 			if (statement != null) {
 				statement.close();
 			}
 		}
-		return false;
+		return result;
 	}
 
 	public void showTables() throws SQLException{
@@ -198,6 +197,10 @@ public class DB implements Configuration {
 
 	}
 
+	/**
+	 * Diese Methode liefert den temporär gespeicherten Wert von Kunden-ID zur&uuml;ck.
+	 * @return kid_buffered : Den zwischengespeicherten Wert von Kunden-ID.
+	 */
 	public int getBufferedKundenID() {
 		return this.kid_buffered;
 	}

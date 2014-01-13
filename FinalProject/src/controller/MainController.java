@@ -148,13 +148,11 @@ public class MainController implements Configuration{
 
 			// KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN ) {
-				String str_kid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText();
-				if ( !Pattern.matches("\\d*", str_kid) ) {
-					JOptionPane.showMessageDialog(client, "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 2, 6, 89, 432 ...</html>");
+				String inputKID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText();
+				if ( !isValidKID(inputKID) )
 					return;
-				}
 
-				int kID = Integer.parseInt(str_kid);
+				int kID = Integer.parseInt(inputKID);
 				if ( kID == db.getBufferedKundenID() )
 					db.needNextKundenID(true); // DB darf wieder naechsten KID liefern.
 
@@ -173,9 +171,36 @@ public class MainController implements Configuration{
 				}
 			}
 
+			// KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN ) {
+				String inputKID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
+				// Check if the given KID is valid.
+				if ( !isValidKID(inputKID) )
+					return;
+				// Check if the given KID really exists in the database.
+				try {
+					if ( db.checkIfElementExists("KUNDE2", "kid", inputKID) ) {
+						System.out.println("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+					}
+					else {
+						System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+
 			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
 				client.showDialog(new GridBagTemplate(9,null,null));
 			}
+		}
+
+		private boolean isValidKID(String inputKID) {
+			boolean result = Pattern.matches("\\d*", inputKID);  // nur positive nummerische Werte.
+			if ( !result ) {
+				JOptionPane.showMessageDialog(client, "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 2, 6, 89, 432 ...</html>");
+			}
+			return result;
 		}
 	}
 
