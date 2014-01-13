@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -20,7 +20,7 @@ public interface Configuration {
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "BORECKI";
+	static final String TABLE_OWNER = "PROJEKT_2013";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
