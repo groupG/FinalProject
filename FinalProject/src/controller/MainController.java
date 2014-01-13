@@ -164,8 +164,7 @@ public class MainController implements Configuration{
 
 				String[] kundenDaten = { kName, kAdresse, kTelNr, kBranche, kNation };
 				for ( String datum : kundenDaten ) {
-					if ( datum.isEmpty() ) {
-						System.out.println("No new customer");
+					if ( datum.replaceAll("\\s+", "").isEmpty() ) {
 						return;
 					}
 				}
@@ -285,5 +284,3 @@ public class MainController implements Configuration{
 
 	}
 }
-
-
