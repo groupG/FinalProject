@@ -261,7 +261,7 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
 	
-	/* #### Sonstiges #### */
+	/* #### Tabellen, Sequence #### */
 	static final String TABLE_KUNDE = "KUNDE2";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID2";
 }

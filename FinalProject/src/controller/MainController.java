@@ -172,7 +172,7 @@ public class MainController implements Configuration{
 
 				try {
 					db.insertKunde(kID, kName, kAdresse, kTelNr, kBranche, kNation);
-					JOptionPane.showMessageDialog(client, "<html>Neuer Kunde mit Kunden-ID " + kID + " wurde erstellt.</html>");
+					JOptionPane.showMessageDialog(client, "<html>Neuer Kunde mit Kunden-ID " + kID + " wurde erstellt. </html>");
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					e.printStackTrace();

@@ -73,6 +73,7 @@ public class DB implements Configuration {
 	 * @param value : Wert des gesuchten Elements.
 	 * @return <i>true</i>, falls das gesuchte Element in der Table <i>table</i> existiert,
 	 * 		   <i>false</i>, falls das gesuchte Element nicht in der Table <i>table</i> vorkommt.
+	 * 
 	 * @throws SQLException
 	 */
 	public boolean checkIfElementExists(String table, String element, String value) throws SQLException {
