@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -20,7 +20,7 @@ public interface Configuration {
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "SON_DANG";
+	static final String TABLE_OWNER = "PROJEKT_2013_G";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
@@ -60,7 +60,7 @@ public interface Configuration {
 	static final String KUNDENPFLEGE_LABEL_BRANCHE = "<html>Branche</html>";
 	static final String KUNDENPFLEGE_BUTTON_EXECUTE = "<html>Ausf&uuml;hren</html>";
 	static final String KUNDENPFLEGE_BUTTON_SUCHE = "<html>Suchen</html>";
-	
+
 	static final String KUNDENPFLEGE_MESSAGE_INVALID_KID = "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
 	static final String KUNDENPFLEGE_MESSAGE_FILL_ALL_FIELDS = "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>";
 
@@ -260,7 +260,7 @@ public interface Configuration {
 
 	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
-	
+
 	/* #### Tabellen, Sequence #### */
 	static final String TABLE_KUNDE = "KUNDE2";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID2";
