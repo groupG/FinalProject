@@ -21,12 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPanel;
@@ -146,7 +148,7 @@ public class MainController implements Configuration{
 //				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText());
 //			}
 
-			// KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
+			//-----------------  KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN ) {
 				String inputKID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText();
 				if ( !isValidKID(inputKID) )
@@ -179,11 +181,12 @@ public class MainController implements Configuration{
 				}
 			}
 
+			//----------------- 
 			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
 				client.showDialog(new GridBagTemplate(9,null,null));
 			}
 
-			// KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
+			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN ) {
 				String inputKID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
 				// Check if the given KID is valid.
@@ -192,18 +195,21 @@ public class MainController implements Configuration{
 				// Check if the given KID really exists in the database.
 				try {
 					if ( !db.checkIfElementExists(TABLE_KUNDE, "kid", inputKID) ) {
+						JOptionPane.showMessageDialog(client, "<html>Der Kunde mit KID " + inputKID + " ist nicht inder Datenbank vorhanden.</html>");
 						return;
 					}
-					else {
-						System.out.println("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
-					}
+					
+					Vector<Object> values = db.selectFromTable(TABLE_KUNDE, "kid = " + inputKID);
+					System.out.println(values.size());
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setText((String) values.get(1));
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  values.get(4));
+					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
+					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("" + values.get(6));
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-			}
-
-			if (ae.getActionCommand().equals(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN)){
-				client.showDialog(new GridBagTemplate(9,null,null));
 			}
 		}
 

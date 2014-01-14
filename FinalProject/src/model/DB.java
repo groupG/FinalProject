@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import javax.sql.rowset.CachedRowSet;
 
@@ -340,7 +341,6 @@ public class DB implements Configuration {
 	 * @throws SQLException
 	 */
 	public void updateKunde(String kID, String kName, String kAdresse, String kTelNr, float kKonto, String kBranche, String kNation) throws SQLException {
-
 		// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
 		connection.setAutoCommit(false);
 		// Default transaction isolation level of oracle is READ COMMITED.
@@ -400,5 +400,35 @@ public class DB implements Configuration {
 			}
 			connection.setAutoCommit(true);
 		}
+	}
+	
+	public Vector<Object> selectFromTable(String table, String condition) throws SQLException {
+		Vector<Object> values = new Vector<Object>();
+		Statement stmt = null;
+		String sql_query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " +
+				           "WHERE " + condition;
+		try {
+			stmt = this.connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql_query);
+			rs.next();
+			int i = 1;
+			while ( i > 0 ) {
+				try { // Trick, um Invalid Comlumn Index SQLException zu vermeiden
+					values.add(rs.getObject(i));
+				} catch ( SQLException e ) {
+					break;
+				}
+				i++;
+			}
+			rs.close();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		}
+		finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+		}
+		return values;
 	}
 }
