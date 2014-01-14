@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
