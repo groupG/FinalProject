@@ -20,7 +20,7 @@ public interface Configuration {
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "PROJEKT_2013_G";
+	static final String TABLE_OWNER = "SON_DANG";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
@@ -260,7 +260,7 @@ public interface Configuration {
 
 	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
-
+	
 	/* #### Tabellen, Sequence #### */
 	static final String TABLE_KUNDE = "KUNDE2";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID2";
