@@ -83,7 +83,7 @@ public class DB implements Configuration {
 		try {
 			statement = this.connection.createStatement();
 			ResultSet rs = statement.executeQuery(query);
-			result = rs.next();
+			result = rs.next(); // wenn true : Das gesuchte Element existiert in DB.
 			rs.close(); // Close ResultSet object if it's not used more.
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -224,7 +224,7 @@ public class DB implements Configuration {
 	public int getKundenID() {
 		if ( needNextKID ) {
 			Statement stmtKID = null;
-			String sql_query = "SELECT " + TABLE_OWNER + ".SEQ_KUNDE_KID2.NEXTVAL FROM DUAL";
+			String sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_KUNDE_KID + ".NEXTVAL FROM DUAL";
 			try {
 				stmtKID = connection.createStatement();
 				ResultSet rs = stmtKID.executeQuery(sql_query);
@@ -274,7 +274,7 @@ public class DB implements Configuration {
 		// Default transaction isolation level of oracle is READ COMMITED.
 
 		PreparedStatement stmt_InsertKunde = null;
-		String query_InsertKunde = "INSERT INTO " + TABLE_OWNER + ".KUNDE2 " +
+		String query_InsertKunde = "INSERT INTO " + TABLE_OWNER + "." + TABLE_KUNDE + " " +
 				   				   "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
 
 		// Common statement for retrieving data from the database.
@@ -345,7 +345,7 @@ public class DB implements Configuration {
 		// Default transaction isolation level of oracle is READ COMMITED.
 
 		PreparedStatement p_stmt = null;
-		String query_UpdateKunde = "UPDATE " + TABLE_OWNER + ".KUNDE2 " +
+		String query_UpdateKunde = "UPDATE " + TABLE_OWNER + "." + TABLE_KUNDE  + " " +
 				   				   "SET kid = ?, " +
 				   				   "    name = ?, " +
 				   				   "    adresse = ?, " +

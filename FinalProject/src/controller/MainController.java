@@ -165,6 +165,7 @@ public class MainController implements Configuration{
 				String[] kundenDaten = { kName, kAdresse, kTelNr, kBranche, kNation };
 				for ( String datum : kundenDaten ) {
 					if ( datum.replaceAll("\\s+", "").isEmpty() ) {
+						JOptionPane.showMessageDialog(client, KUNDENPFLEGE_MESSAGE_FILL_ALL_FIELDS);
 						return;
 					}
 				}
@@ -190,11 +191,11 @@ public class MainController implements Configuration{
 					return;
 				// Check if the given KID really exists in the database.
 				try {
-					if ( db.checkIfElementExists("KUNDE2", "kid", inputKID) ) {
-						System.out.println("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
+					if ( !db.checkIfElementExists(TABLE_KUNDE, "kid", inputKID) ) {
+						return;
 					}
 					else {
-						System.out.println("NOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+						System.out.println("YESSSSSSSSSSSSSSSSSSSSSSSSSSSS");
 					}
 				} catch (SQLException e) {
 					e.printStackTrace();
@@ -209,7 +210,7 @@ public class MainController implements Configuration{
 		private boolean isValidKID(String inputKID) {
 			boolean result = Pattern.matches("\\d*", inputKID);  // nur positive nummerische Werte.
 			if ( !result ) {
-				JOptionPane.showMessageDialog(client, "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 2, 6, 89, 432 ...</html>");
+				JOptionPane.showMessageDialog(client, KUNDENPFLEGE_MESSAGE_INVALID_KID);
 			}
 			return result;
 		}

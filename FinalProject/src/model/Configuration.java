@@ -13,14 +13,14 @@ public interface Configuration {
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
 //	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
 	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
-//	 static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
+	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
 	static final String BORDER_TITLE_INFO = "Info";
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "BORECKI";
+	static final String TABLE_OWNER = "SON_DANG";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
@@ -33,11 +33,22 @@ public interface Configuration {
 	static final String LABEL_LOGIN_FEEDBACK_WARNING = "<html>Login fehlgeschlagen!</html>";
 	static final String LABEL_LOGIN_FEEDBACK_SUCCESS = "<html>Anmeldung erfolgreich.</html>";
 
-	// Transaktionen
-	// Kundenpflege
+
+	/* ##########################*/
+	/* ##### Transaktionen  #####*/
+	/* ##########################*/
+
+
+	/* ##### Kundenpflege  #####*/
 	static final String KUNDENPFLEGE_CARD_TITLE = "<html>Kunden anlegen und editieren</html>";
-	static final String[] KUNDENPFLEGE_COMBO_STRINGS = { "Wählen Sie eine Transaktion aus","Neuer Kunde",
-			"Kunde editieren" };
+	static final String[] KUNDENPFLEGE_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Neuer Kunde",	"Kunde editieren" };
+	static final String KUNDENPFLEGE_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Kunden anlegen oder bearbeiten.<br>"
+			+ " <br>"
+			+ " Wenn Sie einen neuen Kunden anlegen, dann wird Ihnen vom system automatisch eine passende Kundennummer vorgeschlagen, welche Sie bei Bedarf &auml;ndern k&ouml;nnen.<br>"
+			+ " Achten Sie darauf, dass sie eine g&uuml;tige numerische Zeichenfolge eingeben, sonst wird ihre Transaktion vom System verworfen.<br>"
+			+ "<br>"
+			+ "Beachten Sie, dass Sie die Branche wahlweise aus den vorgeschlagenen Optionen aus&auml;hlen oder aber textuell eingeben k&ouml;nnen. <br>"
+			+ "</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
 	static final String KUNDENPFLEGE_LABEL_KID = "<html>Kunden-ID</html>";
@@ -49,25 +60,34 @@ public interface Configuration {
 	static final String KUNDENPFLEGE_LABEL_BRANCHE = "<html>Branche</html>";
 	static final String KUNDENPFLEGE_BUTTON_EXECUTE = "<html>Ausf&uuml;hren</html>";
 	static final String KUNDENPFLEGE_BUTTON_SUCHE = "<html>Suchen</html>";
+	
+	static final String KUNDENPFLEGE_MESSAGE_INVALID_KID = "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
+	static final String KUNDENPFLEGE_MESSAGE_FILL_ALL_FIELDS = "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>";
 
-	// Produktverwaltung
+	/* ##### Produktverwaltung  #####*/
 	static final String PRODUKTVERWALTUNG_CARD_TITLE = "<html>Zulieferung einbuchen und Best&auml;nde umbuchen</html>";
-	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {
-			"Zulieferung einbuchen", "Bestand umbuchen" };
+	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Zulieferung einbuchen", "Bestand umbuchen" };
+	static final String PRODUKTVERWALTUNG_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Produkt-Zulieferungen ein- oder bereits bestehene Best&auml;nde auf ein anderes Lager umbuchen<br>"
+			+ " <br>"
+			+ "</html>";
 	static final String PRODUKTVERWALTUNG_TITLE_ZULIEFERUNG_NEU = "<html>Neue Zulieferung einbuchen</html>";
 	static final String PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT = "<html>Bestand auf ein anderes Lager umbuchen</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_ZLID = "<html>Zulieferungs-ID</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_SRCLAGER = "<html>Ursprungslager</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_DESTLAGER = "<html>Ziellager</html>";
+	static final String PRODUKTVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
+	static final String PRODUKTVERWALTUNG_LABEL_MENGE = "<html>Menge</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_SUCHE = "<html>Suchen</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_EINBUCHEN = "<html>Einbuchen</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_UMBUCHEN = "<html>Umbuchen</html>";
 	static String PRODUKTVERWALTUNG_ERROR_BESTAND = "<html>Bestand reicht nicht aus! Nur ###x### St&uuml;ck vorr&auml;tig!</html>";
 
-	// Bestellverwaltung
+	/* ##### Bestellverwaltung  #####*/
 	static final String BESTELLVERWALTUNG_CARD_TITLE = "<html>Bestellungen anlegen, editieren &amp; ausliefern</html>";
-	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {
-			"Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
+	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
+	static final String BESTELLVERWALTUNG_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Bestellungen anlegen, bearbeiten und auslifern.<br>"
+			+ " <br>"
+			+ "</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU = "<html>Neue Bestellung anlegen</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT = "<html>Vorhandene Bestellung editieren</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO = "<html>Bestellung an Kunden ausliefern</html>";
@@ -79,24 +99,38 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_LABEL_STATUS = "<html>Bestellstatus</html>";
 	static final String BESTELLVERWALTUNG_LABEL_BSTTERMIN = "<html>Bestelltermin</html>";
 	static final String BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN = "<html>Erledigt am</html>";
-	static final String BESTELLVERWALTUNG_LABEL_BSTPOSNR = "<html>Bestellposition</html>";
-	static final String BESTELLVERWALTUNG_LABEL_BSTMENGE = "<html>Menge</html>";
-	static final String BESTELLVERWALTUNG_LABEL_BSTPREIS = "<html>Preis</html>";
-	static final String BESTELLVERWALTUNG_LABEL_BSTPOSTEXT = "<html>Positionstext</html>";
-	static final String BESTELLVERWALTUNG_LABEL_BSTPID = "<html>Produkt-ID</html>";
-	static final String BESTELLVERWALTUNG_BUTTON_BESTELLUNG_SPEICHERN = "<html>Speichern</html>";
-	static final String BESTELLVERWALTUNG_BUTTON_BESTELLUNG_BESTAETIGEN = "<html>Best&auml;tigen</html>";
+	static final String BESTELLVERWALTUNG_LABEL_BESTELLPOS = "<html>Bestellposition</html>";
+	static final String BESTELLVERWALTUNG_LABEL_POSNR = "<html>Positionsnr.</html>";
+	static final String BESTELLVERWALTUNG_LABEL_MENGE = "<html>Menge</html>";
+	static final String BESTELLVERWALTUNG_LABEL_PREIS = "<html>Preis</html>";
+	static final String BESTELLVERWALTUNG_LABEL_POSTEXT = "<html>Positionstext</html>";
+	static final String BESTELLVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
 
-	// Analyse
+	/* ##########################*/
+	/* ####### Auswertung #######*/
+	/* ##########################*/
+
+	/* ##### Produktanalyse  #####*/
 	static final String ANALYSE_CARD_TITLE = "<html>Bestellungen anlegen, editieren und verschicken</html>";
 	static final String ANALYSE_TITLE_PRODUKTANALYSE = "<html>Produktanalyse starten</html>";
 	static final String ANALYSE_TITLE_LIEFERKOSTENSENKUNG = "<html>Senken der Lieferkosten</html>";
 	static final String ANALYSE_LABEL_TYP = "<html>Typ</html>";
 	static final String ANALYSE_LABEL_GROESSE = "<html>Gr&ouml;&szlig;e</html>";
 	static final String ANALYSE_LABEL_PID = "<html>Produkt-ID</html>";
+	static final String ANALYSE_BUTTON_AUSFUEHREN = "<html>Ausf&uuml;hren</html>";
 
-	// Componentnames
-	// Panels
+	/* ##### Senkung der Lieferkosten  #####*/
+
+
+	/* ##########################*/
+	/* ####### Komponenten ######*/
+	/* ##########################*/
+
+
+	/* ##### Panels #####*/
 	static final String COMPONENT_PANEL_KUNDENPFLEGE = "panel_kundenpflege";
 	static final String COMPONENT_PANEL_PRODUKTVERWALTUNG = "panel_produktverwaltung";
 	static final String COMPONENT_PANEL_BESTELLVERWALTUNG = "panel_bestellungverwaltung";
@@ -113,16 +147,22 @@ public interface Configuration {
 	static final String COMPONENT_PANEL_PRODUKTANALYSE = "panel_produktanalyse";
 	static final String COMPONENT_PANEL_LIEFERKOSTENSENKUNG = "panel_lieferkostensenkung";
 
-	// ScrollPanes
+	/* ##### Container #####*/
+	static final String COMPONENT_PANEL_BESTELLVERWALTUNG_NEU_BSTPOS = "panel_bestellverwaltung_neu_bstpos";
+	static final String COMPONENT_PANEL_BESTELLVERWALTUNG_EDIT_BSTPOS = "panel_bestellverwaltung_edit_bstpos";
+
+	/* ##### ScrollPanes #####*/
 	static final String COMPONENT_SCROLLPANE_EXPLORER = "scrollpane_explorer";
 	static final String COMPONENT_SCROLLPANE_DBOUTPUT = "scrollpane_dboutput";
 
-	// TabbedPanes
+	/* ##### TabbedPanes #####*/
 	static final String COMPONENT_TABBEDPANE_TRANSAKTIONEN = "tabbedpane_transaktionen";
 	static final String COMPONENT_TABBEDPANE_AUSWERTUNG = "tabbedpane_auswertung";
 
-	// Textfields
+	/* ##### Textfields #####*/
+	// DBOutput
 	static final String COMPONENT_TEXTFIELD_DBOUTPUT_SUCHE = "textfield_dboutput_suche";
+	// Kundenpflege
 	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID = "textfield_kundenpflege_neu_kid";
 	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME = "textfield_kundenpflege_neu_name";
 	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE = "textfield_kundenpflege_neu_adresse";
@@ -133,23 +173,57 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE = "textfield_kundenpflege_edit_adresse";
 	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL = "textfield_kundenpflege_edit_tel";
 	static final String COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO = "textfield_kundenpflege_edit_konto";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_ZLID = "textfeld_produktverwaltung_zlid";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_SRCLAGER = "textfield_produktverwaltugn_srclager";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_DESTLAGER = "textfield_produktverwaltung_destlager";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_PID = "textfield_produktverwaltung_pid";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_MENGE = "textfield_produktverwaltung_menge";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_WUNSCHTERMIN = "textfield_bestellverwaltung_wunschtermin";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_POSNR = "textfield_bestellverwaltung_posnr";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_MENGE = "textfield_bestellverwaltung_menge";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_PID = "textfield_bestellverwaltung_pid";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_PREIS = "textfield_bestellverwaltung_preis";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_POSTEXT = "textfield_bestellverwaltung_postext";
-	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_AENDERUNGSDATUM = "textfield_bestellverwaltung_aenderungsdatum";
-	static final String COMPONENT_TEXTFIELD_ANALYSE_TYP = "textfield_analyse_typ";
-	static final String COMPONENT_TEXTFIELD_ANALYSE_GROESSE = "textfield_analyse_groesse";
-	static final String COMPONENT_TEXTFIELD_ANALYSE_PID = "textfield_analyse_produkt";
+	// Produktverwaltung
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID = "textfeld_produktverwaltung_neu_zlid";
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_ZLID = "textfeld_produktverwaltung_edit_zlid";
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER = "textfield_produktverwaltugn_edit_srclager";
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER = "textfield_produktverwaltung_edit_destlager";
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT = "textfield_produktverwaltung_edit_produkt";
+	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE = "textfield_produktverwaltung_edit_menge";
+	// Bestellverwaltung
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID = "textfield_bestellverwaltung_neu_bstid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT = "textfield_bestellverwaltung_neu_bsttext";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER = "textfield_bestellverwaltung_neu_anleger";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN = "textfield_bestellverwaltung_neu_bsttermin";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS = "textfield_bestellverwaltung_neu_bestellpositionen";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PID = "textfield_bestellverwaltung_neu_bstpos_pid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_MENGE = "textfield_bestellverwaltung_neu_bstpos_menge";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PREIS = "textfield_bestellverwaltung_neu_bstpos_preis";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID = "textfield_bestellverwaltung_edit_bstid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT = "textfield_bestellverwaltung_edit_bsttext";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER = "textfield_bestellverwaltung_edit_anleger";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN = "textfield_bestellverwaltung_edit_bsttermin";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS = "textfield_bestellverwaltung_edit_bestellpositionen";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_PID = "textfield_bestellverwaltung_edit_bstpos_pid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_MENGE = "textfield_bestellverwaltung_edit_bstpos_menge";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_PREIS = "textfield_bestellverwaltung_edit_bstpos_preis";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID = "textfield_bestellverwaltung_go_bstid";
+	// Produktanalyse
+	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_PID = "textfield_analyse_produkt";
+	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP = "textfield_analyse_typ";
+	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE = "textfield_analyse_groesse";
+	// Lieferkostensenkung
+	static final String COMPONENT_TEXTFIELD_LIEFERKOSTEN_PID = "textfield_lieferkosten_produkt";
 
-	// Comboboxen
+	/* ##### Textareas #####*/
+	static final String COMPONENT_TEXTAREA_BESTELLVERWALTUNG_NEU_BSTPOS_POSTEXT = "textarea_bestellverwaltung_neu_bstpos_postext";
+	static final String COMPONENT_TEXTAREA_BESTELLVERWALTUNG_EDIT_BSTPOS_POSTEXT = "textarea_bestellverwaltung_edit_bstpos_postext";
+
+	/* ##### Labels #####*/
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS = "label_bestellverwaltung_neu_status";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_STATUS = "label_bestellverwaltung_edit_status";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM = "label_bestellverwaltung_neu_anlagedatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM = "label_bestellverwaltung_neu_aenderungsdatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN = "label_bestellverwaltung_neu_erledigttermin";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM = "label_bestellverwaltung_edit_anlagedatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM = "label_bestellverwaltung_edit_aenderungsdatum";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN = "label_bestellverwaltung_edit_erledigttermin";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_BSTPOS_POSNR = "label_bestellverwaltung_neu_bstpos_posnr";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_BSTPOS_BSTID = "label_bestellverwaltung_neu_bstpos_bstid";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_BSTPOS_POSNR = "label_bestellverwaltung_edit_bstpos_posnr";
+	static final String COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_BSTPOS_BSTID = "label_bestellverwaltung_edit_bstpos_bstid";
+
+	/* ##### Comboboxen #####*/
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS = "combo_kundenpflege_actions";
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION = "combo_kundenpflege_neu_nation";
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE = "combo_kundenpflege_neu_branche";
@@ -158,17 +232,36 @@ public interface Configuration {
 	static final String COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS = "combo_produktverwaltung_actions";
 	static final String COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS = "combo_bestellverwaltung_actions";
 
-	// Tree
+	/* ##### Trees #####*/
 	static final String COMPONENT_TREE_EXPLORER = "tree_explorer";
 
-	// Button
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN = "button_kundenpflege_neu";
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN = "button_kundenpflege_edit";
-	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN = "button_kundenpflege_suchen";
-	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU = "button_produktverwaltung_einbuchen";
-	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT = "button_produktverwaltung_umbuchen";
-	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_SUCHEN = "button_produktverwaltung_suchen";
-	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_BESTELLPOS_NEU = "button_bestellverwaltung_bestellpos_neu";
-	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_BESTELLUNG_SPEICHERN = "button_bestellverwaltung_bestellung_speichern";
-	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_BESTELLUNG_BESTAETIGEN = "button_bestellverwaltung_bestellung_bestaetigen";
+	/* ##### Buttons #####*/
+	static final String COMPONENT_BUTTON_DBOUTPUT_SUCHEN = "button_dboutput_suchen";
+
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN = "button_kundenpflege_neu_ausfuehren";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN = "button_kundenpflege_edit_aendern";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN = "button_kundenpflege_edit_suchen";
+
+	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN = "button_produktverwaltung_neu_einbuchen";
+	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_SUCHEN = "button_produktverwaltung_neu_suchen";
+	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN = "button_produktverwaltung_edit_umbuchen";
+
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSHINZUFUEGEN = "button_bestellverwaltung_neu_bstposhinzufuegen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSAENDERN = "button_bestellverwaltung_neu_bstposaendern";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BSTPOSLOESCHEN = "button_bestellverwaltung_neu_loeschen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN = "button_bestellverwaltung_neu_speichern";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN = "button_bestellverwaltung_neu_bestaetigen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSHINZUFUEGEN = "button_bestellverwaltung_edit_bstposhinzufuegen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSAENDERN = "button_bestellverwaltung_edit_bstposaendern";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSLOESCHEN = "button_bestellverwaltung_edit_loeschen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN = "button_bestellverwaltung_edit_speichern";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN = "button_bestellverwaltung_edit_bestaetigen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN = "button_bestellverwaltung_bestellung_go_ausliefern";
+
+	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
+	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
+	
+	/* #### Sonstiges #### */
+	static final String TABLE_KUNDE = "KUNDE2";
+	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID2";
 }
