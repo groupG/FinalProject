@@ -31,7 +31,7 @@ import model.DB;
 
 /**
  * Login-View. Ermoeglicht es dem Nutzer, sich bei der Datenbank anzumelden und
- * zur Hauptanwendung zu gelangen. TEST
+ * zur Hauptanwendung zu gelangen.
  *
  * @author borecki
  *

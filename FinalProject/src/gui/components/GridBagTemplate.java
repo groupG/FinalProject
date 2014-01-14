@@ -556,7 +556,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = 1;

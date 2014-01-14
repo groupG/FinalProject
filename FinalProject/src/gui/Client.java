@@ -78,7 +78,7 @@ public class Client extends JFrame implements Configuration {
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, bottomSplitPane);
 		mainSplitPane.setPreferredSize(new Dimension(width, height));
 		mainSplitPane.setOneTouchExpandable(true);
-		mainSplitPane.setDividerLocation((int)Math.round(height * 0.62));
+		mainSplitPane.setDividerLocation((int)Math.round(height * 0.57));
 
 		return mainSplitPane;
 	}
