@@ -310,43 +310,47 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Status, char, 20
 			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
-			JTextField _status = new JTextField(10);
+			JLabel _status = new JLabel();
 			_status.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS);
-			addComponent(this, label_status, new Insets(0, 5, 0, 5), 0, 5);
-			addComponent(this, _status, new Insets(0, 5, 0, 5), 1, 5);
+			// TODO Farbe nach status vergeben
+			addComponent(this, label_status, new Insets(0, 5, 0, 5), 2, 0);
+			addComponent(this, _status, new Insets(0, 5, 0, 5), 3, 0);
 
 			// Anlagedatum, date
 			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
 			JLabel _anlagedatum = new JLabel("31.12.2014");
 			_anlagedatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM);
-			addComponent(this, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, _anlagedatum, new Insets(0, 5, 0, 5), 1, 6);
+			addComponent(this, label_anlagedatum, new Insets(0, 5, 0, 5), 2, 1);
+			addComponent(this, _anlagedatum, new Insets(0, 5, 0, 5), 3, 1);
 
 			// Aenderungsdatum, date
 			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
 			JLabel _aenderungsdatum = new JLabel("31.12.2014");
 			_aenderungsdatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM);
-			addComponent(this, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 7);
-			addComponent(this, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 7);
+			addComponent(this, label_aenderungsdatum, new Insets(0, 5, 0, 5), 2, 2);
+			addComponent(this, _aenderungsdatum, new Insets(0, 5, 0, 5), 3, 2);
 
 			// Erledigttermin, date
 			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
 			JLabel _erledigttermin = new JLabel("31.12.2014");
 			_erledigttermin.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN);
-			addComponent(this, label_erledigttermin, new Insets(0, 5, 0, 5), 0, 8);
-			addComponent(this, _erledigttermin, new Insets(0, 5, 0, 5), 1, 8);
+			addComponent(this, label_erledigttermin, new Insets(0, 5, 0, 5), 2, 3);
+			addComponent(this, _erledigttermin, new Insets(0, 5, 0, 5), 3, 3);
+
+			JButton button_abbrechen = new JButton("Abbrechen");
+			addComponent(this, button_abbrechen, new Insets(0, 5, 0, 5), 1, 9);
 
 			// Speichern
 			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
 			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
 			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
-			addComponent(this, button_speichern, new Insets(0, 5, 0, 5), 1, 9);
+			addComponent(this, button_speichern, new Insets(0, 5, 0, 5), 2, 9);
 
 			// Bestaetigen
 			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
 			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN);
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN);
-			addComponent(this, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 9);
+			addComponent(this, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 9);
 		}
 			break;
 		case 5:
@@ -383,41 +387,44 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
 			JLabel _status = new JLabel("OFFEN");
 			_status.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_STATUS);
-			addComponent(this, label_status, new Insets(0, 5, 0, 5), 0, 4);
-			addComponent(this, _status, new Insets(0, 5, 0, 5), 1, 4);
+			addComponent(this, label_status, new Insets(0, 5, 0, 5), 2, 0);
+			addComponent(this, _status, new Insets(0, 5, 0, 5), 3, 0);
 
 			// Anlagedatum, date
 			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
 			JLabel _anlagedatum = new JLabel("31.12.2014");
 			_anlagedatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM);
-			addComponent(this, label_anlagedatum, new Insets(0, 5, 0, 5), 0, 5);
-			addComponent(this, _anlagedatum, new Insets(0, 5, 0, 5), 1, 5);
+			addComponent(this, label_anlagedatum, new Insets(0, 5, 0, 5), 2, 1);
+			addComponent(this, _anlagedatum, new Insets(0, 5, 0, 5), 3, 1);
 
 			// Aenderungsdatum, date
 			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
 			JLabel _aenderungsdatum = new JLabel("31.12.2014");
 			_aenderungsdatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM);
-			addComponent(this, label_aenderungsdatum, new Insets(0, 5, 0, 5), 0, 6);
-			addComponent(this, _aenderungsdatum, new Insets(0, 5, 0, 5), 1, 6);
+			addComponent(this, label_aenderungsdatum, new Insets(0, 5, 0, 5), 2, 2);
+			addComponent(this, _aenderungsdatum, new Insets(0, 5, 0, 5), 3, 2);
 
 			// Erledigttermin, date
 			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
 			JLabel _erledigttermin = new JLabel("31.12.2014");
 			_erledigttermin.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN);
-			addComponent(this, label_erledigttermin, new Insets(0, 5, 0, 5), 0, 7);
-			addComponent(this, _erledigttermin, new Insets(0, 5, 0, 5), 1, 7);
+			addComponent(this, label_erledigttermin, new Insets(0, 5, 0, 5), 2, 3);
+			addComponent(this, _erledigttermin, new Insets(0, 5, 0, 5), 3, 3);
+
+			JButton button_abbrechen = new JButton("Abbrechen");
+			addComponent(this, button_abbrechen, new Insets(0, 5, 0, 5), 1, 8);
 
 			// Speichern
 			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
 			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
 			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
-			addComponent(this, button_speichern, new Insets(0, 5, 0, 5), 1, 8);
+			addComponent(this, button_speichern, new Insets(0, 5, 0, 5), 2, 8);
 
 			// Bestaetigen
 			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
 			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
-			addComponent(this, button_bestaetigen, new Insets(0, 5, 0, 5), 2, 8);
+			addComponent(this, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 8);
 		}
 			break;
 		case 6:

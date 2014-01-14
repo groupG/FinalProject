@@ -134,8 +134,8 @@ public class Transaktionen extends JPanel implements Configuration {
 			Insets insets, int x, int y, int width, int height, double weightx,
 			double weighty) {
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.anchor = GridBagConstraints.NORTHWEST;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.anchor = GridBagConstraints.NORTH;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = width;
@@ -150,7 +150,7 @@ public class Transaktionen extends JPanel implements Configuration {
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.anchor = GridBagConstraints.NORTHWEST;
+		constraints.anchor = GridBagConstraints.NORTH;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = 1;
