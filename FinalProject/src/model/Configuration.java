@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+	static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_THIN_LOCALHOST = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -29,6 +29,7 @@ public interface Configuration {
 	static final String LABEL_CLEAR = "<html>Clear</html>";
 	static final String LABEL_USERNAME = "<html>Benutzername</html>";
 	static final String LABEL_PASSWORD = "<html>Passwort</html>";
+	static final String LABEL_CONNECTION = "<html>Verbindung</html>";
 	static final String LABEL_LOGIN_FEEDBACK_INFO = "<html>Bitte geben Sie ihre Zugangsdaten ein.</html>";
 	static final String LABEL_LOGIN_FEEDBACK_WARNING = "<html>Login fehlgeschlagen!</html>";
 	static final String LABEL_LOGIN_FEEDBACK_SUCCESS = "<html>Anmeldung erfolgreich.</html>";

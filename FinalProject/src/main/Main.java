@@ -33,8 +33,8 @@ public class Main implements Configuration {
 							break;
 						}
 					}
-					createAndBuildGUI();
-//					createAndBuildLoginGui();
+//					createAndBuildGUI();
+					createAndBuildLoginGui();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

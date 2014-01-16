@@ -9,18 +9,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
@@ -46,7 +53,9 @@ public class Login extends JFrame implements Configuration {
 	private JLabel labelUserName;
 	private JLabel labelPassword;
 	private JLabel labelFeedback;
+	private JLabel labelConnection;
 	private JTextField textUserName;
+	private JComboBox<String> comboConnection;
 	private JPasswordField textPassword;
 	private JButton buttonLogin;
 	private JButton buttonClear;
@@ -55,13 +64,14 @@ public class Login extends JFrame implements Configuration {
 
 	// Logik
 	private DB db;
+	private String connection;
 
 	/**
 	 * Konstruktor. Erzeugt eine neue Login-View.
 	 */
 	public Login() {
 		super(TITLE);
-
+		this.connection = CONNECTION_THIN;
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent event) {
@@ -72,6 +82,7 @@ public class Login extends JFrame implements Configuration {
 
 		this.labelUserName = new JLabel(LABEL_USERNAME);
 		this.labelPassword = new JLabel(LABEL_PASSWORD);
+		this.labelConnection = new JLabel(LABEL_CONNECTION);
 		this.labelFeedback = new JLabel(LABEL_LOGIN_FEEDBACK_INFO);
 		this.textUserName = new JTextField(15);
 		this.textPassword = new JPasswordField(15);
@@ -79,16 +90,22 @@ public class Login extends JFrame implements Configuration {
 		this.buttonClear = new JButton(LABEL_CLEAR);
 
 		this.loginPane = getContentPane();
-		this.loginPane.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		this.loginPane
+				.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
 		this.loginPanel = new JPanel();
 		GridBagLayout gbl = new GridBagLayout();
 		this.loginPanel.setLayout(gbl);
 
 		// Label fuer Benutzername
-		addComponent(this.loginPanel, gbl, labelUserName, new Insets(0,5,0,5), 0, 0);
+		addComponent(this.loginPanel, gbl, labelUserName,
+				new Insets(0, 5, 0, 5), 0, 0);
 
 		// Label fuer Passwort
-		addComponent(this.loginPanel, gbl, labelPassword, new Insets(0,5,0,5), 0, 1);
+		addComponent(this.loginPanel, gbl, labelPassword,
+				new Insets(0, 5, 0, 5), 0, 1);
+
+		// Label fuer Connection
+		addComponent(this.loginPanel, gbl, labelConnection, new Insets(0, 5, 0, 5), 0, 2);
 
 		// Label fuer Feedback an den Nutzer
 		this.blackline = BorderFactory.createLineBorder(Color.black);
@@ -99,18 +116,38 @@ public class Login extends JFrame implements Configuration {
 				BORDER_TITLE_INFO);
 		this.title.setTitleJustification(TitledBorder.CENTER);
 		this.labelFeedback.setBorder(this.title);
-		addComponent(this.loginPanel, gbl, labelFeedback, new Insets(0,5,0,5), 0, 2,0,2,1.0,1.0);
+		addComponent(this.loginPanel, gbl, labelFeedback,
+				new Insets(0, 5, 0, 5), 0, 3, 0, 2, 1.0, 1.0);
 
 		// Text fuer Benutzername
 		this.textUserName.setColumns(15);
-		addComponent(this.loginPanel, gbl, textUserName, new Insets(10, 5, 5, 20), 1, 0);
+		addComponent(this.loginPanel, gbl, textUserName, new Insets(10, 5, 5,
+				20), 1, 0);
 
 		// Text fuer Passwort
 		this.textPassword.setColumns(15);
-		addComponent(this.loginPanel, gbl, textPassword, new Insets(10, 5, 5, 20), 1, 1);
+		addComponent(this.loginPanel, gbl, textPassword, new Insets(10, 5, 5,
+				20), 1, 1);
+
+		// ComboBox fuer Connection
+		String[] connection_strings = { "flores.dbs.ifi.lmu.de", "localhost" };
+		this.comboConnection = new JComboBox<String>(connection_strings);
+		addComponent(this.loginPanel, gbl, comboConnection, new Insets(10, 5, 5, 20), 1, 2);
+		this.comboConnection.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent ie) {
+				if (ie.getStateChange() == ItemEvent.SELECTED){
+					String con = (String) ie.getItem();
+					connection = mapToConnection(con);
+				}
+			}
+
+		});
+
 
 		// Button zum Leeren der Textfelder
-		addComponent(this.loginPanel, gbl, buttonClear, new Insets(10, 5, 5, 20), 2, 0);
+		addComponent(this.loginPanel, gbl, buttonClear,
+				new Insets(10, 5, 5, 20), 2, 0);
 		this.buttonClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				reset();
@@ -125,7 +162,7 @@ public class Login extends JFrame implements Configuration {
 
 				try {
 
-					db = new DB(DRIVER, CONNECTION_THIN + "dbprakt", user, pwd);
+					db = new DB(DRIVER, connection + "dbprakt", user, pwd);
 
 				} catch (SQLException e1) {
 					feedback(2);
@@ -136,14 +173,22 @@ public class Login extends JFrame implements Configuration {
 					if (db != null) {
 						feedback(1);
 						dispose();
-						Client client = new Client(db,CLIENT_WIDTH,CLIENT_HEIGHT);
-						MainController controller = new MainController(db, client);
+						Client client = new Client(db, CLIENT_WIDTH,
+								CLIENT_HEIGHT);
+						MainController controller = new MainController(db,
+								client);
 					}
 				}
 			}
 		});
-		addComponent(this.loginPanel, gbl, buttonLogin, new Insets(10, 5, 5, 20), 2, 1);
+		addComponent(this.loginPanel, gbl, buttonLogin,
+				new Insets(10, 5, 5, 20), 2, 1);
 		this.loginPane.add(this.loginPanel);
+	}
+
+	private String mapToConnection(String input) {
+		String connection = ( input == "localhost" ) ? CONNECTION_THIN_LOCALHOST : CONNECTION_THIN;
+		return connection;
 	}
 
 	/**
@@ -228,9 +273,9 @@ public class Login extends JFrame implements Configuration {
 				e.getClass().getName() + ": ", e.getMessage() });
 	}
 
-	public void addComponent(JPanel panel, GridBagLayout gbl,
-			Component c, Insets insets, int x, int y, int width, int height,
-			double weightx, double weighty) {
+	public void addComponent(JPanel panel, GridBagLayout gbl, Component c,
+			Insets insets, int x, int y, int width, int height, double weightx,
+			double weighty) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.gridx = x;
@@ -243,8 +288,8 @@ public class Login extends JFrame implements Configuration {
 		panel.add(c, constraints);
 	}
 
-	public void addComponent(JPanel panel, GridBagLayout layout,
-			Component c, Insets insets, int x, int y) {
+	public void addComponent(JPanel panel, GridBagLayout layout, Component c,
+			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = x;
