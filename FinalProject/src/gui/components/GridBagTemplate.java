@@ -164,6 +164,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JTextField _name = new JTextField(10);
 			_name.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME);
 			_name.setEditable(false);
+			_name.setEnabled(false);
 			addComponent(container, label_name, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(container, _name, new Insets(0, 5, 0, 5), 1, 1);
 
@@ -172,6 +173,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JTextField _adresse = new JTextField(10);
 			_adresse.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE);
 			_adresse.setEditable(false);
+			_adresse.setEnabled(false);
 			addComponent(container, label_adresse, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(container, _adresse, new Insets(0, 5, 0, 5), 1, 2);
 
@@ -180,6 +182,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JTextField _tel = new JTextField(10);
 			_tel.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL);
 			_tel.setEditable(false);
+			_tel.setEnabled(false);
 			addComponent(container, label_tel, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(container, _tel, new Insets(0, 5, 0, 5), 1, 3);
 
@@ -192,6 +195,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			_konto.setValue(new Double(0.00));
 			_konto.setColumns(10);
 			_konto.setEditable(true);
+			_konto.setEnabled(false);
 			addComponent(container, label_konto, new Insets(0, 5, 0, 5), 0, 4);
 			addComponent(container, _konto, new Insets(0, 5, 0, 5), 1, 4);
 
@@ -300,7 +304,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_exec, new Insets(0, 5, 0, 5), 2, 3);
 		}
 			return container;
-		case 4:
+		case 4: // Template, Bestellung Neu
 		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
@@ -393,7 +397,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 4);
 		}
 			return container;
-		case 5:
+		case 5: // Template, Bestellung EDIT
 		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
@@ -406,6 +410,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_kid = new JLabel(BESTELLVERWALTUNG_LABEL_KID);
 			JTextField _kid = new JTextField(10);
 			_kid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID);
+			_kid.setEditable(false);
+			_kid.setEnabled(false);
 			addComponent(container, label_kid, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(container, _kid, new Insets(0, 5, 0, 5), 1, 1);
 
@@ -413,6 +419,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_anleger = new JLabel(BESTELLVERWALTUNG_LABEL_ANLEGER);
 			JTextField _anleger = new JTextField(10);
 			_anleger.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER);
+			_anleger.setEditable(false);
+			_anleger.setEnabled(false);
 			addComponent(container, label_anleger, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(container, _anleger, new Insets(0, 5, 0, 5), 1, 2);
 
@@ -420,6 +428,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_bsttermin = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTERMIN);
 			JTextField _bsttermin = new JTextField(10);
 			_bsttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN);
+			_bsttermin.setEditable(false);
+			_bsttermin.setEnabled(false);
 			addComponent(container, label_bsttermin, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(container, _bsttermin, new Insets(0, 5, 0, 5), 1, 3);
 
@@ -427,6 +437,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_bsttext = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTEXT);
 			JTextField _bsttext = new JTextField(10);
 			_bsttext.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT);
+			_bsttext.setEditable(false);
+			_bsttext.setEnabled(false);
 			addComponent(container, label_bsttext, new Insets(0, 5, 0, 5), 0, 4);
 			addComponent(container, _bsttext, new Insets(0, 5, 0, 5), 1, 4);
 
@@ -482,7 +494,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
 		}
 			return container;
-		case 6:
+		case 6: // Template, Bestellung GO
 		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);

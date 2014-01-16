@@ -1,12 +1,14 @@
 package gui.components;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -28,7 +30,7 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		ListSelectionListener {
 
 	private static final long serialVersionUID = -6721680340100703148L;
-
+	protected HashMap<String, Component> componentMap;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
 
@@ -78,6 +80,8 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		addComponent(this, inputPanel, new Insets(0,0,0,0), 0, 0);
 		addComponent(this, buttonPanel, new Insets(0,0,0,0), 0, 1);
 		addListToPane(nameList, -1);
+		this.componentMap = new HashMap<String, Component>();
+		createComponentMap(this);
 	}
 
 	public JList getList(){
@@ -106,6 +110,26 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		this.remove(this.getComponentCount()-1);
 		this.revalidate();
 		this.repaint();
+	}
+
+	public void createComponentMap(Component component)
+	{
+		this.componentMap.put(component.getName(), component);
+		if (component instanceof Container)
+		{
+			if (((Container) component).getComponentCount() > 0){
+				for (Component child : ((Container) component).getComponents()){
+					createComponentMap(child);
+				}
+			}
+		}
+	}
+
+	public Component getComponentByName(String name) {
+		if (this.componentMap.containsKey(name)) {
+			return (Component) this.componentMap.get(name);
+		} else
+			return null;
 	}
 
 	public void addListToPane(String nameList, int selectedIndex){
