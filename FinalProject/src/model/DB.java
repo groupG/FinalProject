@@ -404,6 +404,16 @@ public class DB implements Configuration {
 		}
 	}
 	
+	/**
+	 * Mit dieser Methode lockt eine Transaktion eine Zeile einer Tabelle. Nur auf alle anderen nicht geblockten Zeilen
+	 * k&ouml;nnen andere (konkurrierende) Transaktionen weiter zugreifen.
+	 * 
+	 * @param table : Tabelle. in der eine Zeile gelockt wird.
+	 * @param condition : Bedingung in WHERE-Klausel.
+	 * @return <i>true</i>, falls eine Transaktion als erstes auf die Zeile zugreift und locken kann.
+	 * 		   <i>false</i>, falls die Zeile bereits von einer anderen Transaktion gelockt ist.
+	 * @throws SQLException
+	 */
 	public boolean lockRows(String table, String condition) throws SQLException {		
 		this.connection.setAutoCommit(false);		
 		Statement stmt = null;
@@ -592,7 +602,7 @@ public class DB implements Configuration {
 			
 			stmt = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 			// Suche den aktuellen Produktbestand im Ursprungslager zuerst.
-			sql_query = "SELECT anzahl FROM LAGERT " +
+			sql_query = "SELECT anzahl FROM " + TABLE_OWNER + ".LAGERT " +
 						"WHERE lagid = " + srcLager + " AND pid =  " + pid;
 			ResultSet rs = stmt.executeQuery(sql_query);
 			
@@ -648,5 +658,39 @@ public class DB implements Configuration {
 		}
 		
 		return success;
+	}
+
+	/**
+	 * 
+	 * @param pid
+	 * @param menge
+	 * @return
+	 * @throws NotExistInDatabaseException
+	 * @throws SQLException
+	 */
+	public double calcTotalPrice(String pid, int menge) throws NotExistInDatabaseException, SQLException {
+		// this.connection.setAutoCommit(false);
+		double totalPrice = -1;
+		Statement stmt = null;
+		String sql_query;
+		try {
+			stmt = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			sql_query = "SELECT einzelverkaufspreis FROM PRODUKT " + 
+						"WHERE pid = " + pid;
+			ResultSet rs = stmt.executeQuery(sql_query);
+			if ( !rs.first() ) {
+				throw new NotExistInDatabaseException("Invalid value. This PID does not exist in the database.");
+			}
+			double einzelverkaufspreis = rs.getDouble(1);
+			rs.close();
+			totalPrice = menge * einzelverkaufspreis;
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+		}
+		return totalPrice;
 	}
 }

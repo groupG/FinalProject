@@ -275,24 +275,26 @@ public class MainController implements Configuration{
 						return;
 					}
 
+
 					Vector<Object> values = db.selectFromTable(TABLE_KUNDE, "kid = " + kID).firstElement();
+
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setText((String) values.get(1));
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
 					((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  (BigDecimal) values.get(4));
 					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
 					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
-					
-					
+
+
 					this.setInputComponentsOfKudenpflegeEditable(true);
-					this.setInputComponentsOfKudenpflegeEnabled(true);					
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(true);				
+					this.setInputComponentsOfKudenpflegeEnabled(true);
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(true);
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
-			
+
 			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - EDIT BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN ) {
 				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
@@ -309,13 +311,13 @@ public class MainController implements Configuration{
 					this.clearInputComponentsOfKundePflege();
 					this.setInputComponentsOfKudenpflegeEnabled(true);
 					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(false);
-					
+
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
-			
+
 			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - FERTIG BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG ) {
 				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
@@ -333,7 +335,7 @@ public class MainController implements Configuration{
 						return;
 					}
 				}
-				
+
 				try {
 					db.updateKunde(kID, kName, kAdresse, kTelNr, kKonto, kBranche, kNation);
 					JOptionPane.showMessageDialog(client, "<html>Der Kunde mit Kunden-ID " + kID + " wurde aktualisiert. </html>");
@@ -348,17 +350,23 @@ public class MainController implements Configuration{
 					this.setInputComponentsOfKudenpflegeEnabled(false);
 				}
 			}
-			
-			//----------------- PRODUKTVERWALTUNG - ZULIEFERUNG EINBUCHEN			
+
+			//----------------- PRODUKTVERWALTUNG - ZULIEFERUNG EINBUCHEN
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN ) {
 				String zlid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID)).getText();
 
+				// Check if the textfield for zlid is empty.
+				if ( zlid.isEmpty() ) {
+					JOptionPane.showMessageDialog(client, "Bitte geben Sie eine Zulieferungs-ID an.");
+					return;
+				}
+				
 				// Check if the given KID is valid.
 				if ( !Pattern.matches("\\d*", zlid) ) { // nur positive nummerische Werte.
 					JOptionPane.showMessageDialog(client, PRODUKTVERWALTUNG_MESSAGE_INVALID_ZLID);
 					return;
 				}
-				
+
 				// Neue Zulieferung einbuchen.
 				boolean success = true;
 				try {
@@ -371,42 +379,46 @@ public class MainController implements Configuration{
 					e.printStackTrace();
 					return;
 				}
-				
+
 				String msg = "";
 				if ( !success ) {
 					msg = "<html>Die Zulieferung mit der ID " + zlid + " kann nicht mehr eingebucht werden. Sie wurde bereits erledigt.</html>";
 				} else {
 					msg = "<html>Die Zuliefeung mit der ID " + zlid + " wurde erfolgreich eingebucht.</html>";
-				}				
-				JOptionPane.showMessageDialog(client, msg);				
+				}
+				JOptionPane.showMessageDialog(client, msg);
 			}
-			
+
 			//----------------- PRODUKTVERWALTUNG - BESTAND UMBUCHEN
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN ) {
 				String srcLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER)).getText();
 				String destLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER)).getText();
 				String pid  = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT)).getText();
 				String menge = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE)).getText();
-				
-				// Check the input strings on valid numeric values.
+
+				// Check the input strings on valid numeric values, or if they are empty.
 				String[] inputs = { srcLager, destLager, pid, menge };
 				for ( String s : inputs ) {
 					if ( !Pattern.matches("\\d*", s ) ) {
 						JOptionPane.showMessageDialog(client, "Die Eingabe darf nur positive numerische Werte enthalten, z.B. 1, 5, 98, 2098...");
 						return;
 					}
+					if ( s.isEmpty() ) { // Check empty string.
+						JOptionPane.showMessageDialog(client, "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>");
+						return;
+					}
 				}
-				
+
 				if ( srcLager.equals(destLager) ) {
 					JOptionPane.showMessageDialog(client, "Es kann nichts umgebucht werden. Ursprungs- und Ziellager sind gleich.");
 					return;
 				}
-				
+
 				// Bestaende umbuchen.
 				int success = -999;
 				try {
 					success = db.bestandUmbuchen(srcLager, destLager, pid, Integer.parseInt(menge));
-				} catch ( NotExistInDatabaseException ne) {
+				} catch ( NotExistInDatabaseException ne ) {
 					JOptionPane.showMessageDialog(client, "<html>Ursprungslager + " + srcLager + " oder Produkt " + pid + " ist nicht in der Datenbank vorhanden.</html>");
 					// ne.printStackTrace();
 					return;
@@ -414,20 +426,20 @@ public class MainController implements Configuration{
 					e.printStackTrace();
 					return;
 				}
-				
+
 				String msg = "";
 				if ( success != -999 ) {
 					msg = "<html>Bestand reicht nicht aus! Nur " + success + " St&uuml;ck vorr&auml;tig.</html>";
 				} else {
 					msg = "<html>Die Best&auml;nde wurden erfolgreich vom Lager " + srcLager + " auf Ziellager " + destLager + " umgebucht.</html>";
 				}
-				JOptionPane.showMessageDialog(client, msg);	
+				JOptionPane.showMessageDialog(client, msg);
 			}
 		}
 
 		//-------------------- Private auxiliary methods for KUNDENPFLEGE
 		/**
-		 * Diese Methode &uuml;berpr&uuml;ft, ob der Input sich nur aus numerischen Werte (Ziffern) besteht.  
+		 * Diese Methode &uuml;berpr&uuml;ft, ob der Input sich nur aus numerischen Werte (Ziffern) besteht.
 		 * @param input
 		 * @return <i>true</i>, falls der Input nur numerische Werte hat. Sonst <i>false</i>.
 		 */
@@ -441,13 +453,13 @@ public class MainController implements Configuration{
 
 		/**
 		 * Diese Methode bildet die NID einer Nation auf deren Namen ab. StandardmA6uml;&szlig; gibt es nur 3 Nationen:
-		 * 
+		 *
 		 * 		NID  |  NAME
 		 *   --------+---------
 		 *      12   |  Belize
 		 *      73   |  Jemen
 		 *     104   |  Neuseeland
-		 *     
+		 *
 		 * @param nid : ID einer der obigen 3 Nationen.
 		 * @return Namen der Nation mit der NID <i>nid</i>.
 		 */
@@ -455,25 +467,25 @@ public class MainController implements Configuration{
 			String name = ( nid == 12 ) ? "Belize" : ( ( nid == 73 ) ? "Jemen" : "Neuseeland" );
 			return name;
 		}
-		
+
 		private void setInputComponentsOfKudenpflegeEditable(boolean b) {
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setEditable(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEditable(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEditable(b);
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setEditable(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEditable(b);					
+			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEditable(b);
 			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEditable(b);
 		}
-		
+
 		private void setInputComponentsOfKudenpflegeEnabled(boolean b) {
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setEnabled(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEnabled(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEnabled(b);
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setEnabled(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEnabled(b);					
+			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEnabled(b);
 			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEnabled(b);
 		}
-		
+
 		private void clearInputComponentsOfKundePflege() {
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setText("");
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText("");
@@ -482,7 +494,6 @@ public class MainController implements Configuration{
 			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem("");
 			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("");
 		}
-
 
 		private boolean isValidBSTID(String inputBSTID){
 			boolean result = Pattern.matches("\\d*", inputBSTID);
