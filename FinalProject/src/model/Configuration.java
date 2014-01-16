@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -20,7 +20,7 @@ public interface Configuration {
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "SON_DANG";
+	static final String TABLE_OWNER = "PROJEKT_2013_G";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
@@ -58,8 +58,9 @@ public interface Configuration {
 	static final String KUNDENPFLEGE_LABEL_NATION = "<html>Nation</html>";
 	static final String KUNDENPFLEGE_LABEL_KONTO = "<html>Konto</html>";
 	static final String KUNDENPFLEGE_LABEL_BRANCHE = "<html>Branche</html>";
-	static final String KUNDENPFLEGE_BUTTON_EXECUTE = "<html>Ausf&uuml;hren</html>";
-	static final String KUNDENPFLEGE_BUTTON_SUCHE = "<html>Suchen</html>";
+	static final String KUNDENPFLEGE_BUTTON_EXECUTE = "<html>&Auml;usf&uuml;hren</html>"; // Soni
+	static final String KUNDENPFLEGE_BUTTON_SUCHE = "<html>Suchen & &Auml;ndern</html>"; // Soni
+	static final String KUNDENPFLEGE_BUTTON_EXECUTE_FERTIG = "<html>Fertig</html>"; // Soni
 	
 	static final String KUNDENPFLEGE_MESSAGE_INVALID_KID = "<html>Ung&uuml;ltige Eingabe. Kunden-KID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
 	static final String KUNDENPFLEGE_MESSAGE_FILL_ALL_FIELDS = "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>";
@@ -75,12 +76,14 @@ public interface Configuration {
 	static final String PRODUKTVERWALTUNG_LABEL_ZLID = "<html>Zulieferungs-ID</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_SRCLAGER = "<html>Ursprungslager</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_DESTLAGER = "<html>Ziellager</html>";
-	static final String PRODUKTVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
+	static final String PRODUKTVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>"; // Soni
 	static final String PRODUKTVERWALTUNG_LABEL_MENGE = "<html>Menge</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_SUCHE = "<html>Suchen</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_EINBUCHEN = "<html>Einbuchen</html>";
 	static final String PRODUKTVERWALTUNG_BUTTON_UMBUCHEN = "<html>Umbuchen</html>";
 	static String PRODUKTVERWALTUNG_ERROR_BESTAND = "<html>Bestand reicht nicht aus! Nur ###x### St&uuml;ck vorr&auml;tig!</html>";
+	
+	static final String PRODUKTVERWALTUNG_MESSAGE_INVALID_ZLID = "<html>Ung&uuml;ltige Eingabe. Zulieferungs-ID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>"; // Soni
 
 	/* ##### Bestellverwaltung  #####*/
 	static final String BESTELLVERWALTUNG_CARD_TITLE = "<html>Bestellungen anlegen, editieren &amp; ausliefern</html>";
@@ -108,6 +111,11 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
+
+	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTID = "<html>Ung&uuml;ltige Eingabe. Die Bestellungs-ID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
+	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTTERMIN = "<html>Bitte geben Sie ein Datum mit dem Format dd.mm.yy ein, z.B. 31.12.14.</html>";
+	static final String BESTELLVERWALTUNG_MESSAGE_FILL_ALL_FIELDS = "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>";
+
 
 	/* ##########################*/
 	/* ####### Auswertung #######*/
@@ -241,6 +249,7 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN = "button_kundenpflege_neu_ausfuehren";
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN = "button_kundenpflege_edit_aendern";
 	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN = "button_kundenpflege_edit_suchen";
+	static final String COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG = "button_kundenpflege_edit_aendern_fertig"; // Soni
 
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN = "button_produktverwaltung_neu_einbuchen";
 	static final String COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_SUCHEN = "button_produktverwaltung_neu_suchen";
@@ -262,6 +271,7 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
 	
 	/* #### Tabellen, Sequence #### */
-	static final String TABLE_KUNDE = "KUNDE2";
-	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID2";
+	static final String TABLE_KUNDE = "KUNDE";
+	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID";
+	
 }

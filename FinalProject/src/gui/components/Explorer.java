@@ -142,4 +142,3 @@ public class Explorer extends JPanel implements Configuration {
 		this.root = new DefaultMutableTreeNode(owner);
 	}
 }
-

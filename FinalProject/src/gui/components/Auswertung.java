@@ -30,11 +30,11 @@ public class Auswertung extends JPanel implements Configuration {
 		// TODO: Tooltips, Shortcuts, PreferredSize dynamisch?
 
 		// Tab1 - Produktanalyse
-		JPanel panel_tab_1 = new GridBagTemplate(7, ANALYSE_TITLE_PRODUKTANALYSE, COMPONENT_PANEL_PRODUKTANALYSE);
+		JPanel panel_tab_1 = new GridBagTemplate(7, ANALYSE_TITLE_PRODUKTANALYSE, COMPONENT_PANEL_PRODUKTANALYSE, false);
 		tabbedPane.addTab("Produktanalyse", panel_tab_1);
 
 		// Tab2 - Senkung der Lieferkosten
-		JPanel panel_tab_2 = new GridBagTemplate(8, ANALYSE_TITLE_LIEFERKOSTENSENKUNG, COMPONENT_PANEL_LIEFERKOSTENSENKUNG);
+		JPanel panel_tab_2 = new GridBagTemplate(8, ANALYSE_TITLE_LIEFERKOSTENSENKUNG, COMPONENT_PANEL_LIEFERKOSTENSENKUNG, false);
 		tabbedPane.addTab("Lieferkostensenkung", panel_tab_2);
 
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);

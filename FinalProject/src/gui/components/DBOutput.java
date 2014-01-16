@@ -1,6 +1,6 @@
 package gui.components;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.GridBagConstraints;
@@ -13,7 +13,6 @@ import javax.sql.rowset.CachedRowSet;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JViewport;
 import javax.swing.table.TableModel;
 
 import model.Configuration;
@@ -41,7 +40,6 @@ public class DBOutput extends JPanel implements Configuration{
 		addTableModel(this.tableModel);
 		addTableToPane();
 
-		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
 		createComponentMap(this);
 	}
@@ -61,13 +59,17 @@ public class DBOutput extends JPanel implements Configuration{
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		this.table.setFillsViewportHeight(true);
 		this.table.setAutoCreateRowSorter(true);
+		this.table.getTableHeader().setBackground(Color.YELLOW);
 	}
 
 	public void addTableToPane(){
-		this.scrollPane = new JScrollPane(this.table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		this.scrollPane = new JScrollPane(this.table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.scrollPane.setName(COMPONENT_SCROLLPANE_DBOUTPUT);
-		this.scrollPane.repaint();
-		this.scrollPane.revalidate();
+		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
+	}
+
+	public void removeScrollPane(){
+		this.remove(this.scrollPane);
 	}
 
 	public void createComponentMap(Component component)
