@@ -706,6 +706,7 @@ public class DB implements Configuration {
 			cs = this.connection.prepareCall("{call ANALYSE2(?)}");
 			cs.setString(1, produkt);
 			cs.execute();
+			this.connection.commit();
 		} catch ( SQLException e ){
 			e.printStackTrace();
 			this.connection.rollback(savePoint1);
@@ -721,6 +722,50 @@ public class DB implements Configuration {
 		}
 	}
 
+	/**
+	 * Diese Methode &uuml;berpr&uuml;ft, ob es zu einem vorgegebenen Liefertermin gen&uuml;gende Menge
+	 * eines Produkttyps zum Verkauf gibt.
+	 *
+	 * @param pid
+	 * @param menge
+	 * @param liefertermin
+	 * @return
+	 * @throws SQLException
+	 * @throws NotExistInDatabaseException
+	 */
+	public boolean callProcedureCheckLiefertermin(int pid, int menge, String liefertermin)
+			throws SQLException, NotExistInDatabaseException {
+		this.connection.setAutoCommit(false);
+		Savepoint savePoint1 = this.connection.setSavepoint();
+
+		boolean keeping = true;
+		CallableStatement cs = null;
+		try {
+			cs = this.connection.prepareCall("{call BESTAETIGUNGSTEST(?,?,?,?)}");
+			cs.setInt(1, pid);
+			cs.setInt(2, menge);
+			cs.setString(3, liefertermin);
+			cs.registerOutParameter(4, java.sql.Types.INTEGER);
+			cs.execute();
+			int bestand = cs.getInt(4);
+			keeping = ( bestand >= 0 ) ? true : false;
+		} catch ( SQLException e ){
+			e.printStackTrace();
+			this.connection.rollback(savePoint1);
+		} finally {
+			if ( cs != null ) {
+				try{
+					cs.close();
+				} catch (SQLException e){
+					e.printStackTrace();
+				}
+			}
+			this.connection.setAutoCommit(true);
+		}
+		this.connection.commit();
+		return keeping;
+	}
+
 	public void dropLieferkostenTabelle() throws SQLException, NotExistInDatabaseException{
 		this.connection.setAutoCommit(false);
 		Savepoint savePoint1 = this.connection.setSavepoint();
@@ -729,6 +774,7 @@ public class DB implements Configuration {
 		try {
 			cs = this.connection.prepareCall("{call DROPANALYSE2HELPRES()}");
 			cs.execute();
+			this.connection.commit();
 		} catch ( SQLException e ){
 			e.printStackTrace();
 			this.connection.rollback(savePoint1);
@@ -752,6 +798,7 @@ public class DB implements Configuration {
 		try {
 			cs = this.connection.prepareCall("{call DROPANALYSEHELPRES()}");
 			cs.execute();
+			this.connection.commit();
 		} catch ( SQLException e ){
 			e.printStackTrace();
 			this.connection.rollback(savePoint1);
@@ -880,11 +927,11 @@ public class DB implements Configuration {
 
 					sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLPOSITION " +
 								"VALUES (" + i + ", "  // posnr
-										   + anzahl + ", "  // anzahl-
+										   + anzahl + ", "  // anzahl
 										   + preis + ", "  // preis
-										   + bpos[i][2] + ", "  // positionstext-
+										   + bpos[i][2] + ", "  // positionstext
 										   + bstid + ", "  // bstid
-										   + pid  + ")";  // pid-
+										   + pid  + ")";  // pid
 					stmt.executeUpdate(sql_query);
 				}
 			}
@@ -899,6 +946,36 @@ public class DB implements Configuration {
 			this.connection.setAutoCommit(true);
 		}
 	}
+
+	public void bestellungAendern(String bstid, String bestelltext, String anleger, String bestelltermin) throws SQLException, NotExistInDatabaseException{
+		this.connection.setAutoCommit(false);
+		Statement stmt = null;
+		String sql_query;
+
+		try {
+			stmt = this.connection.createStatement();
+			sql_query = "SELECT status FROM " + TABLE_OWNER + ".BESTELLUNG " +
+						"WHERE bstid = " + bstid;
+			ResultSet rs = stmt.executeQuery(sql_query);
+			if ( !rs.next() ) {
+				throw new NotExistInDatabaseException("<html>Invalid BSTID. Ung&uuml;ltige Bestellungs-ID.</html>");
+			}
+			String status = rs.getString("STATUS");
+			if ( status.trim().equals("OFFEN") ) { // OFFEN, dann UPDATE alle.
+				sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
+							"SET bestelltext = " + bestelltext + ", anleger = " + anleger ;
+			}
+
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
+	}
+
 
 	/**
 	 * Diese Methode liefert eine bereits best&auml;tigte Bestellung aus.
@@ -950,7 +1027,7 @@ public class DB implements Configuration {
 				sql_query = "SELECT lagid, pid, anzahl FROM " + TABLE_OWNER + ".LAGERT " +
 							"WHERE pid = " + pid;
 				ResultSet _rs_ = stmt.executeQuery(sql_query);
-				while ( _rs_.next() ) {
+				inner_while: while ( _rs_.next() ) {
 					int lagid = _rs_.getInt("LAGID");
 					int aktuellerBestand = _rs_.getInt("ANZAHL");
 					// UPDATE LAGERT.
@@ -961,7 +1038,7 @@ public class DB implements Configuration {
 									"WHERE lagid = " + lagid + " AND pid = " + pid;
 						menge = 0;
 						stmt.executeUpdate(sql_query);
-						break;
+						break inner_while;
 					}
 					else { // menge > aktuellerBestand
 						sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " +
@@ -977,6 +1054,7 @@ public class DB implements Configuration {
 				}
 			}
 			rs.close();
+			this.connection.commit();
 		} catch ( SQLException e ) {
 			e.printStackTrace();
 			this.connection.rollback(savePoint1);
@@ -987,5 +1065,21 @@ public class DB implements Configuration {
 			this.connection.setAutoCommit(true);
 		}
 		return success;
+	}
+
+	/**
+	 * Diese Methode formattiert ein Datum (Date) nach einem vorgegebenen Muster.
+	 *
+	 * @param date
+	 * @param pattern
+	 * @return
+	 */
+	public String dateFormat(Date date, String pattern) {
+		DateFormat df = new SimpleDateFormat(pattern);
+		return df.format(date);
+	}
+
+	public String dateFormat(Date date) {
+		return dateFormat(date, "dd-MM-yy");
 	}
 }
