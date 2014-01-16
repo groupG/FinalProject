@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-//	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -108,6 +108,11 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
+
+	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTID = "<html>Ung&uuml;ltige Eingabe. Die Bestellungs-ID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
+	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTTERMIN = "<html>Bitte geben Sie ein Datum mit dem Format dd.mm.yy ein, z.B. 31.12.14.</html>";
+	static final String BESTELLVERWALTUNG_MESSAGE_FILL_ALL_FIELDS = "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>";
+
 
 	/* ##########################*/
 	/* ####### Auswertung #######*/

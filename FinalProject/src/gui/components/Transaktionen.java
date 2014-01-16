@@ -3,6 +3,7 @@ package gui.components;
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -16,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import model.Configuration;
@@ -75,8 +77,8 @@ public class Transaktionen extends JPanel implements Configuration {
 		JPanel cards = new JPanel(new CardLayout());
 		cards.setName(COMPONENT_PANEL_KUNDENPFLEGE);
 		cards.add(new JLabel(KUNDENPFLEGE_LABEL_INFOTEXT), KUNDENPFLEGE_COMBO_STRINGS[0]);
-		cards.add(new GridBagTemplate(0, KUNDENPFLEGE_TITLE_KUNDE_NEU, COMPONENT_PANEL_KUNDENPFLEGE_NEU), KUNDENPFLEGE_COMBO_STRINGS[1]);
-		cards.add(new GridBagTemplate(1, KUNDENPFLEGE_TITLE_KUNDE_EDIT, COMPONENT_PANEL_KUNDENPFLEGE_EDIT), KUNDENPFLEGE_COMBO_STRINGS[2]);
+		cards.add(new GridBagTemplate(0, KUNDENPFLEGE_TITLE_KUNDE_NEU, COMPONENT_PANEL_KUNDENPFLEGE_NEU, false), KUNDENPFLEGE_COMBO_STRINGS[1]);
+		cards.add(new GridBagTemplate(1, KUNDENPFLEGE_TITLE_KUNDE_EDIT, COMPONENT_PANEL_KUNDENPFLEGE_EDIT, false), KUNDENPFLEGE_COMBO_STRINGS[2]);
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		addComponent(panel, actions, new Insets(0, 5, 0, 5), 0, 0);
@@ -97,8 +99,8 @@ public class Transaktionen extends JPanel implements Configuration {
 		JPanel cards = new JPanel(new CardLayout());
 		cards.setName(COMPONENT_PANEL_PRODUKTVERWALTUNG);
 		cards.add(new JLabel(PRODUKTVERWALTUNG_LABEL_INFOTEXT), PRODUKTVERWALTUNG_COMBO_STRINGS[0]);
-		cards.add(new GridBagTemplate(2, PRODUKTVERWALTUNG_TITLE_ZULIEFERUNG_NEU, COMPONENT_PANEL_PRODUKTVERWALTUNG_ZULIEFERUNG_NEU), PRODUKTVERWALTUNG_COMBO_STRINGS[1]);
-		cards.add(new GridBagTemplate(3, PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT, COMPONENT_PANEL_PRODUKTVERWALTUNG_BESTAND_EDIT), PRODUKTVERWALTUNG_COMBO_STRINGS[2]);
+		cards.add(new GridBagTemplate(2, PRODUKTVERWALTUNG_TITLE_ZULIEFERUNG_NEU, COMPONENT_PANEL_PRODUKTVERWALTUNG_ZULIEFERUNG_NEU, false), PRODUKTVERWALTUNG_COMBO_STRINGS[1]);
+		cards.add(new GridBagTemplate(3, PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT, COMPONENT_PANEL_PRODUKTVERWALTUNG_BESTAND_EDIT, false), PRODUKTVERWALTUNG_COMBO_STRINGS[2]);
 
 		JPanel panel = new JPanel(new GridBagLayout());
 		addComponent(panel, actions, new Insets(0, 5, 0, 5), 0, 0);
@@ -118,30 +120,40 @@ public class Transaktionen extends JPanel implements Configuration {
 
 		JPanel cards = new JPanel(new CardLayout());
 		cards.setName(COMPONENT_PANEL_BESTELLVERWALTUNG);
+		cards.setSize(new Dimension(640,630));
+
+		JPanel card1 = new GridBagTemplate(4, BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU, COMPONENT_PANEL_BESTELLVERWALTUNG_NEU,true);
+		card1.setMinimumSize(new Dimension(400,400));
+		card1.setPreferredSize(new Dimension(640,630));
+		JPanel card2 = new GridBagTemplate(5, BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT, COMPONENT_PANEL_BESTELLVERWALTUNG_EDIT, true);
+		card2.setMinimumSize(new Dimension(400,400));
+		card2.setPreferredSize(new Dimension(640,630));
+		JPanel card3 = new GridBagTemplate(6, BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO, COMPONENT_PANEL_BESTELLVERWALTUNG_GO, true);
+		card3.setMinimumSize(new Dimension(400,400));
+		card3.setPreferredSize(new Dimension(640,630));
+
 		cards.add(new JLabel(BESTELLVERWALTUNG_LABEL_INFOTEXT), BESTELLVERWALTUNG_COMBO_STRINGS[0]);
-		cards.add(new GridBagTemplate(4, BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU, COMPONENT_PANEL_BESTELLVERWALTUNG_NEU), BESTELLVERWALTUNG_COMBO_STRINGS[1]);
-		cards.add(new GridBagTemplate(5, BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT, COMPONENT_PANEL_BESTELLVERWALTUNG_EDIT), BESTELLVERWALTUNG_COMBO_STRINGS[2]);
-		cards.add(new GridBagTemplate(6, BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO, COMPONENT_PANEL_BESTELLVERWALTUNG_GO), BESTELLVERWALTUNG_COMBO_STRINGS[3]);
+		cards.add(card1, BESTELLVERWALTUNG_COMBO_STRINGS[1]);
+		cards.add(card2, BESTELLVERWALTUNG_COMBO_STRINGS[2]);
+		cards.add(card3, BESTELLVERWALTUNG_COMBO_STRINGS[3]);
 
 		JPanel panel = new JPanel(new GridBagLayout());
-		addComponent(panel, actions, new Insets(0, 5, 0, 5), 0, 0);
-		addComponent(panel, cards, new Insets(0, 5, 0, 5), 0, 1);
+		addComponent(panel, actions, new Insets(0, 5, 0, 5), 0, 0, GridBagConstraints.REMAINDER, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
+		addComponent(panel, cards, new Insets(0, 5, 0, 5), 0, 1, 1, GridBagConstraints.REMAINDER, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
 
 		return panel;
 	}
 
-	public void addComponent(JPanel panel, Component c,
-			Insets insets, int x, int y, int width, int height, double weightx,
-			double weighty) {
+	public void addComponent(JPanel panel, Component c, Insets insets, int x, int y, int width, int height, int fill, int anchor) {
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.anchor = GridBagConstraints.NORTH;
+		constraints.anchor = anchor;
+		constraints.fill = fill;
 		constraints.gridx = x;
 		constraints.gridy = y;
 		constraints.gridwidth = width;
 		constraints.gridheight = height;
-		constraints.weightx = weightx;
-		constraints.weighty = weighty;
+		constraints.weightx = 1.0;
+		constraints.weighty = 1.0;
 		constraints.insets = insets;
 		panel.add(c, constraints);
 	}

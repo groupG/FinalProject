@@ -62,23 +62,23 @@ public class Client extends JFrame implements Configuration {
 		this.explorer.setPreferredSize(new Dimension((int) Math.round(width * 0.2), (int) Math.round(height * 0.4)));
 		this.dboutput.setPreferredSize(new Dimension((int) Math.round(width * 0.8), (int) Math.round(height * 0.4)));
 		JSplitPane topSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.explorer, this.dboutput);
-		topSplitPane.setSize(new Dimension(width, (int) Math.round(height * 0.4)));
+		topSplitPane.setSize(new Dimension(width, (int) Math.round(height * 0.3)));
 		topSplitPane.setOneTouchExpandable(true);
 		topSplitPane.setDividerLocation((int) Math.round(width * 0.2));
 
 		// bottom SplitPane
-		this.transaktionen.setPreferredSize(new Dimension((int) Math.round(width * 0.5), (int) Math.round(height * 0.6)));
-		this.auswertung.setPreferredSize(new Dimension((int) Math.round(width * 0.5), (int) Math.round(height * 0.6)));
+		this.transaktionen.setPreferredSize(new Dimension((int) Math.round(width * 0.5), (int) Math.round(height * 0.7)));
+		this.auswertung.setPreferredSize(new Dimension((int) Math.round(width * 0.5), (int) Math.round(height * 0.7)));
 		JSplitPane bottomSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.transaktionen, this.auswertung);
-		bottomSplitPane.setPreferredSize(new Dimension(width, (int) Math.round(height * 0.6)));
+		bottomSplitPane.setPreferredSize(new Dimension(width, (int) Math.round(height * 0.8)));
 		bottomSplitPane.setOneTouchExpandable(true);
-		bottomSplitPane.setDividerLocation((int) Math.round(width * 0.5));
+		bottomSplitPane.setDividerLocation((int) Math.round(width * 0.7));
 
 		// main SplitPane
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, bottomSplitPane);
 		mainSplitPane.setPreferredSize(new Dimension(width, height));
 		mainSplitPane.setOneTouchExpandable(true);
-		mainSplitPane.setDividerLocation((int)Math.round(height * 0.57));
+		mainSplitPane.setDividerLocation((int)Math.round(height * 0.43));
 
 		return mainSplitPane;
 	}
