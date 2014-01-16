@@ -53,6 +53,7 @@ public class Main implements Configuration {
 		@SuppressWarnings("unused")
 		LoginController controller = new LoginController();
 		Login login = new Login();
+		login.setResizable(false);
 		login.pack();
 		login.setVisible(true);
 		login.setLocationRelativeTo(null);

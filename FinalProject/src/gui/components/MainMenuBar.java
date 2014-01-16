@@ -31,28 +31,34 @@ public class MainMenuBar extends JMenuBar implements Configuration{
 		// Create the items of menu 'Options'.
 		JMenuItem menuItem_logOut = new JMenuItem(ITEM_LOGOUT);
 		menuItem_logOut.setName(COMPONENT_ITEM_MENU_LOGOUT);
+		menuItem_logOut.setActionCommand(COMPONENT_ITEM_MENU_LOGOUT);
+		this.componentMap.put(menuItem_logOut.getName(), menuItem_logOut);
 		JMenuItem menuItem_exit = new JMenuItem(ITEM_EXIT);
-		menuItem_logOut.setName(COMPONENT_ITEM_MENU_EXIT);
+		menuItem_exit.setName(COMPONENT_ITEM_MENU_EXIT);
+		menuItem_exit.setActionCommand(COMPONENT_ITEM_MENU_EXIT);
+		this.componentMap.put(menuItem_exit.getName(), menuItem_exit);
 
 		menu_options.add(menuItem_logOut);
 		menu_options.add(menuItem_exit);
 
 		// Add actionListeners to the menu items.
-		menuItem_logOut.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Fuer LoginView
-				Login loginView = new Login();
-				loginView.pack();
-				loginView.setLocationRelativeTo(null);
-				loginView.setVisible(true);
-			}
-		});
+//		menuItem_logOut.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				// Fuer LoginView
+//				Login loginView = new Login();
+//				loginView.pack();
+//				loginView.setLocationRelativeTo(null);
+//				loginView.setVisible(true);
+//			}
+//		});
 
 		// Create menu 'Hilfe'.
 		JMenu menu_about = new JMenu(MENU_ABOUT);
 		JMenuItem menuItem_hilfe = new JMenuItem(ITEM_INFO);
 		menuItem_hilfe.setName(COMPONENT_ITEM_MENU_INFO);
+		menuItem_hilfe.setActionCommand(COMPONENT_ITEM_MENU_INFO);
+		this.componentMap.put(menuItem_hilfe.getName(), menuItem_hilfe);
 		menu_about.add(menuItem_hilfe);
 
 

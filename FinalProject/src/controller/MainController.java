@@ -30,6 +30,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -38,6 +39,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import main.Main;
 import model.Configuration;
 import model.DB;
 import model.OutputTableModel;
@@ -67,7 +69,8 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((MainMenuBar) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-			if (pairs.getValue() instanceof JButton){
+			System.out.println(pairs.getKey());
+			if (pairs.getValue() instanceof JMenuItem){
 				System.out.println("Button registriert: " + pairs.getKey());
 				this.client.getMenu().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
@@ -506,15 +509,30 @@ public class MainController implements Configuration{
 			}
 
 			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_LOGOUT){
-
+				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie sich wirklich abmelden?", "Haufkof Client - Abmelden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+				client.repaint();
+				if (inputPrompt == 0){
+					client.dispose();
+					try {
+						db._DB();
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					Main.createAndBuildLoginGui();
+				}
 			}
 
 			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_EXIT){
-				String[] buttons = {"Ja", "Nein"};
-				int inputPrompt = JOptionPane.showOptionDialog(client, "Wollen Sie die Anwendung wirklich beenden?", "Haufkof Client", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, buttons, buttons[2]);
-				if (inputPrompt == 1){
+				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie die Anwendung wirklich beenden?", "Haufkof Client - Beenden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+				client.repaint();
+				if (inputPrompt == 0){
 					System.exit(0);
 				}
+			}
+
+			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_INFO){
+				JOptionPane.showMessageDialog(client, "<html>Haufkof-Client, Betaversion </html>", "Haufkof Client - Info", JOptionPane.INFORMATION_MESSAGE, null);
+				client.repaint();
 			}
 		}
 
@@ -659,7 +677,7 @@ public class MainController implements Configuration{
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) client.getExplorer().getTree().getLastSelectedPathComponent();
 			System.out.println(selectedNode.getUserObject().toString());
 			if (selectedNode.getChildCount() > 0){
-				System.out.println("if: " + selectedNode.getUserObject().toString());
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				OutputTableModel tableModel = null;
 				try {
 				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 10000");
@@ -671,6 +689,7 @@ public class MainController implements Configuration{
 				client.getDBOutput().addTableToPane();
 				client.revalidate();
 				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
 			}
 		}
 
