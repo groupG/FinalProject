@@ -28,6 +28,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 	private int type;
 	private String title;
 	private String name;
+	private Bestellpositionen pos;
 
 	public GridBagTemplate(int type, String title, String name, boolean isScrollPane) {
 		super(new GridBagLayout());
@@ -35,6 +36,29 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		this.title = title;
 		this.name = name;
 
+		this.setBorder(BorderFactory.createTitledBorder(this.title));
+		this.setName(this.name);
+
+		if (isScrollPane){
+			JScrollPane scrollPane = new JScrollPane(createPanel(new JPanel(new GridBagLayout()),type),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			scrollPane.setMinimumSize(new Dimension(500,500));
+
+
+			addComponent(this,scrollPane, new Insets(0,0,0,0),0,0);
+		}
+		else {
+			addComponent(this,createPanel(new JPanel(new GridBagLayout()),type), new Insets(0,0,0,0),0,0);
+		}
+		this.componentMap = new HashMap<String, Component>();
+		createComponentMap(this);
+	}
+
+	public GridBagTemplate(int type, String title, String name, boolean isScrollPane, Bestellpositionen pos) {
+		super(new GridBagLayout());
+		this.type = type;
+		this.title = title;
+		this.name = name;
+		this.pos = pos;
 		this.setBorder(BorderFactory.createTitledBorder(this.title));
 		this.setName(this.name);
 
@@ -219,7 +243,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		case 2: // Template: Zulieferung einbuchen
 		{
 			// ZID, number, 10
-			JLabel label_zlid = new JLabel(PRODUKTVERWALTUNG_LABEL_PRODUKT);
+			JLabel label_zlid = new JLabel(PRODUKTVERWALTUNG_LABEL_ZLID);
 			JTextField _zlid = new JTextField(10);
 			_zlid.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID);
 			addComponent(container, label_zlid, new Insets(0, 5, 0, 5), 0, 0);
@@ -322,7 +346,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, _bsttext, new Insets(0, 5, 0, 5), 1, 4);
 
 			// Bestellpositionen, panel
-			addComponent(container, new Bestellpositionen("bestellPosListNeu", "listNeu", "addNeu", "delNeu"), new Insets(0,0,0,0), 0, 5, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.FIRST_LINE_START);
+			addComponent(container, this.pos, new Insets(0,0,0,0), 0, 5, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.FIRST_LINE_START);
 
 			// Status, char, 20
 			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
@@ -407,7 +431,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, _bsttext, new Insets(0, 5, 0, 5), 1, 4);
 
 			// Bestellpositionen, panel
-			addComponent(container, new Bestellpositionen("bestellPosListEDIT", "listEdit", "addEdit", "delEdit"), new Insets(0,0,0,0), 0, 5, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.FIRST_LINE_START);
+			addComponent(container, this.pos, new Insets(0,0,0,0), 0, 5, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.FIRST_LINE_START);
 
 			// Status, char, 20
 			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
@@ -447,12 +471,14 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
 			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
 			button_speichern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN);
+			button_speichern.setEnabled(false);
 			addComponent(container, button_speichern, new Insets(0, 5, 0, 5), 2, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
 
 			// Bestaetigen
 			JButton button_bestaetigen = new JButton(BESTELLVERWALTUNG_BUTTON_BESTAETIGEN);
 			button_bestaetigen.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
+			button_bestaetigen.setEnabled(false);
 			addComponent(container, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
 		}
 			return container;

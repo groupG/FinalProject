@@ -290,6 +290,7 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN = "button_bestellverwaltung_edit_speichern";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN = "button_bestellverwaltung_edit_bestaetigen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN = "button_bestellverwaltung_bestellung_go_ausliefern";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG = "button_bestellverwaltung_edit_aendern_fertig"; // Soni
 
 	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
@@ -303,6 +304,7 @@ public interface Configuration {
 
 	/* #### Tabellen, Sequence #### */
 	static final String TABLE_KUNDE = "KUNDE";
+	static final String TABLE_BESTELLUNG = "BESTELLUNG";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID";
 	static final String SEQUENCE_BESTELLUNG_BSTID = "SEQ_BESTELLUNG_BSTID";
 

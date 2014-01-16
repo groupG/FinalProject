@@ -5,6 +5,7 @@ import gui.components.Explorer;
 import gui.components.Transaktionen;
 import gui.components.Auswertung;
 import gui.components.MainMenuBar;
+import gui.components.Bestellpositionen;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.AbstractButton;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -38,6 +40,7 @@ import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import main.Main;
@@ -203,14 +206,13 @@ public class MainController implements Configuration{
 
 			//----------------- BESTELLVERWALTUNG - BSTPOSITION - HINZUFUEGEN BUTTON
 			if (ae.getActionCommand() == "addNeu"){
-				System.out.println("add");
-				String pos = (String) ((JTextField) client.getComponentByName("bstPosInput")).getText();
-
+				String pos = (String) ((JTextField) client.getComponentByName("inpNeu")).getText();
 					if (!pos.contains(";")){
 //						System.out.println(((AbstractButton) ((Client) client.getComponentByName("bestellPosListNeu")).getComponentByName("listNeu")).getModel());
 						JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
 						return;
 					}
+
 					pos.split("\\;");
 					int elementCount = pos.split("\\;").length;
 					if (elementCount <= 3 ){
@@ -270,6 +272,51 @@ public class MainController implements Configuration{
 
 			}
 
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - SUCHEN BUTTON
+			// TODO
+			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SUCHEN){
+			//	((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG)).setVisible(false);
+				DefaultListModel<String> listModel = new DefaultListModel<String>();
+				listModel.addElement("test;test");
+				listModel.addElement("test1;test2");
+				//System.out.println("listsize:"+((Bestellpositionen)client.getComponentByName("bestellPosListEdit")).getListModel().getSize());
+				client.getTransaktionen().getPosEdit().removeList();
+				client.getTransaktionen().getPosEdit().setModel(listModel);
+				client.getTransaktionen().getPosEdit().addListToPane("listEdit", 1);
+				client.getTransaktionen().getPosEdit().addModel();
+//				client.getTransaktionen().getPosEdit().getList().setSelectedIndex(1);
+				client.revalidate();
+				client.repaint();
+//				((Bestellpositionen)client.getComponentByName("bestellPosListNeu")).getListModel().addElement("test;test");
+				System.out.println("listsize:"+((Bestellpositionen)client.getComponentByName("bestellPosListNeu")).getListModel().getSize());
+				String bstID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID)).getText();
+				// Check if the given BSTID is valid.
+//				if ( !isValidBstID(bstID) )
+//					return;
+//				// Check if the given BSTID really exists in the database.
+//				try {
+//					if ( !db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstID) ) {
+//						JOptionPane.showMessageDialog(client, "<html>Es ist keine Bestellung mit der ID " + bstID + " in der Datenbank vorhanden.</html>");
+//						return;
+//					}
+//
+//					Vector<Object> values = db.selectFromTable(TABLE_BESTELLUNG, "bstid = " + bstID).firstElement();
+//
+//					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setText((String) values.get(1));
+//					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setText((String) values.get(2));
+//					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).setText((String) values.get(3));
+//					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).setText((String) values.get(4));
+//
+//
+//					this.setInputComponentsOfKudenpflegeEditable(true);
+//					this.setInputComponentsOfKudenpflegeEnabled(true);
+//					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(true);
+//				} catch (SQLException e) {
+//					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+//					e.printStackTrace();
+//				}
+			}
+
 			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - AENDERN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN){
 
@@ -296,8 +343,8 @@ public class MainController implements Configuration{
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
 					((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  (BigDecimal) values.get(4));
-					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
-					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
+					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
+					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
 
 
 					this.setInputComponentsOfKudenpflegeEditable(true);
@@ -553,6 +600,21 @@ public class MainController implements Configuration{
 		}
 
 		/**
+		 * Diese Methode &uuml;berpr&uuml;ft, ob der Input sich nur aus numerischen Werte (Ziffern) besteht.
+		 * @param input
+		 * @return <i>true</i>, falls der Input nur numerische Werte hat. Sonst <i>false</i>.
+		 */
+		private boolean isValidBstID(String input) {
+			boolean result = Pattern.matches("\\d*", input);  // nur positive nummerische Werte.
+			if ( !result ) {
+				JOptionPane.showMessageDialog(client, BESTELLVERWALTUNG_MESSAGE_INVALID_BSTID);
+			}
+			return result;
+		}
+
+
+
+		/**
 		 * Diese Methode bildet die NID einer Nation auf deren Namen ab. StandardmA6uml;&szlig; gibt es nur 3 Nationen:
 		 *
 		 * 		NID  |  NAME
@@ -574,8 +636,8 @@ public class MainController implements Configuration{
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEditable(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEditable(b);
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setEditable(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEditable(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEditable(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEditable(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEditable(b);
 		}
 
 		private void setInputComponentsOfKudenpflegeEnabled(boolean b) {
@@ -583,8 +645,8 @@ public class MainController implements Configuration{
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEnabled(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEnabled(b);
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setEnabled(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEnabled(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEnabled(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEnabled(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEnabled(b);
 		}
 
 		private void clearInputComponentsOfKundePflege() {
@@ -592,8 +654,8 @@ public class MainController implements Configuration{
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText("");
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText("");
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("");
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem("");
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("");
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem("");
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("");
 		}
 
 		private boolean isValidBSTID(String inputBSTID){

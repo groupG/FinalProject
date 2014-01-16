@@ -25,11 +25,14 @@ import model.Configuration;
 public class Transaktionen extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 5054965523548199842L;
-
+	private Bestellpositionen posNeu;
+	private Bestellpositionen posEdit;
 	protected HashMap<String, Component> componentMap;
 
 	public Transaktionen() {
 		super(new GridBagLayout());
+		this.posNeu = new Bestellpositionen("bestellPosListNeu", "listNeu", "addNeu", "delNeu", "inpNeu");
+		this.posEdit = new Bestellpositionen("bestellPosListEdit", "listEdit", "addEdit", "delEdit", "inpEdit");
 		addComponent(this, createTransactionsPanel(), new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
 		createComponentMap(this);
@@ -122,10 +125,10 @@ public class Transaktionen extends JPanel implements Configuration {
 		cards.setName(COMPONENT_PANEL_BESTELLVERWALTUNG);
 		cards.setSize(new Dimension(640,630));
 
-		JPanel card1 = new GridBagTemplate(4, BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU, COMPONENT_PANEL_BESTELLVERWALTUNG_NEU,true);
+		JPanel card1 = new GridBagTemplate(4, BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU, COMPONENT_PANEL_BESTELLVERWALTUNG_NEU, true, this.posNeu);
 		card1.setMinimumSize(new Dimension(400,400));
 		card1.setPreferredSize(new Dimension(640,630));
-		JPanel card2 = new GridBagTemplate(5, BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT, COMPONENT_PANEL_BESTELLVERWALTUNG_EDIT, true);
+		JPanel card2 = new GridBagTemplate(5, BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT, COMPONENT_PANEL_BESTELLVERWALTUNG_EDIT, true, this.posEdit);
 		card2.setMinimumSize(new Dimension(400,400));
 		card2.setPreferredSize(new Dimension(640,630));
 		JPanel card3 = new GridBagTemplate(6, BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO, COMPONENT_PANEL_BESTELLVERWALTUNG_GO, false);
@@ -142,6 +145,14 @@ public class Transaktionen extends JPanel implements Configuration {
 		addComponent(panel, cards, new Insets(0, 5, 0, 5), 0, 1, 1, GridBagConstraints.REMAINDER, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
 
 		return panel;
+	}
+
+	public Bestellpositionen getPosNeu(){
+		return this.posNeu;
+	}
+
+	public Bestellpositionen getPosEdit(){
+		return this.posEdit;
 	}
 
 	public void addComponent(JPanel panel, Component c, Insets insets, int x, int y, int width, int height, int fill, int anchor) {
