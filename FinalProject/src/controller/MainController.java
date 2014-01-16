@@ -1,16 +1,15 @@
 package controller;
 
 import gui.Client;
-import gui.components.Dialog;
 import gui.components.Explorer;
-import gui.components.DBOutput;
-import gui.components.GridBagTemplate;
 import gui.components.Transaktionen;
 import gui.components.Auswertung;
+import gui.components.MainMenuBar;
 
 import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -27,21 +26,16 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import model.Configuration;
@@ -65,6 +59,19 @@ public class MainController implements Configuration{
 		this.componentMap = new HashMap<String, Component>();
 		addTransaktionenListeners(this.client.getTransaktionen());
 		addExplorerListeners(this.client.getExplorer());
+		addAuswertungenListeneres(this.client.getAuswertung());
+		addMenuListeners(this.client.getMenu());
+	}
+
+	void addMenuListeners(Component component){
+		Iterator<Entry<String, Component>> it = ((MainMenuBar) component).getComponentMap().entrySet().iterator();
+		while (it.hasNext()){
+			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
+			if (pairs.getValue() instanceof JButton){
+				System.out.println("Button registriert: " + pairs.getKey());
+				this.client.getMenu().addActionListeners(pairs.getValue(), new ActionEventListener());
+			}
+		}
 	}
 
 	void addTransaktionenListeners(Component component){
@@ -79,6 +86,18 @@ public class MainController implements Configuration{
 			else if (pairs.getValue() instanceof JComboBox){
 //				System.out.println("ComboBox registriert: " + pairs.getKey());
 				this.client.getTransaktionen().addItemListeners(pairs.getValue(), new ItemEventListener());
+			}
+		}
+	}
+
+	void addAuswertungenListeneres(Component component){
+		Iterator<Entry<String, Component>> it = ((Auswertung) component).getComponentMap().entrySet().iterator();
+		while (it.hasNext()){
+			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
+//			System.out.println(pairs.getKey());
+			if (pairs.getValue() instanceof JButton){
+				System.out.println("Button registriert: " + pairs.getKey());
+				this.client.getAuswertung().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 		}
 	}
@@ -143,17 +162,6 @@ public class MainController implements Configuration{
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
-//			System.out.println("ActionEvent: " + ae);
-//			if (ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN){
-//				System.out.println(client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME));
-//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText());
-//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText());
-//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText());
-//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).getText());
-//				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).getSelectedItem().toString());
-//				System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString());
-//				System.out.println(((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText());
-//			}
 
 			//-----------------  KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN ) {
@@ -425,6 +433,78 @@ public class MainController implements Configuration{
 					msg = "<html>Die Best&auml;nde wurden erfolgreich vom Lager " + srcLager + " auf Ziellager " + destLager + " umgebucht.</html>";
 				}
 				JOptionPane.showMessageDialog(client, msg);
+			}
+
+			//----------------- PRODUKTANALYSE
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN ) {
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				String typ = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP)).getText();
+				String groesse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE)).getText();
+
+				try {
+					//db.callProcedureProduktanalyse("STANDARD PLATED STEEL", 20);
+					db.callProcedureProduktanalyse(typ, Integer.parseInt(groesse));
+					OutputTableModel tableModel = null;
+					try {
+					    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + "ANALYSEHELPRES");
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					client.getDBOutput().removeScrollPane();
+					client.getDBOutput().addTableModel(tableModel);
+					client.getDBOutput().addTableToPane();
+					client.revalidate();
+					client.repaint();
+					db.dropProduktTabelle();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotExistInDatabaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				client.setCursor(Cursor.getDefaultCursor());
+			}
+
+			//----------------- LIEFERKOSTENSENKUNG
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN ) {
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				String produkt = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_LIEFERKOSTEN_PRODUKT)).getText();
+
+				try {
+					db.callProcedureLieferkostenAnalyse(produkt);
+					OutputTableModel tableModel = null;
+					try {
+					    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + "ANALYSE2HELPRES");
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					client.getDBOutput().removeScrollPane();
+					client.getDBOutput().addTableModel(tableModel);
+					client.getDBOutput().addTableToPane();
+					client.revalidate();
+					client.repaint();
+					db.dropLieferkostenTabelle();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NotExistInDatabaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				client.setCursor(Cursor.getDefaultCursor());
+			}
+
+			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_LOGOUT){
+
+			}
+
+			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_EXIT){
+				String[] buttons = {"Ja", "Nein"};
+				int inputPrompt = JOptionPane.showOptionDialog(client, "Wollen Sie die Anwendung wirklich beenden?", "Haufkof Client", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, buttons, buttons[2]);
+				if (inputPrompt == 1){
+					System.exit(0);
+				}
 			}
 		}
 

@@ -33,6 +33,13 @@ public interface Configuration {
 	static final String LABEL_LOGIN_FEEDBACK_WARNING = "<html>Login fehlgeschlagen!</html>";
 	static final String LABEL_LOGIN_FEEDBACK_SUCCESS = "<html>Anmeldung erfolgreich.</html>";
 
+	// MenuBar
+	static final String MENU_OPTIONS = "<html>Optionen</html>";
+	static final String MENU_ABOUT = "<html>Hilfe</html>";
+	static final String ITEM_INFO = "<html>&Uuml;ber</html>";
+	static final String ITEM_LOGOUT = "<html>Abmelden</html>";
+	static final String ITEM_EXIT = "<html>Beenden</html>";
+
 
 	/* ##########################*/
 	/* ##### Transaktionen  #####*/
@@ -126,7 +133,7 @@ public interface Configuration {
 	static final String ANALYSE_TITLE_LIEFERKOSTENSENKUNG = "<html>Senken der Lieferkosten</html>";
 	static final String ANALYSE_LABEL_TYP = "<html>Typ</html>";
 	static final String ANALYSE_LABEL_GROESSE = "<html>Gr&ouml;&szlig;e</html>";
-	static final String ANALYSE_LABEL_PID = "<html>Produkt-ID</html>";
+	static final String ANALYSE_LABEL_PRODUKT = "<html>Produkt-Name</html>";
 	static final String ANALYSE_BUTTON_AUSFUEHREN = "<html>Ausf&uuml;hren</html>";
 
 	/* ##### Senkung der Lieferkosten  #####*/
@@ -206,11 +213,10 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTPOS_PREIS = "textfield_bestellverwaltung_edit_bstpos_preis";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID = "textfield_bestellverwaltung_go_bstid";
 	// Produktanalyse
-	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_PID = "textfield_analyse_produkt";
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP = "textfield_analyse_typ";
 	static final String COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE = "textfield_analyse_groesse";
 	// Lieferkostensenkung
-	static final String COMPONENT_TEXTFIELD_LIEFERKOSTEN_PID = "textfield_lieferkosten_produkt";
+	static final String COMPONENT_TEXTFIELD_LIEFERKOSTEN_PRODUKT = "textfield_lieferkosten_produkt";
 
 	/* ##### Textareas #####*/
 	static final String COMPONENT_TEXTAREA_BESTELLVERWALTUNG_NEU_BSTPOS_POSTEXT = "textarea_bestellverwaltung_neu_bstpos_postext";
@@ -268,6 +274,13 @@ public interface Configuration {
 
 	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
+
+	/* ##### Menu Items #####*/
+	static final String COMPONENT_MENU = "menu";
+	static final String COMPONENT_ITEM_MENU_LOGOUT = "item_menu_logout";
+	static final String COMPONENT_ITEM_MENU_EXIT = "item_menu_exit";
+	static final String COMPONENT_ITEM_MENU_ABOUT = "item_menu_about";
+	static final String COMPONENT_ITEM_MENU_INFO = "item_menu_info";
 
 	/* #### Tabellen, Sequence #### */
 	static final String TABLE_KUNDE = "KUNDE";

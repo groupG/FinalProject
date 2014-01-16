@@ -5,8 +5,10 @@ import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import javax.swing.AbstractButton;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -22,6 +24,10 @@ public class Auswertung extends JPanel implements Configuration {
 		addComponent(this, createAnalysisPanel(), new Insets(0, 5, 0, 5), 0, 0);
 		this.componentMap = new HashMap<String, Component>();
 		createComponentMap(this);
+	}
+
+	public void addActionListeners(Component component, ActionListener ae){
+		((AbstractButton) component).addActionListener(ae);
 	}
 
 	public Component createAnalysisPanel()

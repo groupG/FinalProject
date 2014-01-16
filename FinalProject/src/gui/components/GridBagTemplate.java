@@ -482,9 +482,9 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		case 8: // Template: Senkung der Lieferkosten
 		{
 			// PID, number, 10
-			JLabel label_pid = new JLabel(ANALYSE_LABEL_PID);
+			JLabel label_pid = new JLabel(ANALYSE_LABEL_PRODUKT);
 			JTextField _pid = new JTextField(10);
-			_pid.setName(COMPONENT_TEXTFIELD_LIEFERKOSTEN_PID);
+			_pid.setName(COMPONENT_TEXTFIELD_LIEFERKOSTEN_PRODUKT);
 			addComponent(container, label_pid, new Insets(0, 5, 0, 5), 0, 0, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.WEST);
 			addComponent(container, _pid, new Insets(0, 5, 0, 5), 1, 0, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.WEST);
 

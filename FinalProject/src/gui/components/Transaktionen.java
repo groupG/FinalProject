@@ -128,7 +128,7 @@ public class Transaktionen extends JPanel implements Configuration {
 		JPanel card2 = new GridBagTemplate(5, BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT, COMPONENT_PANEL_BESTELLVERWALTUNG_EDIT, true);
 		card2.setMinimumSize(new Dimension(400,400));
 		card2.setPreferredSize(new Dimension(640,630));
-		JPanel card3 = new GridBagTemplate(6, BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO, COMPONENT_PANEL_BESTELLVERWALTUNG_GO, true);
+		JPanel card3 = new GridBagTemplate(6, BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO, COMPONENT_PANEL_BESTELLVERWALTUNG_GO, false);
 		card3.setMinimumSize(new Dimension(400,400));
 		card3.setPreferredSize(new Dimension(640,630));
 

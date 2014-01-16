@@ -30,6 +30,7 @@ public class Client extends JFrame implements Configuration {
 	private DBOutput dboutput;
 	private Transaktionen transaktionen;
 	private Auswertung auswertung;
+	private MainMenuBar menu;
 
 	public Client(DB db, int width, int height) {
 
@@ -37,7 +38,8 @@ public class Client extends JFrame implements Configuration {
 		setSize(new Dimension(width, height));
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setResizable(true);
-		setJMenuBar(new MainMenuBar().createMenuBar());
+		this.menu = new MainMenuBar(COMPONENT_MENU);
+		setJMenuBar(this.menu);
 
 		this.db = db;
 		this.getContentPane().add(initComponents(width, height));
@@ -142,5 +144,9 @@ public class Client extends JFrame implements Configuration {
 
 	public void setAuswertung(Auswertung auswertung){
 		this.auswertung = auswertung;
+	}
+
+	public MainMenuBar getMenu(){
+		return this.menu;
 	}
 }
