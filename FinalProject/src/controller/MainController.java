@@ -26,6 +26,7 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -201,11 +202,12 @@ public class MainController implements Configuration{
 			}
 
 			//----------------- BESTELLVERWALTUNG - BSTPOSITION - HINZUFUEGEN BUTTON
-			if (ae.getActionCommand() == "add"){
+			if (ae.getActionCommand() == "addNeu"){
 				System.out.println("add");
 				String pos = (String) ((JTextField) client.getComponentByName("bstPosInput")).getText();
 
 					if (!pos.contains(";")){
+//						System.out.println(((AbstractButton) ((Client) client.getComponentByName("bestellPosListNeu")).getComponentByName("listNeu")).getModel());
 						JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
 						return;
 					}

@@ -76,7 +76,7 @@ public interface Configuration {
 
 	/* ##### Produktverwaltung  #####*/
 	static final String PRODUKTVERWALTUNG_CARD_TITLE = "<html>Zulieferung einbuchen und Best&auml;nde umbuchen</html>";
-	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Zulieferung einbuchen", "Bestand umbuchen" };
+	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Produkt-Transaktion aus <<", "Zulieferung einbuchen", "Bestand umbuchen" };
 	static final String PRODUKTVERWALTUNG_LABEL_INFOTEXT = "<html><div style='border:1px solid #000000;padding:25px;margin-top:-30px;'><center><p>In diesem Reiter k&ouml;nnen Sie neue Produkt-Zulieferungen ein- oder bereits bestehene Best&auml;nde auf ein anderes Lager umbuchen</p></center>"
 			+ " <br>"
 			+ "<p>Wenn Sie eine neue Zulieferung einbuchen und best&auml;tigen wollen, dann geben Sie einfach die Zulieferungs-ID in das vorgesehene Feld ein und dr&uuml;cken Sie den 'Einbuchen'-Button. Das System pr&uuml;ft, ob es sich um eine g&uuml;tige ID handelt und f&uuml;hrt bei erfolgreicher Pr&uuml;fung die Transaktion aus.</p>"
@@ -99,8 +99,8 @@ public interface Configuration {
 
 	/* ##### Bestellverwaltung  #####*/
 	static final String BESTELLVERWALTUNG_CARD_TITLE = "<html>Bestellungen anlegen, editieren &amp; ausliefern</html>";
-	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
-	static final String BESTELLVERWALTUNG_LABEL_INFOTEXT = "<html><div style='border:1px solid #000000;padding:20px'><center><p>In diesem Reiter k&ouml;nnen Sie neue Bestellungen anlegen, bearbeiten und auslifern.</p></center>"
+	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Bestell-Transaktion aus <<", "Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
+	static final String BESTELLVERWALTUNG_LABEL_INFOTEXT = "<html><div style='border:1px solid #000000;padding:15px'><center><p>In diesem Reiter k&ouml;nnen Sie neue Bestellungen anlegen, bearbeiten und auslifern.</p></center>"
 			+ " <br>"
 			+ "<p>Wenn Sie eine neue Bestellung anlegen m&ouml;chten, dann f&uuml;llen Sie zun&auml;chst den Bestellkopf aus (Kunden-ID, Anleger, Bestelltermin, Bestelltext). Dannach k&ouml;nnen Sie eine oder mehrere Bestellposition hinzuf&uuml;gen. <br> Achten Sie bei den Feldern Bestelltermin und Bestellposition bitte darauf, dass Sie die richtige Formattierung verwenden:" +
 			"<ul><li><b>Bestelltermin:</b> dd.mm.yy, z.B. 31.12.14 oder 01.03.14</li><li><b>Bestellposition:</b> Eine Position erfordert die Angabe von Produkt-ID und der gew&uuml;nschten Menge. Der Positionstext ist optional. Achten Sie bei der Eingabe darauf, dass Sie die Werte mit einem <i>Semikolon (';')<i> trennen. Falls Sie keinen Positionstext eingeben ist kein abschlie&szlig;endes Semikolon erforderlich.</li></ul>" +
@@ -115,6 +115,7 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT = "<html>Vorhandene Bestellung editieren</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO = "<html>Bestellung an Kunden ausliefern</html>";
 	static final String BESTELLVERWALTUNG_LABEL_BSTID = "<html>Bestellungs-ID</html>";
+	static final String BESTELLVERWALTUNG_LABEL_KID = "<html>Kunden-ID</html>";
 	static final String BESTELLVERWALTUNG_LABEL_BSTTEXT = "<html>Bestelltext</html>";
 	static final String BESTELLVERWALTUNG_LABEL_ANLEGER = "<html>Anleger</html>";
 	static final String BESTELLVERWALTUNG_LABEL_ANLAGEDATUM = "<html>Anlagedatum</html>";
@@ -128,6 +129,7 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_LABEL_PREIS = "<html>Preis</html>";
 	static final String BESTELLVERWALTUNG_LABEL_POSTEXT = "<html>Positionstext</html>";
 	static final String BESTELLVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_SUCHE = "<html>Suchen & &Auml;ndern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
@@ -210,6 +212,7 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE = "textfield_produktverwaltung_edit_menge";
 	// Bestellverwaltung
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID = "textfield_bestellverwaltung_neu_bstid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID = "textfield_bestellverwaltung_neu_kid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT = "textfield_bestellverwaltung_neu_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER = "textfield_bestellverwaltung_neu_anleger";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN = "textfield_bestellverwaltung_neu_bsttermin";
@@ -218,6 +221,7 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_MENGE = "textfield_bestellverwaltung_neu_bstpos_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PREIS = "textfield_bestellverwaltung_neu_bstpos_preis";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID = "textfield_bestellverwaltung_edit_bstid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID = "textfield_bestellverwaltung_edit_kid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT = "textfield_bestellverwaltung_edit_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER = "textfield_bestellverwaltung_edit_anleger";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN = "textfield_bestellverwaltung_edit_bsttermin";
@@ -282,6 +286,7 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSHINZUFUEGEN = "button_bestellverwaltung_edit_bstposhinzufuegen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSAENDERN = "button_bestellverwaltung_edit_bstposaendern";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSLOESCHEN = "button_bestellverwaltung_edit_loeschen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SUCHEN = "button_bestellverwaltung_edit_suchen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN = "button_bestellverwaltung_edit_speichern";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN = "button_bestellverwaltung_edit_bestaetigen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN = "button_bestellverwaltung_bestellung_go_ausliefern";

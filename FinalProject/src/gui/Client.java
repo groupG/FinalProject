@@ -74,13 +74,13 @@ public class Client extends JFrame implements Configuration {
 		JSplitPane bottomSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.transaktionen, this.auswertung);
 		bottomSplitPane.setPreferredSize(new Dimension(width, (int) Math.round(height * 0.8)));
 		bottomSplitPane.setOneTouchExpandable(true);
-		bottomSplitPane.setDividerLocation((int) Math.round(width * 0.7));
+		bottomSplitPane.setDividerLocation((int) Math.round(width * 0.6));
 
 		// main SplitPane
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, bottomSplitPane);
 		mainSplitPane.setPreferredSize(new Dimension(width, height));
 		mainSplitPane.setOneTouchExpandable(true);
-		mainSplitPane.setDividerLocation((int)Math.round(height * 0.43));
+		mainSplitPane.setDividerLocation((int)Math.round(height * 0.42));
 
 		return mainSplitPane;
 	}

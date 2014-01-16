@@ -48,9 +48,9 @@ public class Bestellpositionen extends JPanel implements Configuration,
 
 	private JTextField txtInput;
 
-	public Bestellpositionen(String title) {
+	public Bestellpositionen(String name, String nameList, String nameAdd, String nameDel) {
 		super(new GridBagLayout());
-
+		this.setName(name);
 		this.listModel = new DefaultListModel<String>();
 //		this.listModel.addElement("Test");
 
@@ -59,20 +59,20 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		this.list.setSelectedIndex(-1);
 		this.list.addListSelectionListener(this);
 		this.list.setVisibleRowCount(5);
-		this.list.setName(title);
+		this.list.setName(nameList);
 
 		JScrollPane listScrollPane = new JScrollPane(this.list);
 
 		this.btnAdd = new JButton(Bestellpositionen.add);
 		AddListener addListener = new AddListener(this.btnAdd);
 		this.btnAdd.addActionListener(addListener);
-		this.btnAdd.setName("add");
-		this.btnAdd.setActionCommand("add");
+		this.btnAdd.setName(nameAdd);
+		this.btnAdd.setActionCommand(nameAdd);
 		this.btnAdd.setEnabled(false);
 
 		this.btnDel = new JButton(Bestellpositionen.del);
-		this.btnDel.setName("del");
-		this.btnDel.setActionCommand("del");
+		this.btnDel.setName(nameDel);
+		this.btnDel.setActionCommand(nameDel);
 		this.btnDel.setEnabled(false);
 		this.btnDel.addActionListener(new DeleteListener());
 
@@ -97,9 +97,6 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		addComponent(this, listScrollPane, new Insets(0,0,0,0), 0, 2);
 	}
 
-	public int getList(){
-		return this.listModel.getSize();
-	}
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
