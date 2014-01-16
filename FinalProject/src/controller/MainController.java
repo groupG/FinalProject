@@ -364,6 +364,12 @@ public class MainController implements Configuration{
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN ) {
 				String zlid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID)).getText();
 
+				// Check if the textfield for zlid is empty.
+				if ( zlid.isEmpty() ) {
+					JOptionPane.showMessageDialog(client, "Bitte geben Sie eine Zulieferungs-ID an.");
+					return;
+				}
+
 				// Check if the given KID is valid.
 				if ( !Pattern.matches("\\d*", zlid) ) { // nur positive nummerische Werte.
 					JOptionPane.showMessageDialog(client, PRODUKTVERWALTUNG_MESSAGE_INVALID_ZLID);
@@ -399,11 +405,15 @@ public class MainController implements Configuration{
 				String pid  = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT)).getText();
 				String menge = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE)).getText();
 
-				// Check the input strings on valid numeric values.
+				// Check the input strings on valid numeric values, or if they are empty.
 				String[] inputs = { srcLager, destLager, pid, menge };
 				for ( String s : inputs ) {
 					if ( !Pattern.matches("\\d*", s ) ) {
 						JOptionPane.showMessageDialog(client, "Die Eingabe darf nur positive numerische Werte enthalten, z.B. 1, 5, 98, 2098...");
+						return;
+					}
+					if ( s.isEmpty() ) { // Check empty string.
+						JOptionPane.showMessageDialog(client, "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>");
 						return;
 					}
 				}
@@ -417,7 +427,7 @@ public class MainController implements Configuration{
 				int success = -999;
 				try {
 					success = db.bestandUmbuchen(srcLager, destLager, pid, Integer.parseInt(menge));
-				} catch ( NotExistInDatabaseException ne) {
+				} catch ( NotExistInDatabaseException ne ) {
 					JOptionPane.showMessageDialog(client, "<html>Ursprungslager + " + srcLager + " oder Produkt " + pid + " ist nicht in der Datenbank vorhanden.</html>");
 					// ne.printStackTrace();
 					return;
