@@ -641,6 +641,12 @@ public class MainController implements Configuration{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
 	    			client.repaint();
 	    		}
+
+	    		//----------- BESTELLUNG VERWALTUNG - Bestellung anlegen
+	    		if ( (int) ((JComboBox<String>) ie.getSource()).getSelectedIndex() == 1 ) {
+	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID)).setText("" + db.generateBSTID());
+	    			client.repaint();
+	    		}
 	    	}
 
 	    }
