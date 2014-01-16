@@ -3,12 +3,15 @@ package model;
 import java.net.ConnectException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -224,9 +227,12 @@ public class DB implements Configuration {
 		this.needNextKID = b;
 	}
 
+	public void needNextBestellungsID( boolean b ) {
+		this.needNextBSTID = b;
+	}
 	/**
 	 * This method suggests a KID for a new customer.
-	 * Diese Methode schl��gt eine KID fuer neuen Kunden.
+	 * Diese Methode schl&auml;gt eine KID fuer neuen Kunden.
 	 *
 	 * @return kid : Vorgeschlagener KID f&uuml;r den neuen Kunden.
 	 *
@@ -827,18 +833,159 @@ public class DB implements Configuration {
 		return this.bstid_buffered;
 	}
 
-	public void createBestellposition(String posNr, String anzahl, String preis ,String positionstext,
-									  String bstid, String pid) {
+	/**
+	 * Diese Methode legt eine neue Bestellung an und speichert sie auf der Datenbank.
+	 *
+	 * 	BESTELLUNG : [BSTID], Bestelltext, Anleger, Anlagedatum, Aenderungsdatum, Status, Bestellterminm,
+	 * 						  Erledigt_Termin, KID
+	 *
+	 * @param bstid
+	 * @param kid
+	 * @param bestelltext
+	 * @param anleger
+	 * @param status
+	 * @param bestelltermin
+	 * @param bpos : Bestellpositionen
+	 * @throws NotExistInDatabaseException
+	 */
+	public void bestellungSpeichern(String bstid, String bestelltext, String anleger, String bestelltermin,
+									String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException {
+		this.connection.setAutoCommit(false);
+		Statement stmt = null;
+		String sql_query;
 
+		try {
+			stmt = this.connection.createStatement();
+			// Anlagedatum.
+			Date date = new Date(System.currentTimeMillis()); // aktuelle Zeit
+			String anlagedatum = date.toString(); // yyyy-mm-dd
+			// Aenderungsdatum
+			String aenderungsdatum = anlagedatum;
+
+			sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLUNG " +
+						"VALUES (" + bstid + ", " + bestelltext + ", " + anleger + ", "
+								   + "to_date(" + anlagedatum + ", 'dd.mm.yy'), "
+								   + "to_date(" + aenderungsdatum + ", 'dd.mm.yy'), "
+								   + "OFFEN, " + bestelltermin + ", NULL, " + kid + ")";
+			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
+
+			/*
+			 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
+			 */
+			if ( bpos != null ) { // INSERT Bestellpositionen
+				for ( int i = 0; i < bpos.length; i++ ) {
+					int anzahl = Integer.parseInt(bpos[i][1]);
+					String pid = bpos[i][0];
+					double preis = calcTotalPrice(pid, anzahl);
+
+					sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLPOSITION " +
+								"VALUES (" + i + ", "  // posnr
+										   + anzahl + ", "  // anzahl-
+										   + preis + ", "  // preis
+										   + bpos[i][2] + ", "  // positionstext-
+										   + bstid + ", "  // bstid
+										   + pid  + ")";  // pid-
+					stmt.executeUpdate(sql_query);
+				}
+			}
+			this.connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+			this.connection.rollback();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
 	}
 
-	public void createBestellung(String bstid, String bestelltext, String anleger, String anlagedatum,
-			 					 String aenderungsdatum, String status, String bestelltermin,
-			 					 String erledigt_termin, String kid ) {
+	/**
+	 * Diese Methode liefert eine bereits best&auml;tigte Bestellung aus.
+	 *
+	 * @param bstid
+	 * @return <i>true</i>, falls die Bestellung ausgeliefert werden kann. <i>false</i> sonst.
+	 * @throws NotExistInDatabaseException
+	 * @throws SQLException
+	 */
+	public boolean bestellungAusliefern(String bstid) throws NotExistInDatabaseException, SQLException {
+		this.connection.setAutoCommit(false);
+		Statement stmt = null;
+		String sql_query;
 
-	}
+		Savepoint savePoint1 = this.connection.setSavepoint();
+		boolean success = true; // true = Bestellung kann augeliefert werden.
+		try {
+			stmt = this.connection.createStatement();
+			sql_query = "SELECT betelltermin, status FROM " + TABLE_OWNER + ".BESTELLUNG " +
+						"WHERE bstid = " + bstid + "FOR UPDATE NOWAIT";
 
-	public void bestellungSpeichern() {
+			ResultSet rs = stmt.executeQuery(sql_query);
+			if ( !rs.next() ) {
+				success = false;
+				throw new NotExistInDatabaseException("<html>Invalid BSTID. Ung&uuml;ltige Bestellungs-ID.</html>");
+			}
 
+			String status = rs.getString("STATUS");
+			Date bestelltermin = rs.getDate("BESTELLTERMIN");
+
+			// Wenn die Bestellung noch OFFEN oder bereits ERLEDIGT ist, kann sie nicht mehr ausgeliefert werden.
+			if ( status.trim().equals("OFFEN") || status.trim().equals("ERLEDIGT") ) {
+				return false;
+			}
+
+			// wenn der Bestelltermin (bzw. Liefertermin) schon vorbei ist, und der Kunde hat seine bestellte Ware
+			// noch nicht ausgeliefert bekommt. Tja not good babe :P
+			Date now = new Date(System.currentTimeMillis());
+			if ( bestelltermin.before(now) ) {
+				return false;
+			}
+
+			sql_query = "SELECT posnr, pid, anzahl FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
+						"WHERE bstid = " + bstid;
+			rs = stmt.executeQuery(sql_query);
+			while ( rs.next() ) {
+				int pid = rs.getInt("PID"); // Produkt-ID.
+				int menge = rs.getInt("ANZAHL"); // Zu lieferende Menge.
+				sql_query = "SELECT lagid, pid, anzahl FROM " + TABLE_OWNER + ".LAGERT " +
+							"WHERE pid = " + pid;
+				ResultSet _rs_ = stmt.executeQuery(sql_query);
+				while ( _rs_.next() ) {
+					int lagid = _rs_.getInt("LAGID");
+					int aktuellerBestand = _rs_.getInt("ANZAHL");
+					// UPDATE LAGERT.
+					if ( menge <= aktuellerBestand ) {
+						aktuellerBestand -= menge;
+						sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " +
+									"SET anzahl = " + aktuellerBestand + " " +
+									"WHERE lagid = " + lagid + " AND pid = " + pid;
+						menge = 0;
+						stmt.executeUpdate(sql_query);
+						break;
+					}
+					else { // menge > aktuellerBestand
+						sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " +
+									"SET anzahl = 0 " +
+									"WHERE lagid = " + lagid + " AND pid = " + pid;
+						menge -= aktuellerBestand;
+					}
+					stmt.executeUpdate(sql_query);
+				}
+				_rs_.close();
+				if ( menge > 0 ) {
+					return false; // Die bestellten Produkte koennen nicht genuegend beliefert werden.
+				}
+			}
+			rs.close();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+			this.connection.rollback(savePoint1);
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
+		return success;
 	}
 }
