@@ -37,10 +37,14 @@ public class DB implements Configuration {
 	 */
 	private boolean needNextKID = true;
 
+	private boolean needNextBSTID = true;
+
 	/**
 	 * In dieser Variable wird die aktuell vorgeschlagene, noch freie KundenID (KID) zwischengespeichert.
 	 */
 	private int kid_buffered = -1;
+
+	private int bstid_buffered = -1;
 
 	/**
 	 * Konstruktor. Erzeugt eine neue Instanz der DB-Klasse. Es wird
@@ -789,5 +793,52 @@ public class DB implements Configuration {
 			}
 		}
 		return totalPrice;
+	}
+
+
+	/**
+	 * This method generates a new BSTID (Bestellungs-ID) from a sequence object.
+	 *
+	 * @return a self generated bstid (Bestellungs-ID)
+	 */
+	public int generateBSTID() {
+		if ( needNextBSTID ) {
+			String sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_BESTELLUNG_BSTID + ".NEXTVAL FROM DUAL";
+			Statement stmt = null;
+			try {
+				stmt = this.connection.createStatement();
+				ResultSet rs = stmt.executeQuery(sql_query);
+				rs.next();
+				this.bstid_buffered = rs.getInt(1);
+				rs.close();
+			} catch ( SQLException e ) {
+				e.printStackTrace();
+			} finally {
+				if ( stmt != null) {
+					try {
+						stmt.close();
+					} catch ( SQLException e ) {
+						e.printStackTrace();
+					}
+				}
+				this.needNextBSTID = false;
+			}
+		}
+		return this.bstid_buffered;
+	}
+
+	public void createBestellposition(String posNr, String anzahl, String preis ,String positionstext,
+									  String bstid, String pid) {
+
+	}
+
+	public void createBestellung(String bstid, String bestelltext, String anleger, String anlagedatum,
+			 					 String aenderungsdatum, String status, String bestelltermin,
+			 					 String erledigt_termin, String kid ) {
+
+	}
+
+	public void bestellungSpeichern() {
+
 	}
 }
