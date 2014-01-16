@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.Vector;
 import javax.sql.rowset.CachedRowSet;
 
 import com.sun.rowset.CachedRowSetImpl;
+
+import utils.NotExistInDatabaseException;
 
 /**
  * Klasse, welche den Verbindungsaufbau zur Oracle-Datenbank managed.
@@ -269,17 +272,13 @@ public class DB implements Configuration {
 	 * @param kNation : Name des Landes, in dem der Kunde lebt.
 	 * @throws SQLException
 	 */
-	public void insertKunde(int kID, String kName, String kAdresse, String kTelNr, String kBranche, String kNation) throws SQLException {
+	public void insertKunde(String kID, String kName, String kAdresse, String kTelNr, String kBranche, String kNation) throws SQLException {
 
 		// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
 		connection.setAutoCommit(false);
 		// Default transaction isolation level of oracle is READ COMMITED.
 
 		PreparedStatement stmt_InsertKunde = null;
-		String query_InsertKunde = "INSERT INTO " + TABLE_OWNER + "." + TABLE_KUNDE + " " +
-				   				   "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
-
-		// Common statement for retrieving data from the database.
 		Statement stmt_Retrieve = null;
 		String sql_query;
 
@@ -302,8 +301,11 @@ public class DB implements Configuration {
 			rs.close();
 
 			// Fuege den neuen Kunden mit allen seinen Daten in DB ein.
-			stmt_InsertKunde = connection.prepareStatement(query_InsertKunde);
-			stmt_InsertKunde.setInt(1, kID); // KID
+			sql_query = "INSERT INTO " + TABLE_OWNER + "." + TABLE_KUNDE + " " +
+	   				    "VALUES (?,?,?,?,0.00,?,?)"; // KID, Name, Adresse, Telefonnr, Konto, Branche, Nation
+			
+			stmt_InsertKunde = connection.prepareStatement(sql_query);
+			stmt_InsertKunde.setInt(1, Integer.parseInt(kID)); // KID
 			stmt_InsertKunde.setString(2, kName); // Name
 			stmt_InsertKunde.setString(3, kAdresse); // Adresse
 			stmt_InsertKunde.setString(4, kTelNr); // Telefonnummer
@@ -340,14 +342,14 @@ public class DB implements Configuration {
 	 * @param kNation : Name des Landes, in dem der Kunde lebt.
 	 * @throws SQLException
 	 */
-	public void updateKunde(String kID, String kName, String kAdresse, String kTelNr, float kKonto, String kBranche, String kNation) throws SQLException {
+	public void updateKunde(String kID, String kName, String kAdresse, String kTelNr, double kKonto, String kBranche, String kNation) throws SQLException {
 		// Set the AutoCommit mode off. Each separate statement or action won't be considered a unit transaction more.
-		connection.setAutoCommit(false);
-		// Default transaction isolation level of oracle is READ COMMITED.
-
+		//this.connection.setAutoCommit(false);
+		//connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
+		
 		PreparedStatement p_stmt = null;
 		String query_UpdateKunde = "UPDATE " + TABLE_OWNER + "." + TABLE_KUNDE  + " " +
-				   				   "SET kid = ?, " +
+				   				   "SET " +
 				   				   "    name = ?, " +
 				   				   "    adresse = ?, " +
 				   				   "    telefonnummer = ?, " +
@@ -356,7 +358,6 @@ public class DB implements Configuration {
 				   				   "    nid = ? " +
 				   				   "WHERE kid = " + kID;
 
-		// Common statement for retrieving data from the database.
 		Statement stmt = null;
 		String sql_query;
 
@@ -383,7 +384,7 @@ public class DB implements Configuration {
 			p_stmt.setString(1, kName); // Name
 			p_stmt.setString(2, kAdresse); // Adresse
 			p_stmt.setString(3, kTelNr); // Telefonnummer
-			p_stmt.setFloat(4, kKonto); // Kontostand
+			p_stmt.setDouble(4, kKonto); // Kontostand
 			p_stmt.setString(5, kBranche); // Branche
 			p_stmt.setInt(6, kNID); // NID
 			p_stmt.executeUpdate();
@@ -398,27 +399,67 @@ public class DB implements Configuration {
 			if ( p_stmt != null ) {
 				p_stmt.close();
 			}
+			
 			connection.setAutoCommit(true);
 		}
 	}
 	
-	public Vector<Object> selectFromTable(String table, String condition) throws SQLException {
-		Vector<Object> values = new Vector<Object>();
+	public boolean lockRows(String table, String condition) throws SQLException {		
+		this.connection.setAutoCommit(false);		
+		Statement stmt = null;
+		String sql_query;
+		
+		boolean isLocked = false; // there is still no lock.
+		try {
+			stmt = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			sql_query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " + 
+					    "WHERE " + condition + " FOR UPDATE NOWAIT";
+			ResultSet rs = stmt.executeQuery(sql_query); // Lock the coherent row.
+			// SQLException can be caused here, if no rs can be returned. 
+			isLocked = rs.first(); // true, i.e. the record (row) is being locked now. There was no lock set on it before.
+			System.out.println("Lock ResultSet r is : " + rs.getString(1));
+		} catch ( SQLException e ) {
+			//e.printStackTrace();
+			// SQLException, because this record is already locked by a previous process 
+			// and cannot be accessed by the current process. 
+		}
+		finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+		}
+		return isLocked;
+	}
+	
+	/**
+	 * Diese Methode liefert eine Menge von Zeilen als Ergebnis der SELECT-Query mit der Bedingung <i>condition</i>.
+	 * 
+	 * @param table : Tabelle, in der gesucht wird.
+	 * @param condition : Pr&auml;dikat oder Bedingung in WHERE-Klasuel.
+	 * @return Menge von Zeilen, die Bedingung <i>condition</i> erf&uuml;llen.
+	 * @throws SQLException
+	 */
+	public Vector<Vector<Object>> selectFromTable(String table, String condition) throws SQLException {
+		Vector<Vector<Object>> values = new Vector<Vector<Object>>();
+		// connecion.setAutoCommit(true);
 		Statement stmt = null;
 		String sql_query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " +
 				           "WHERE " + condition;
 		try {
 			stmt = this.connection.createStatement();
 			ResultSet rs = stmt.executeQuery(sql_query);
-			rs.next();
-			int i = 1;
-			while ( i > 0 ) {
-				try { // Trick, um Invalid Comlumn Index SQLException zu vermeiden
-					values.add(rs.getObject(i));
-				} catch ( SQLException e ) {
-					break;
+			while ( rs.next() ) {
+				Vector<Object> v = new Vector<Object>();
+				int i = 1;
+				while ( i > 0 ) {
+					try {
+						v.add(rs.getObject(i));
+					} catch ( SQLException e ) {
+						break;
+					}
+					i++;
 				}
-				i++;
+				values.add(v);
 			}
 			rs.close();
 		} catch ( SQLException e ) {
@@ -430,5 +471,182 @@ public class DB implements Configuration {
 			}
 		}
 		return values;
+	}
+	
+	/**
+	 * Diese Methode bucht die Produktbest&auml;nde einer Zulieferung mit der gegebenen ID <i>zlid</i> auf das
+	 * in der Zulieferung angegebene Lager ein.
+	 * 
+	 * 	 Zulieferung : [ZLID], Liefertext, Liefertermin, Aenderungsdatum, Anleger, Anlagedatum, Status, Erledigt_Termin, LID, LAGID
+	 *   Zulieferungsposition : [POSNR], Anzahl, Preis, Positionstext, [ZLID], PID
+	 *   Lager : [LAGID], Adresse
+	 *   Lagert : [LAGID], [PID], Anzahl
+	 * 
+	 * @param zlid : Zulieferungs-ID
+	 * @throws NotInDatabaseException 
+	 * @throws SQLException 
+	 */
+	public boolean zulieferungEinbuchen(String zlid) throws NotExistInDatabaseException, SQLException {
+		this.connection.setAutoCommit(false);
+		
+		Statement stmt = null;
+		String sql_query;
+		boolean success = true; // wenn eine Zulieferung erfolgreich eingebucht werden kann.
+		
+		try {
+			stmt = this.connection.createStatement();
+			sql_query = "SELECT status, lagid FROM ZULIEFERUNG WHERE zlid = " + zlid;
+			ResultSet rs = stmt.executeQuery(sql_query);
+			
+			// Check if the given zlid is in the database, i.e. the ResultSet is empty.
+			if ( !rs.next() ) {
+				throw new NotExistInDatabaseException("ResultSet is empty. The method first() has returned false :-)");
+			}
+
+			// If the zlid is really in a databse, i.e. the ResultSet is not empty.
+			//rs.first();
+			String status = rs.getString("status");
+			int lagid = rs.getInt("lagid"); // Determine the lagid of LAGER included in ZULIEFERUNG.
+
+			// Muss hier denglisch verwenden. Mein Wortschatz ist begrenzt. ;-)
+			// Check if the Zulieferung is still open (OFFEN) or already finished (ERLEDIGT).
+			if ( status.trim().equals("ERLEDIGT") ) {
+				System.out.println(status);
+				return false;
+			}
+			
+			// If the Zulieferung is still OPEN., ...
+			// Set the STATUS of ZULIEFERUNG to ERLEDIGT and the ERLEDIGT_TERMIN to current date (SYSDATE).
+			sql_query = "UPDATE " + TABLE_OWNER + ".ZULIEFERUNG " + 
+			            "SET STATUS = 'ERLEDIGT', ERLEDIGT_TERMIN = SYSDATE " +
+					    "WHERE ZLID = " + zlid;
+			stmt.executeUpdate(sql_query);
+			
+			// Now book the Zulieferungspositionen.
+			sql_query = "SELECT anzahl, pid FROM ZULIEFERUNGSPOSITION " + 
+						"WHERE zlid = " + zlid;
+			rs = stmt.executeQuery(sql_query);
+			while ( rs.next() ) {
+				int anzahl = rs.getInt("ANZAHL");
+				int pid = rs.getInt("PID");
+				sql_query = "SELECT anzahl FROM " + TABLE_OWNER + ".LAGERT " + 
+							"WHERE lagid = " + lagid + " AND pid = " + pid;
+				ResultSet _rs_ = stmt.executeQuery(sql_query);
+				// Update the number of products in warehouse.
+				// Aktualisiere die Anzahl der Produkte im Lager.
+				int aktuellerBestand = 0;
+				int count = 0;
+				while ( _rs_.next() ) {
+					aktuellerBestand = _rs_.getInt("ANZAHL");
+					count++;
+				}
+				// If the product (PID) does not exist in LAGERT, then INSERT it into LAGERT.
+				if ( count == 0 ) {
+					sql_query = "INSERT INTO " + TABLE_OWNER + " LAGERT " +
+								"VALUES (" + lagid + ", " + pid + ", " + anzahl + ")";
+				}
+				else { // the product (PID) is existing in the LAGERT, then UPDATE.
+					aktuellerBestand += anzahl;
+					sql_query = "UPDATE LAGERT " + 
+								"SET anzahl = " + aktuellerBestand + " " + 
+								"WHERE lagid = " + lagid + " AND pid = " + pid;
+				}
+				_rs_.close();
+			}
+			
+			rs.close();			
+			this.connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+			//this.connection.rollback();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
+		
+		return success;
+	}
+	
+	/**
+	 * 
+	 * @param srcLager
+	 * @param destLager
+	 * @param pid
+	 * @param menge
+	 * @return
+	 * @throws SQLException
+	 * @throws NotExistInDatabaseException
+	 */
+	public int bestandUmbuchen(String srcLager, String destLager, String pid, int menge) throws SQLException, NotExistInDatabaseException {
+		this.connection.setAutoCommit(false);
+		Savepoint savePoint1 = this.connection.setSavepoint();
+		
+		Statement stmt = null;
+		String sql_query;
+		
+		int success = -999; // wenn eine Umbuchung erfolgreich abgeschlossen werden kann.
+		
+		try {
+			
+			stmt = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			// Suche den aktuellen Produktbestand im Ursprungslager zuerst.
+			sql_query = "SELECT anzahl FROM LAGERT " +
+						"WHERE lagid = " + srcLager + " AND pid =  " + pid;
+			ResultSet rs = stmt.executeQuery(sql_query);
+			
+			// Falls srcLger nicht in der Datenbank vorhanden ist, oder es gibts noch kein Produkt pid im Lager.
+			if ( !rs.first() ) {
+				throw new NotExistInDatabaseException("ResultSet is empty. The method first() has returned false.");
+			}
+			
+			rs.first(); // move the rs cursor to the first element.
+			int aktuellerBestand = 0; // wird verwendet, um die aktuelle Anzahl sowohl im Ursprungs- als auch Ziellager zu speichern.
+			aktuellerBestand = rs.getInt("ANZAHL");
+			
+			// Ueberpruefe, ob der aktuelle Bestand im Ursprungslager ausreicht, d.h. aktuellerBestand >= menge.
+			// Falls der Bestand nicht genuegt.
+			if ( aktuellerBestand < menge ) {
+				return aktuellerBestand; // Bestand reicht nicht aus. Nur x Stueck vorraetig.
+			}
+			
+			// Falls der Bestand ausreicht, d.h. aktuellerBestand >= menge.
+			aktuellerBestand -= menge;
+			sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " + 
+						"SET anzahl = " + aktuellerBestand + " " + 
+						"WHERE lagid = " + srcLager + " AND pid = " + pid;
+			stmt.executeUpdate(sql_query);
+			
+			// Jetzt buche die Menge von Ursprungslager nach Ziellager um.
+			// Aber zuerst bestimme die akutelle Produktmenge im Ziellager.
+			sql_query = "SELECT anzahl FROM " + TABLE_OWNER + ".LAGERT " +
+						"WHERE lagid = " + destLager + " AND pid = " + pid;
+			rs = stmt.executeQuery(sql_query);
+			if ( rs.first() ) { // Falls rs nicht leer ist, d.h. Produkt mit PID ist auch im Ziellager vorhanden. 
+				// Dann UPDATE die Anzahl.
+				aktuellerBestand = rs.getInt(1); // Anzahl im Ziellager.
+				sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " + 
+							"SET anzahl = " + ( aktuellerBestand + menge ) + " " +
+							"WHERE lagid = " + destLager + " AND pid = " + pid;
+			}
+			else { // Produkt (PID) existiert nicht im Ziellage.
+				// Daher INSERT.
+				sql_query = "INSERT INTO " + TABLE_OWNER + ".LAGERT " +
+							"VALUES (" + destLager + ", " + pid + ", " + menge + ")";
+			}
+			stmt.executeUpdate(sql_query);
+			this.connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+			this.connection.rollback(savePoint1);
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
+		
+		return success;
 	}
 }

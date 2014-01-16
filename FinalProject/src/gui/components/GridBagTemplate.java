@@ -139,6 +139,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_name = new JLabel(KUNDENPFLEGE_LABEL_NAME);
 			JTextField _name = new JTextField(10);
 			_name.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME);
+			_name.setEditable(false);
 			addComponent(container, label_name, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(container, _name, new Insets(0, 5, 0, 5), 1, 1);
 
@@ -146,6 +147,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_adresse = new JLabel(KUNDENPFLEGE_LABEL_ADRESSE);
 			JTextField _adresse = new JTextField(10);
 			_adresse.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE);
+			_adresse.setEditable(false);
 			addComponent(container, label_adresse, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(container, _adresse, new Insets(0, 5, 0, 5), 1, 2);
 
@@ -153,6 +155,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_tel = new JLabel(KUNDENPFLEGE_LABEL_TEL);
 			JTextField _tel = new JTextField(10);
 			_tel.setName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL);
+			_tel.setEditable(false);
 			addComponent(container, label_tel, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(container, _tel, new Insets(0, 5, 0, 5), 1, 3);
 
@@ -175,7 +178,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JComboBox<String> _branche = new JComboBox<String>(branche_strings);
 			_branche.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE);
 			_branche.setSelectedIndex(0);
-			_branche.setEditable(true);
+			_branche.setEditable(false);
+			_branche.setEnabled(false);
 			addComponent(container, label_branche, new Insets(0, 5, 0, 5), 0, 5);
 			addComponent(container, _branche, new Insets(0, 5, 0, 5), 1, 5);
 
@@ -186,7 +190,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
 			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION);
 			_nation.setSelectedIndex(0);
-			_nation.setEditable(true);
+			_nation.setEditable(false);
+			_nation.setEnabled(false);
 			addComponent(container, label_nation, new Insets(0, 5, 0, 5), 0, 6);
 			addComponent(container, _nation, new Insets(0, 5, 0, 5), 1, 6);
 
@@ -194,6 +199,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JButton button_exec = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE);
 			button_exec.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN);
 			button_exec.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN);
+			button_exec.setEnabled(false);
 			addComponent(container, button_exec, new Insets(0, 5, 0, 5), 2, 6);
 
 			// Suchen
@@ -201,6 +207,13 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			button_search.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN);
 			button_search.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN);
 			addComponent(container, button_search, new Insets(0, 5, 0, 5), 2, 0);
+
+			// Fertig
+			JButton button_exec_fertig = new JButton(KUNDENPFLEGE_BUTTON_EXECUTE_FERTIG);
+			button_exec_fertig.setName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG);
+			button_exec_fertig.setActionCommand(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG);
+			button_exec_fertig.setVisible(false);
+			addComponent(container, button_exec_fertig, new Insets(0, 5, 0, 5), 2, 5);
 		}
 			return container;
 		case 2: // Template: Zulieferung einbuchen
@@ -217,6 +230,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			button_search.setName(COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_SUCHEN);
 			button_search.setActionCommand(COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_SUCHEN);
 			addComponent(container, button_search, new Insets(0, 5, 0, 5), 2, 0);
+			button_search.setVisible(false); // Soni
 
 			// Einbuchen
 			JButton button_exec = new JButton(PRODUKTVERWALTUNG_BUTTON_EINBUCHEN);
