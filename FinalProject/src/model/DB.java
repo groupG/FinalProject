@@ -1195,6 +1195,7 @@ public class DB implements Configuration {
 
 		DateFormat df;
 		df = DateFormat.getDateInstance(DateFormat.SHORT);
+		//Test
 
 		return df.format(new Date(d.getTime()));
 	}
