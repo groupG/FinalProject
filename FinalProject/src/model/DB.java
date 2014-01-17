@@ -910,6 +910,9 @@ public class DB implements Configuration {
 	 */
 	public void bestellungSpeichern(String bstid, String bestelltext, String anleger, String status,
 									String bestelltermin, String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException {
+		if ( !checkIfElementExists(TABLE_OWNER + "." + TABLE_KUNDE, "kid", kid) ) {
+			throw new NotExistInDatabaseException("Kunde mit der ID " + kid + " existiert nicht in der Datenbank.");
+		}
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
 		String sql_query;
@@ -1028,6 +1031,11 @@ public class DB implements Configuration {
 	 */
 	public boolean bestellungAendern(String bstid, String bestelltext, String anleger,
 									 String bestelltermin, String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException{
+
+		if ( !checkIfElementExists(TABLE_OWNER + "." + TABLE_KUNDE, "kid", kid) ) {
+			throw new NotExistInDatabaseException("Kunde mit der ID " + kid + " existiert nicht in der Datenbank.");
+		}
+
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
 		String sql_query;
