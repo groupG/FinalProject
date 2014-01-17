@@ -541,8 +541,17 @@ public class MainController implements Configuration{
 				} else {
 					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? Falls nicht wird Ihre Bestellung verworfen.</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 					client.repaint();
-					if (inputPrompt == 0){
-						// TODO
+					if (inputPrompt == 1){
+						try {
+							db.bestellungLoeschen(bstid);
+						} catch (NotExistInDatabaseException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						this.clearInputComponentsOfBestellverwaltungNeu();
 					}
 				}
 			}
@@ -606,13 +615,11 @@ public class MainController implements Configuration{
 					client.repaint();
 
 					if (((String) bestellKopf.firstElement().get(5)).trim().equalsIgnoreCase("ERLEDIGT")){
-						System.out.println("abafasdfgeFAEFT");
 						this.setInputComponentsOfBestellverwaltungEditEditable(false);
 						this.setInputComponentsOfBestellverwaltungEditEnabled(false);
 						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN)).setEnabled(false);
 						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN)).setEnabled(false);
 					} else {
-
 						this.setInputComponentsOfBestellverwaltungEditEditable(true);
 						this.setInputComponentsOfBestellverwaltungEditEnabled(true);
 						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN)).setEnabled(true);
@@ -820,7 +827,7 @@ public class MainController implements Configuration{
 					client.showException(e);
 				}
 				JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde ge&auml;ndert. </html>");
-				clearInputComponentsOfBestellverwaltungEdit();
+				this.clearInputComponentsOfBestellverwaltungEdit();
 
 			}
 
@@ -927,8 +934,17 @@ public class MainController implements Configuration{
 				} else {
 					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? Falls nicht wird Ihre Bestellung verworfen.</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 					client.repaint();
-					if (inputPrompt == 0){
-						// TODO
+					if (inputPrompt == 1){
+						try {
+							db.bestellungLoeschen(bstid);
+						} catch (NotExistInDatabaseException e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+						this.clearInputComponentsOfBestellverwaltungEdit();
 					}
 				}
 			}
