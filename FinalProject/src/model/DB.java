@@ -737,7 +737,7 @@ public class DB implements Configuration {
 	 * @param pid
 	 * @param menge
 	 * @param liefertermin
-	 * @return
+	 * @return <i>true</i>, falls der Liefertermin haltbar ist. <i>false</i> sonst.
 	 * @throws SQLException
 	 * @throws NotExistInDatabaseException
 	 */
@@ -898,13 +898,13 @@ public class DB implements Configuration {
 	 * @param kid
 	 * @param bestelltext
 	 * @param anleger
-	 * @param status
+	 * @param status : OFFEN oder BESTAETIGT
 	 * @param bestelltermin
 	 * @param bpos : Bestellpositionen
 	 * @throws NotExistInDatabaseException
 	 */
-	public void bestellungSpeichern(String bstid, String bestelltext, String anleger, String bestelltermin,
-									String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException {
+	public void bestellungSpeichern(String bstid, String bestelltext, String anleger, String status,
+									String bestelltermin, String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException {
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
 		String sql_query;
@@ -921,7 +921,7 @@ public class DB implements Configuration {
 						"VALUES (" + bstid + ", " + bestelltext + ", " + anleger + ", "
 								   + "to_date(" + anlagedatum + ", 'dd.mm.yy'), "
 								   + "to_date(" + aenderungsdatum + ", 'dd.mm.yy'), "
-								   + "OFFEN, " + bestelltermin + ", NULL, " + kid + ")";
+								   + status + ", " + bestelltermin + ", NULL, " + kid + ")";
 			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
 
 			/*
@@ -955,11 +955,57 @@ public class DB implements Configuration {
 		}
 	}
 
-	public void bestellungAendern(String bstid, String bestelltext, String anleger, String bestelltermin) throws SQLException, NotExistInDatabaseException{
+	/**
+	 * Diese Methode best&auml;tigt eine neue Bestellung, wenn deren Liefertermin (Bestelltermin) haltbar ist.
+	 * Anschlie&szlig;end wird diese Bestellung in der Datenbank abgelegt.
+	 *
+	 * @param bstid
+	 * @param bestelltext
+	 * @param anleger
+	 * @param bestelltermin
+	 * @param kid
+	 * @param bpos
+	 * @throws SQLException
+	 * @throws NotExistInDatabaseException
+	 *
+	 */
+	public boolean bestellungBestaetigen(String bstid, String bestelltext, String anleger,
+										 String bestelltermin, String kid, String[][] bpos ) throws SQLException, NotExistInDatabaseException {
+		boolean success = true;
+		/*
+		 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
+		 */
+		for ( int i = 0; i < bpos.length; i++ ) {
+			// [pid, menge, text]
+			int pid = Integer.parseInt(bpos[i][0]);
+			int menge = Integer.parseInt(bpos[i][1]);
+			boolean lieferterminHaltbar = this.callProcedureCheckLiefertermin(pid, menge, bestelltermin);
+			if ( !lieferterminHaltbar ) {
+				return false;
+			}
+		}
+		this.bestellungSpeichern(bstid, bestelltext, anleger, "BESTAETIGT", bestelltermin, kid, bpos); // Speichern mit dem Status BESTAETIGT.
+		return success;
+	}
+
+	/**
+	 * Diese Methode &auml;ndert eine bestehende Bestellungsdetails.
+	 *
+	 * @param bstid
+	 * @param bestelltext
+	 * @param anleger
+	 * @param bestelltermin
+	 * @return
+	 * @throws SQLException
+	 * @throws NotExistInDatabaseException
+	 */
+	public boolean bestellungAendern(String bstid, String bestelltext, String anleger, String bestelltermin) throws SQLException, NotExistInDatabaseException{
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
 		String sql_query;
 
+		Savepoint savepoint1 = this.connection.setSavepoint();
+		boolean success = true;
 		try {
 			stmt = this.connection.createStatement();
 			sql_query = "SELECT status FROM " + TABLE_OWNER + ".BESTELLUNG " +
@@ -969,21 +1015,44 @@ public class DB implements Configuration {
 				throw new NotExistInDatabaseException("<html>Invalid BSTID. Ung&uuml;ltige Bestellungs-ID.</html>");
 			}
 			String status = rs.getString("STATUS");
-			if ( status.trim().equals("OFFEN") ) { // OFFEN, dann UPDATE alle.
-				sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
-							"SET bestelltext = " + bestelltext + ", anleger = " + anleger ;
+			if ( status.trim().equals("ERLEDIGT") ) {
+				return false;
 			}
 
+			if ( status.trim().equals("BESTAETIGT") ) {
+				boolean lieferterminHaltbar = true;
+				sql_query = "SELECT posnr, anzahl, pid FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
+							"WHERE bstid = " + bstid;
+				rs = stmt.executeQuery(sql_query);
+				while ( rs.next() ) { // Iteriere jede Bestellposition in einer Bestellung bstid.
+					int pid = rs.getInt("PID");
+					int menge = rs.getInt("ANZAHL");
+					lieferterminHaltbar = callProcedureCheckLiefertermin(pid, menge, bestelltermin);
+					if ( !lieferterminHaltbar ) {
+						return false; /// << keine Aenderung kann betaetigt werden.
+					}
+				}
+			}
+			// sonst, nur noch OFFENe Bestellungen. Einfach alle aendern.
+			Date now = new Date(System.currentTimeMillis());
+			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
+						"SET bestelltext = " + bestelltext + ", anleger = " + anleger +
+						",   aenderungsdatum = to_date(" + now.toString() + ", 'DD-MM-YY')" + ", bestelltermin = " + bestelltermin + " " +
+						"WHERE bstid = " + bstid;
+			stmt.executeQuery(sql_query);
+			this.connection.commit();
 		} catch ( SQLException e ) {
 			e.printStackTrace();
+			this.connection.rollback(savepoint1);
 		} finally {
 			if ( stmt != null ) {
 				stmt.close();
 			}
 			this.connection.setAutoCommit(true);
 		}
-	}
 
+		return success;
+	}
 
 	/**
 	 * Diese Methode liefert eine bereits best&auml;tigte Bestellung aus.
@@ -1025,6 +1094,12 @@ public class DB implements Configuration {
 			if ( bestelltermin.before(now) ) {
 				return false;
 			}
+
+			// Setze den Status auf ERLEDIGT.
+			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
+						"SET status = 'ERLEDIGT', erledigt_termin = to_date(" + now.toString() + ", 'DD-MM-YY') " +
+						"WHERE bstid = " + bstid;
+			stmt.executeUpdate(sql_query);
 
 			sql_query = "SELECT posnr, pid, anzahl FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
 						"WHERE bstid = " + bstid;
