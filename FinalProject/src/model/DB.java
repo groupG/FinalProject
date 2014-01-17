@@ -66,6 +66,8 @@ public class DB implements Configuration {
 		setUrl(connection);
 		setConnection(getUrl(), getCredentials());
 		setQuery("");
+		System.out.println("altering date format");
+		alterDateFormat();
 	}
 
 	/**
@@ -919,9 +921,9 @@ public class DB implements Configuration {
 
 			sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLUNG " +
 						"VALUES (" + bstid + ", " + bestelltext + ", " + anleger + ", "
-								   + "to_date(" + anlagedatum + ", 'dd.mm.yy'), "
-								   + "to_date(" + aenderungsdatum + ", 'dd.mm.yy'), "
-								   + status + ", " + bestelltermin + ", NULL, " + kid + ")";
+								   + "to_date('" + anlagedatum + "', 'dd.mm.yy'), "
+								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), "
+								   + status + ", '" + bestelltermin + "', NULL, " + kid + ")";
 			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
 
 			/*
@@ -1186,5 +1188,26 @@ public class DB implements Configuration {
 
 	public String dateFormat(Date date) {
 		return dateFormat(date, "dd-MM-yy");
+	}
+
+	public void alterDateFormat() {
+
+		String sql_query = "alter session set NLS_DATE_FORMAT='dd.mm.yy'";
+		Statement stmt = null;
+		try {
+			stmt = this.connection.createStatement();
+			stmt.execute(sql_query);
+			this.connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} finally {
+			if ( stmt != null) {
+				try {
+					stmt.close();
+				} catch ( SQLException e ) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 }
