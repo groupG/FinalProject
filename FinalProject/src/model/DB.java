@@ -3,7 +3,7 @@ package model;
 import java.net.ConnectException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -1086,8 +1086,9 @@ public class DB implements Configuration {
 	 * @return <i>true</i>, falls die Bestellung ausgeliefert werden kann. <i>false</i> sonst.
 	 * @throws NotExistInDatabaseException
 	 * @throws SQLException
+	 * @throws ParseException
 	 */
-	public boolean bestellungAusliefern(String bstid) throws NotExistInDatabaseException, SQLException {
+	public boolean bestellungAusliefern(String bstid) throws NotExistInDatabaseException, SQLException, ParseException {
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
 		String sql_query;
@@ -1116,14 +1117,17 @@ public class DB implements Configuration {
 			// wenn der Bestelltermin (bzw. Liefertermin) schon vorbei ist, und der Kunde hat seine bestellte Ware
 			// noch nicht ausgeliefert bekommt. Tja not good babe :P
 			Date now = new Date(System.currentTimeMillis());
+			System.out.println(now.toString());
+			System.out.println(dateFormat(now, "dd.MM.yy"));
 			if ( bestelltermin.before(now) ) {
 				return false;
 			}
 
 			// Setze den Status auf ERLEDIGT.
 			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
-						"SET status = 'ERLEDIGT', erledigt_termin = to_date(" + now.toString() + ", 'DD-MM-YY') " +
+						"SET status = 'ERLEDIGT', erledigt_termin = to_date('" + dateFormat(now, "dd.MM.yy") + "', 'DD.MM.YY') " +
 						"WHERE bstid = " + bstid;
+			System.out.println(now.toString());
 			stmt.executeUpdate(sql_query);
 
 			sql_query = "SELECT posnr, pid, anzahl FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
@@ -1188,9 +1192,11 @@ public class DB implements Configuration {
 		return df.format(date);
 	}
 
+
 	public String dateFormat(String date, String pattern) throws ParseException {
 		Date d = (Date) (new SimpleDateFormat(pattern).parse(date));
-		return d.toString();
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		return df.format(new Date(d.getTime()));
 	}
 
 	public String dateFormat(Date date) {
