@@ -1232,6 +1232,45 @@ public class DB implements Configuration {
 		return success;
 	}
 
+	public boolean bestellungLoeschen(String bstid) throws NotExistInDatabaseException, SQLException, ParseException {
+		this.connection.setAutoCommit(false);
+		Statement stmt = null;
+		String sql_query;
+
+		Savepoint savePoint1 = this.connection.setSavepoint();
+		boolean success = false;
+
+		try {
+			stmt = this.connection.createStatement();
+//
+//			// Wenn die Bestellung noch OFFEN oder bereits ERLEDIGT ist, kann sie nicht mehr ausgeliefert werden.
+//			if ( status.trim().equals("OFFEN") || status.trim().equals("ERLEDIGT") ) {
+//				return false;
+//			}
+
+			// Loesche alle Bestellpositionen.
+			sql_query = "DELETE FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
+						"WHERE bstid = " + bstid;
+			stmt.executeUpdate(sql_query);
+
+			// Loesche die Bestellung.
+			sql_query = "DELETE FROM " + TABLE_OWNER + ".BESTELLUNG " +
+					    "WHERE bstid = " + bstid;
+			stmt.executeUpdate(sql_query);
+
+			success = true;
+			this.connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+			this.connection.rollback(savePoint1);
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
+		return success;
+	}
 
 	/**
 	 * Diese Methode formattiert ein Datum (Date) nach einem vorgegebenen Muster.
