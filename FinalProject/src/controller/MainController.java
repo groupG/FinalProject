@@ -335,7 +335,11 @@ public class MainController implements Configuration{
 				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).getText();
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN)).getText();
-				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
+				if (bsttermin.length() > 0) {
+					if(!isValidDate(bsttermin)){ // checkt ob der bestelltermin den vorgaben entspricht
+						return;
+					}
+				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
 
 				try {
@@ -447,7 +451,11 @@ public class MainController implements Configuration{
 				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).getText();
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN)).getText();
-				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
+				if (bsttermin.length() > 0) {
+					if(!isValidDate(bsttermin)){ // checkt ob der bestelltermin den vorgaben entspricht
+						return;
+					}
+				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
 
 //				try {
@@ -554,8 +562,6 @@ public class MainController implements Configuration{
 						return;
 					}
 
-
-
 					// Bestellkopf ausfuellen
 					Vector<Vector<Object>> bestellKopf = db.selectFromTable(TABLE_BESTELLUNG, "bstid = " + bstID);
 					Iterator<Vector<Object>> itKopf = bestellKopf.iterator();
@@ -573,13 +579,7 @@ public class MainController implements Configuration{
 						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setText(""+ v.get(8));
 					}
 
-					if (((String) bestellKopf.firstElement().get(5)).trim().equalsIgnoreCase("ERLEDIGT")){
-						System.out.println("abafasdfgeFAEFT");
-//						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setEnabled(false);
-//						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).setEditable(false);
-						this.setInputComponentsOfBestellverwaltungEditEditable(false);
-						this.setInputComponentsOfBestellverwaltungEditEnabled(false);
-					}
+
 
 					Vector<Vector<Object>> values = db.selectFromTable(TABLE_BESTELLPOSITION, "bstid = " + bstID);
 					List<String> tooltips = new ArrayList<String>();
@@ -591,7 +591,6 @@ public class MainController implements Configuration{
 						try {
 							Double totalPrice = db.calcTotalPrice(""+v.get(2), ((BigDecimal) v.get(3)).intValue() );
 							tooltips.add("Gesamtpreis der Position: "+totalPrice.toString() +" €");
-							//client.getTransaktionen().getPosEdit().setToolTipText("Gesamtpreis der Position "+v.get(0)+": "+totalPrice.toString() +" €",((BigDecimal) v.get(0)).intValue()-1);
 						} catch (NotExistInDatabaseException e) {
 							client.showException(e);
 						}
@@ -606,10 +605,20 @@ public class MainController implements Configuration{
 					client.revalidate();
 					client.repaint();
 
-					this.setInputComponentsOfBestellverwaltungEditEditable(true);
-					this.setInputComponentsOfBestellverwaltungEditEnabled(true);
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN)).setEnabled(true);
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN)).setEnabled(true);
+					if (((String) bestellKopf.firstElement().get(5)).trim().equalsIgnoreCase("ERLEDIGT")){
+						System.out.println("abafasdfgeFAEFT");
+						this.setInputComponentsOfBestellverwaltungEditEditable(false);
+						this.setInputComponentsOfBestellverwaltungEditEnabled(false);
+						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN)).setEnabled(false);
+						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN)).setEnabled(false);
+					} else {
+
+						this.setInputComponentsOfBestellverwaltungEditEditable(true);
+						this.setInputComponentsOfBestellverwaltungEditEnabled(true);
+						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN)).setEnabled(true);
+						((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN)).setEnabled(true);
+						((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("delEdit").setEnabled(false);
+					}
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					client.showException(e);
@@ -630,7 +639,11 @@ public class MainController implements Configuration{
 				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).getText();
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).getText();
-				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
+				if (bsttermin.length() > 0) {
+					if(!isValidDate(bsttermin)){ // checkt ob der bestelltermin den vorgaben entspricht
+						return;
+					}
+				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).getText();
 
 //				try {
@@ -725,7 +738,11 @@ public class MainController implements Configuration{
 				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).getText();
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).getText();
-				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
+				if (bsttermin.length() > 0) {
+					if(!isValidDate(bsttermin)){ // checkt ob der bestelltermin den vorgaben entspricht
+						return;
+					}
+				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).getText();
 
 //				try {
@@ -820,7 +837,11 @@ public class MainController implements Configuration{
 				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).getText();
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).getText();
-				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
+				if (bsttermin.length() > 0) {
+					if(!isValidDate(bsttermin)){ // checkt ob der bestelltermin den vorgaben entspricht
+						return;
+					}
+				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).getText();
 
 //				try {
@@ -1123,12 +1144,23 @@ public class MainController implements Configuration{
 
 			//----------------- PRODUKTANALYSE
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN ) {
-				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				String typ = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_TYP)).getText();
 				String groesse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTANALYSE_GROESSE)).getText();
 
 				try {
-					//db.callProcedureProduktanalyse("STANDARD PLATED STEEL", 20);
+					if ( !db.checkIfElementExists(TABLE_PRODUKT, "typ", "'"+typ+"'") ) {
+						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Produkt vom Typ '" + typ + "'.</html>");
+						return;
+					}
+				} catch (HeadlessException e) {
+					client.showException(e);
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
+
+				try {
 					db.callProcedureProduktanalyse(typ, Integer.parseInt(groesse));
 					OutputTableModel tableModel = null;
 					try {
@@ -1154,8 +1186,19 @@ public class MainController implements Configuration{
 
 			//----------------- LIEFERKOSTENSENKUNG
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN ) {
-				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+
 				String produkt = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_LIEFERKOSTEN_PRODUKT)).getText();
+				try {
+					if ( !db.checkIfElementExists(TABLE_PRODUKT, "name", "'"+produkt+"'") ) {
+						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Produkt mit dem Namen '" + produkt + "'.</html>");
+						return;
+					}
+				} catch (HeadlessException e) {
+					client.showException(e);
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 				try {
 					db.callProcedureLieferkostenAnalyse(produkt);
