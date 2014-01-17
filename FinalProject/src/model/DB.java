@@ -1204,6 +1204,22 @@ public class DB implements Configuration {
 		return success;
 	}
 
+//	public boolean deleteRow(String table, String condition) {
+//		this.connection.setAutoCommit(false);
+//		Savepoint savePoint1 = this.connection.setSavepoint();
+//
+//		Statement stmt = null;
+//		String sql_query;
+//
+////		try {
+////			stmt = this.connection.createStatement();
+////			sql_query = "DELETE FROM " + TABLE_OWNER + "." + table + " " +
+////						"WHERE " + condition ;
+////		} catch () {
+////
+////		}
+//	}
+
 
 	/**
 	 * Diese Methode formattiert ein Datum (Date) nach einem vorgegebenen Muster.
@@ -1224,10 +1240,13 @@ public class DB implements Configuration {
 		return df.format(new Date(d.getTime()));
 	}
 
-
 	public String dateFormat(String date, String pattern) throws ParseException {
 		Date d = (Date) (new SimpleDateFormat(pattern).parse(date));
-		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+
+		DateFormat df;
+		df = DateFormat.getDateInstance(DateFormat.SHORT);
+		//Testdfsa
+
 		return df.format(new Date(d.getTime()));
 	}
 
