@@ -142,6 +142,11 @@ public class Bestellpositionen extends JPanel implements Configuration,
 
 	public void addToolTips(List<String> tooltips){
 		this.tooltips = tooltips;
+		System.out.println("tooltips set: " + tooltips.size());
+	}
+
+	public List<String> getToolTips(){
+		return this.tooltips;
 	}
 
 	public void addListToPane(String nameList, int selectedIndex){

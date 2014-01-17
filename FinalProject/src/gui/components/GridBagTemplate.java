@@ -354,7 +354,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Status, char, 20
 			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
-			JLabel _status = new JLabel();
+			JLabel _status = new JLabel("-");
 			_status.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS);
 			// TODO Farbe nach status vergeben
 			addComponent(container, label_status, new Insets(0, 5, 0, 5), 2, 0);
@@ -362,21 +362,21 @@ public class GridBagTemplate extends JPanel implements Configuration {
 
 			// Anlagedatum, date
 			JLabel label_anlagedatum = new JLabel(BESTELLVERWALTUNG_LABEL_ANLAGEDATUM);
-			JLabel _anlagedatum = new JLabel("31.12.2014");
+			JLabel _anlagedatum = new JLabel("-");
 			_anlagedatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM);
 			addComponent(container, label_anlagedatum, new Insets(0, 5, 0, 5), 2, 1);
 			addComponent(container, _anlagedatum, new Insets(0, 5, 0, 5), 3, 1);
 
 			// Aenderungsdatum, date
 			JLabel label_aenderungsdatum = new JLabel(BESTELLVERWALTUNG_LABEL_AENDERUNGSDATUM);
-			JLabel _aenderungsdatum = new JLabel("31.12.2014");
+			JLabel _aenderungsdatum = new JLabel("-");
 			_aenderungsdatum.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM);
 			addComponent(container, label_aenderungsdatum, new Insets(0, 5, 0, 5), 2, 2);
 			addComponent(container, _aenderungsdatum, new Insets(0, 5, 0, 5), 3, 2);
 
 			// Erledigttermin, date
 			JLabel label_erledigttermin = new JLabel(BESTELLVERWALTUNG_LABEL_ERLEDIGTTERMIN);
-			JLabel _erledigttermin = new JLabel("31.12.2014");
+			JLabel _erledigttermin = new JLabel("-");
 			_erledigttermin.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN);
 			addComponent(container, label_erledigttermin, new Insets(0, 5, 0, 5), 2, 3);
 			addComponent(container, _erledigttermin, new Insets(0, 5, 0, 5), 3, 3);
@@ -492,7 +492,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
 			button_bestaetigen.setEnabled(false);
 			addComponent(container, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
-			
+
 			// Fertig
 			JButton button_exec_fertig = new JButton(BESTELLVERWALTUNG_BUTTON_EXECUTE_FERTIG);
 			button_exec_fertig.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG);

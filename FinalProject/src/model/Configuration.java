@@ -307,6 +307,7 @@ public interface Configuration {
 	static final String TABLE_KUNDE = "KUNDE";
 	static final String TABLE_BESTELLUNG = "BESTELLUNG";
 	static final String TABLE_BESTELLPOSITION = "BESTELLPOSITION";
+	static final String TABLE_PRODUKT = "PRODUKT";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID";
 	static final String SEQUENCE_BESTELLUNG_BSTID = "SEQ_BESTELLUNG_BSTID";
 
