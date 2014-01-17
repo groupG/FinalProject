@@ -736,9 +736,9 @@ public class MainController implements Configuration{
 
 			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - BESTAETIGEN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN){
-
+//
 				if (client.getTransaktionen().getPosEdit().getListModel().getSize() == 0){
-					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie mind. eine Bestellposition an.</html>");
+					JOptionPane.showMessageDialog(client, "<html>XXBitte geben Sie mind. eine Bestellposition an.</html>");
 					return;
 				}
 
