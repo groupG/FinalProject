@@ -923,7 +923,7 @@ public class DB implements Configuration {
 						"VALUES (" + bstid + ", " + bestelltext + ", " + anleger + ", "
 								   + "to_date('" + anlagedatum + "', 'dd.mm.yy'), "
 								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), "
-								   + status + ", '" + bestelltermin + "', NULL, " + kid + ")";
+								   + status + ", to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
 			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
 
 			/*
@@ -1095,7 +1095,7 @@ public class DB implements Configuration {
 		try {
 			stmt = this.connection.createStatement();
 			sql_query = "SELECT betelltermin, status FROM " + TABLE_OWNER + ".BESTELLUNG " +
-						"WHERE bstid = " + bstid + "FOR UPDATE NOWAIT";
+						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
 
 			ResultSet rs = stmt.executeQuery(sql_query);
 			if ( !rs.next() ) {
@@ -1187,7 +1187,7 @@ public class DB implements Configuration {
 	}
 
 	public String dateFormat(Date date) {
-		return dateFormat(date, "dd-MM-yy");
+		return dateFormat(date, "dd.MM.yy");
 	}
 
 	public void alterDateFormat() {
