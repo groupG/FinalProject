@@ -1204,20 +1204,33 @@ public class DB implements Configuration {
 		return success;
 	}
 
-//	public boolean deleteRow(String table, String condition) {
-//		this.connection.setAutoCommit(false);
-//		Savepoint savePoint1 = this.connection.setSavepoint();
-//
-//		Statement stmt = null;
-//		String sql_query;
-//
-////		try {
-////			stmt = this.connection.createStatement();
-////			sql_query = "DELETE FROM " + TABLE_OWNER + "." + table + " " +
-////						"WHERE " + condition ;
-////		} catch () {
-////
-////		}
+
+	public boolean deleteRow(String table, String condition) throws SQLException {
+		this.connection.setAutoCommit(false);
+		Savepoint savePoint1 = this.connection.setSavepoint();
+
+		Statement stmt = null;
+		String sql_query;
+
+		boolean success = false;
+
+		try {
+			stmt = this.connection.createStatement();
+			sql_query = "DELETE FROM " + TABLE_OWNER + "." + table + " " +
+						"WHERE " + condition;
+			success = true;
+			this.connection.commit();
+		} catch ( SQLException e) {
+			e.printStackTrace();
+			this.connection.rollback(savePoint1);
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+			this.connection.setAutoCommit(true);
+		}
+
+		return success;
 	}
 
 
