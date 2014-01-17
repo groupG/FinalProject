@@ -219,6 +219,14 @@ public class DB implements Configuration {
 	}
 
 	/**
+	 * Diese Methode liefert den tempor��r gespeicherten Wert von Bestellungs-ID zur&uuml;ck.
+	 * @return bstid_buffered : Den zwischengespeicherten Wert von Bestellungs-ID.
+	 */
+	public int getBufferedBestellungsID() {
+		return this.bstid_buffered;
+	}
+
+	/**
 	 * Diese Methode setzt die Variable <i>needNextKID</i> auf einen boolean Wert.
 	 *
 	 * @param b : true gibt an, dass der n&auml;chste KID von DB berechnet werden soll. Bei false wird kein neuer KID berechnet.

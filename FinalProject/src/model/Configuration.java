@@ -133,6 +133,7 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_EXECUTE_FERTIG = "<html>Fertig</html>"; // Soni
 
 	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTID = "<html>Ung&uuml;ltige Eingabe. Die Bestellungs-ID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
 	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTTERMIN = "<html>Bitte geben Sie ein Datum mit dem Format dd.mm.yy ein, z.B. 31.12.14.</html>";

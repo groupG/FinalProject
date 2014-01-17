@@ -9,7 +9,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -19,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -34,6 +38,9 @@ public class Bestellpositionen extends JPanel implements Configuration,
 	protected HashMap<String, Component> componentMap;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
+	private String tooltip;
+	private List<String> tooltips;
+	private int selectedIndex;
 
 	private static final String add = "Hinzufügen";
 	private static final String del = "Entfernen";
@@ -133,6 +140,10 @@ public class Bestellpositionen extends JPanel implements Configuration,
 			return null;
 	}
 
+	public void addToolTips(List<String> tooltips){
+		this.tooltips = tooltips;
+	}
+
 	public void addListToPane(String nameList, int selectedIndex){
 		this.list = new JList<String>();
 		this.list.setModel(this.listModel);
@@ -141,8 +152,25 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		this.list.addListSelectionListener(this);
 		this.list.setVisibleRowCount(5);
 		this.list.setName(nameList);
+		this.tooltips = new ArrayList<String>();
 		JScrollPane listScrollPane = new JScrollPane(this.list);
 		addComponent(this, listScrollPane, new Insets(0,0,0,0), 0, 2);
+	}
+
+	public void addListener(){
+		this.list.addMouseMotionListener(new MouseMotionAdapter() {
+	        @Override
+	        public void mouseMoved(MouseEvent e) {
+	            JList l = (JList)e.getSource();
+	            ListModel m = l.getModel();
+	            int index = l.locationToIndex(e.getPoint());
+	            if( index>-1 ) {
+//	                l.setToolTipText("Preis: "+m.getElementAt(index).toString());
+	            	//tooltips.add(index, tooltip);
+	                l.setToolTipText(tooltips.get(index));
+	            }
+	        }
+	    });
 	}
 
 	public void addComponent(JPanel panel, Component c,
@@ -256,8 +284,6 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		private boolean isValidInput(String input){
 			input.split("\\;");
 			int elementCount = input.split("\\;").length;
-			System.out.println(elementCount);
-			System.out.println(elementCount <= 3 && elementCount > 1);
 			return (elementCount <= 3 && elementCount > 1);
 		}
 

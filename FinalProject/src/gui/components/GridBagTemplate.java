@@ -492,6 +492,13 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			button_bestaetigen.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN);
 			button_bestaetigen.setEnabled(false);
 			addComponent(container, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 5, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
+			
+			// Fertig
+			JButton button_exec_fertig = new JButton(BESTELLVERWALTUNG_BUTTON_EXECUTE_FERTIG);
+			button_exec_fertig.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG);
+			button_exec_fertig.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG);
+			button_exec_fertig.setVisible(false);
+			addComponent(container, button_exec_fertig, new Insets(0, 5, 0, 5), 2, 6, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
 		}
 			return container;
 		case 6: // Template, Bestellung GO
