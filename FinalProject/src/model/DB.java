@@ -96,6 +96,7 @@ public class DB implements Configuration {
 		Statement statement = null;
 		String query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " +
 		               "WHERE " + element + " = " + value;
+		System.out.println(query);
 		boolean result = false; // false : Das gesuchte Element existiert nicht.
 		try {
 			statement = this.connection.createStatement();
@@ -910,7 +911,7 @@ public class DB implements Configuration {
 	 */
 	public void bestellungSpeichern(String bstid, String bestelltext, String anleger, String status,
 									String bestelltermin, String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException {
-		if ( !checkIfElementExists(TABLE_OWNER + "." + TABLE_KUNDE, "kid", kid) ) {
+		if ( !checkIfElementExists(TABLE_KUNDE, "kid", kid) ) {
 			throw new NotExistInDatabaseException("Kunde mit der ID " + kid + " existiert nicht in der Datenbank.");
 		}
 		this.connection.setAutoCommit(false);
@@ -1032,7 +1033,7 @@ public class DB implements Configuration {
 	public boolean bestellungAendern(String bstid, String bestelltext, String anleger,
 									 String bestelltermin, String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException{
 
-		if ( !checkIfElementExists(TABLE_OWNER + "." + TABLE_KUNDE, "kid", kid) ) {
+		if ( !checkIfElementExists(TABLE_KUNDE, "kid", kid) ) {
 			throw new NotExistInDatabaseException("Kunde mit der ID " + kid + " existiert nicht in der Datenbank.");
 		}
 
