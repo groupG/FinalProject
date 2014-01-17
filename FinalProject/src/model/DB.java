@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -749,17 +750,18 @@ public class DB implements Configuration {
 		this.connection.setAutoCommit(false);
 		Savepoint savePoint1 = this.connection.setSavepoint();
 
-		boolean keeping = true;
+		boolean keeping = false;
 		CallableStatement cs = null;
 		try {
-			cs = this.connection.prepareCall("{call BESTAETIGUNGSTEST(?,?,?,?)}");
+			cs = this.connection.prepareCall("{call BESTAETIGUNGTEST(?,?,?,?)}");
 			cs.setInt(1, pid);
 			cs.setInt(2, menge);
 			cs.setString(3, liefertermin);
 			cs.registerOutParameter(4, java.sql.Types.INTEGER);
 			cs.execute();
 			int bestand = cs.getInt(4);
-			keeping = ( bestand >= 0 ) ? true : false;
+			System.out.println(bestand);
+			keeping = ( bestand > 0 ) ? true : false;
 		} catch ( SQLException e ){
 			e.printStackTrace();
 			this.connection.rollback(savePoint1);
@@ -976,7 +978,7 @@ public class DB implements Configuration {
 	 */
 	public boolean bestellungBestaetigen(String bstid, String bestelltext, String anleger,
 										 String bestelltermin, String kid, String[][] bpos ) throws SQLException, NotExistInDatabaseException {
-		boolean success = true;
+		boolean success = false;
 		/*
 		 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
 		 */
@@ -984,12 +986,32 @@ public class DB implements Configuration {
 			// [pid, menge, text]
 			int pid = Integer.parseInt(bpos[i][0]);
 			int menge = Integer.parseInt(bpos[i][1]);
+			System.out.println("bestelltermin: "+bestelltermin);
 			boolean lieferterminHaltbar = this.callProcedureCheckLiefertermin(pid, menge, bestelltermin);
 			if ( !lieferterminHaltbar ) {
 				return false;
 			}
 		}
-		this.bestellungSpeichern(bstid, bestelltext, anleger, "BESTAETIGT", bestelltermin, kid, bpos); // Speichern mit dem Status BESTAETIGT.
+//		this.bestellungAendern(bstid, bestelltext, anleger, "BESTAETIGT", bestelltermin, kid, bpos); // Speichern mit dem Status BESTAETIGT.
+		Statement stmt = null;
+		Date now = new Date(System.currentTimeMillis());
+		String aenderungsdatum = dateFormat(now, "dd.mm.yy");
+		String sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
+							"SET bestelltext = '" + bestelltext + "', anleger = '" + anleger + "', status = 'BESTAETIGT'" +
+							",   aenderungsdatum = to_date('" + aenderungsdatum+ "', 'dd.mm.yy')" + ", bestelltermin = to_date('" + bestelltermin + "','dd.mm.yy') " +
+							"WHERE bstid = " + bstid;
+		System.out.println(sql_query);
+		try {
+			stmt = this.connection.createStatement();
+			stmt.executeUpdate(sql_query);
+			this.connection.commit();
+		} catch ( SQLException e ) {
+			e.printStackTrace();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+		}
 		return success;
 	}
 
@@ -1041,10 +1063,12 @@ public class DB implements Configuration {
 			}
 			// sonst, nur noch OFFENe Bestellungen. Einfach alle aendern.
 			Date now = new Date(System.currentTimeMillis());
+			String aenderungsdatum = dateFormat(now, "dd.mm.yy");
 			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
-						"SET bestelltext = " + bestelltext + ", anleger = " + anleger +
-						",   aenderungsdatum = to_date(" + now.toString() + ", 'DD-MM-YY')" + ", bestelltermin = " + bestelltermin + " " +
+						"SET bestelltext = '" + bestelltext + "', anleger = '" + anleger +
+						"',   aenderungsdatum = to_date('" + aenderungsdatum+ "', 'dd.mm.yy')" + ", bestelltermin = to_date('" + bestelltermin + "','dd.mm.yy') " +
 						"WHERE bstid = " + bstid;
+			System.out.println(sql_query);
 			stmt.executeQuery(sql_query);
 			/*
 			 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
@@ -1188,6 +1212,12 @@ public class DB implements Configuration {
 		DateFormat df;
 		df = DateFormat.getDateInstance(DateFormat.SHORT);
 		return df.format(new Date(date.getTime()));
+	}
+
+	public String dateFormat(Timestamp timestamp){
+		Date d = new Date(timestamp.getTime());
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		return df.format(new Date(d.getTime()));
 	}
 
 	public String dateFormat(String date, String pattern) throws ParseException {
