@@ -68,7 +68,6 @@ public class DB implements Configuration {
 		setUrl(connection);
 		setConnection(getUrl(), getCredentials());
 		setQuery("");
-		System.out.println("altering date format");
 		alterDateFormat();
 	}
 
@@ -96,7 +95,6 @@ public class DB implements Configuration {
 		Statement statement = null;
 		String query = "SELECT * FROM " + TABLE_OWNER + "." + table + " " +
 		               "WHERE " + element + " = " + value;
-		System.out.println(query);
 		boolean result = false; // false : Das gesuchte Element existiert nicht.
 		try {
 			statement = this.connection.createStatement();
@@ -118,19 +116,16 @@ public class DB implements Configuration {
 		Statement stmt = this.connection.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 		while(rs.next()){
-			System.out.println(rs.getString(1));
 			query = "Select column_name from all_tab_columns where owner = 'ALTDATEN' and table_name='" +rs.getString(1)+ "'";
 			Statement stamt = this.connection.createStatement();
 			ResultSet res = stamt.executeQuery(query);
 			while(res.next()){
-				System.out.println("--"+res.getString(1));
 			}
 		}
 	}
 
 	public List<String> getTables(String owner) throws SQLException {
 		String query = "Select table_name from all_tables where owner='"+owner+"'";
-		System.out.println(query);
 		Statement statement = this.connection.createStatement();
 		ResultSet result = statement.executeQuery(query);
 		List<String> tables = new ArrayList<String>();
@@ -452,7 +447,6 @@ public class DB implements Configuration {
 			ResultSet rs = stmt.executeQuery(sql_query); // Lock the coherent row.
 			// SQLException can be caused here, if no rs can be returned.
 			isLocked = rs.first(); // true, i.e. the record (row) is being locked now. There was no lock set on it before.
-			System.out.println("Lock ResultSet r is : " + rs.getString(1));
 		} catch ( SQLException e ) {
 			//e.printStackTrace();
 			// SQLException, because this record is already locked by a previous process
@@ -546,7 +540,6 @@ public class DB implements Configuration {
 			// Muss hier denglisch verwenden. Mein Wortschatz ist begrenzt. ;-)
 			// Check if the Zulieferung is still open (OFFEN) or already finished (ERLEDIGT).
 			if ( status.trim().equals("ERLEDIGT") ) {
-				System.out.println(status);
 				return false;
 			}
 
@@ -761,7 +754,6 @@ public class DB implements Configuration {
 			cs.registerOutParameter(4, java.sql.Types.INTEGER);
 			cs.execute();
 			int bestand = cs.getInt(4);
-			System.out.println(bestand);
 			keeping = ( bestand > 0 ) ? true : false;
 		} catch ( SQLException e ){
 			e.printStackTrace();
@@ -931,7 +923,6 @@ public class DB implements Configuration {
 								   + "to_date('" + anlagedatum + "', 'dd.mm.yy'), "
 								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), '"
 								   + status + "', to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
-			System.out.println(sql_query);
 			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
 
 			/*
@@ -950,7 +941,6 @@ public class DB implements Configuration {
 										   + anzahl + ", "  // anzahl
 										   + preis + ", "  // preis
 										   + bpos[i][1] + ")";  // positionstext
-					System.out.println(sql_query);
 					stmt.executeUpdate(sql_query);
 				}
 			}
@@ -990,7 +980,6 @@ public class DB implements Configuration {
 			// [pid, menge, text]
 			int pid = Integer.parseInt(bpos[i][0]);
 			int menge = Integer.parseInt(bpos[i][1]);
-			System.out.println("bestelltermin: "+bestelltermin);
 			boolean lieferterminHaltbar = this.callProcedureCheckLiefertermin(pid, menge, bestelltermin);
 			if ( !lieferterminHaltbar ) {
 				return false;
@@ -1004,7 +993,6 @@ public class DB implements Configuration {
 							"SET bestelltext = '" + bestelltext + "', anleger = '" + anleger + "', status = 'BESTAETIGT'" +
 							",   aenderungsdatum = to_date('" + aenderungsdatum+ "', 'dd.mm.yy')" + ", bestelltermin = to_date('" + bestelltermin + "','dd.mm.yy') " +
 							"WHERE bstid = " + bstid;
-		System.out.println(sql_query);
 		try {
 			stmt = this.connection.createStatement();
 			stmt.executeUpdate(sql_query);
@@ -1077,7 +1065,6 @@ public class DB implements Configuration {
 						"SET bestelltext = '" + bestelltext + "', anleger = '" + anleger +
 						"',   aenderungsdatum = to_date('" + aenderungsdatum+ "', 'dd.mm.yy')" + ", bestelltermin = to_date('" + bestelltermin + "','dd.mm.yy') " +
 						"WHERE bstid = " + bstid;
-			System.out.println(sql_query);
 			stmt.executeQuery(sql_query);
 			/*
 			 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
@@ -1151,8 +1138,6 @@ public class DB implements Configuration {
 			// wenn der Bestelltermin (bzw. Liefertermin) schon vorbei ist, und der Kunde hat seine bestellte Ware
 			// noch nicht ausgeliefert bekommt. Tja not good babe :P
 			Date now = new Date(System.currentTimeMillis());
-			System.out.println(now.toString());
-			System.out.println(dateFormat(now, "dd.MM.yy"));
 			if ( bestelltermin.before(now) ) {
 				return false;
 			}
@@ -1161,7 +1146,6 @@ public class DB implements Configuration {
 			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
 						"SET status = 'ERLEDIGT', erledigt_termin = to_date('" + dateFormat(now, "dd.MM.yy") + "', 'DD.MM.YY') " +
 						"WHERE bstid = " + bstid;
-			System.out.println(now.toString());
 			stmt.executeUpdate(sql_query);
 
 			sql_query = "SELECT posnr, pid, anzahl FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
@@ -1241,6 +1225,14 @@ public class DB implements Configuration {
 		return success;
 	}
 
+	/**
+	 *
+	 * @param bstid
+	 * @return
+	 * @throws NotExistInDatabaseException
+	 * @throws SQLException
+	 * @throws ParseException
+	 */
 	public boolean bestellungLoeschen(String bstid) throws NotExistInDatabaseException, SQLException, ParseException {
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
@@ -1251,11 +1243,19 @@ public class DB implements Configuration {
 
 		try {
 			stmt = this.connection.createStatement();
-//
-//			// Wenn die Bestellung noch OFFEN oder bereits ERLEDIGT ist, kann sie nicht mehr ausgeliefert werden.
-//			if ( status.trim().equals("OFFEN") || status.trim().equals("ERLEDIGT") ) {
-//				return false;
-//			}
+			sql_query = "SELECT status FROM " + TABLE_OWNER + ".BESTELLUNG " +
+						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
+			ResultSet rs = stmt.executeQuery(sql_query);
+			if ( !rs.next() ) {
+				success = false;
+				throw new NotExistInDatabaseException("<html>Invalid BSTID. Ung&uuml;ltige Bestellungs-ID.</html>");
+			}
+
+			String status = rs.getString("STATUS");
+			// Wenn die Bestellung ERLEDIGT ist, kann sie nicht geloescht werden.
+			if ( status.trim().equals("ERLEDIGT") ) {
+				return false;
+			}
 
 			// Loesche alle Bestellpositionen.
 			sql_query = "DELETE FROM " + TABLE_OWNER + ".BESTELLPOSITION " +

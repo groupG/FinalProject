@@ -756,7 +756,7 @@ public class MainController implements Configuration{
 //				this.clearInputComponentsOfBestellverwaltungEdit();
 			}
 
-			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - BESTAETIGEN BUTTON
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - BESTAETIGEN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN){
 
 				if (client.getTransaktionen().getPosEdit().getListModel().getSize() == 0){
@@ -768,17 +768,13 @@ public class MainController implements Configuration{
 				String bstid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID)).getText();
 				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).getText();
-				if (anleger.length() > 0) {
-					if(!isValidInput(anleger)){
-						return;
-					}
-				}
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).getText();
 				if (bsttermin.length() > 0) {
 					if(!isValidDate(bsttermin)){ // checkt ob der bestelltermin den vorgaben entspricht
 						return;
 					}
 				}
+
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).getText();
 				if (bsttext.length() > 0) {
 					if(!isValidInput(bsttext)){
