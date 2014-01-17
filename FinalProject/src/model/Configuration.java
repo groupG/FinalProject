@@ -11,8 +11,8 @@ public interface Configuration {
 	// Connection
 	static final String TITLE = "Haufkof Client";
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
-	 static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
-//	static final String CONNECTION_THIN = "jdbc:oracle:thin:@localhost:1521:";
+	static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
+	static final String CONNECTION_THIN_LOCALHOST = "jdbc:oracle:thin:@localhost:1521:";
 	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
@@ -20,7 +20,8 @@ public interface Configuration {
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "PROJEKT_2013_G";
+//	static final String TABLE_OWNER = "PROJEKT_2013_G";
+	static final String TABLE_OWNER = "SON_DANG";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
@@ -29,6 +30,7 @@ public interface Configuration {
 	static final String LABEL_CLEAR = "<html>Clear</html>";
 	static final String LABEL_USERNAME = "<html>Benutzername</html>";
 	static final String LABEL_PASSWORD = "<html>Passwort</html>";
+	static final String LABEL_CONNECTION = "<html>Verbindung</html>";
 	static final String LABEL_LOGIN_FEEDBACK_INFO = "<html>Bitte geben Sie ihre Zugangsdaten ein.</html>";
 	static final String LABEL_LOGIN_FEEDBACK_WARNING = "<html>Login fehlgeschlagen!</html>";
 	static final String LABEL_LOGIN_FEEDBACK_SUCCESS = "<html>Anmeldung erfolgreich.</html>";
@@ -48,14 +50,16 @@ public interface Configuration {
 
 	/* ##### Kundenpflege  #####*/
 	static final String KUNDENPFLEGE_CARD_TITLE = "<html>Kunden anlegen und editieren</html>";
-	static final String[] KUNDENPFLEGE_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Neuer Kunde",	"Kunde editieren" };
-	static final String KUNDENPFLEGE_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Kunden anlegen oder bearbeiten.<br>"
-			+ " <br>"
-			+ " Wenn Sie einen neuen Kunden anlegen, dann wird Ihnen vom system automatisch eine passende Kundennummer vorgeschlagen, welche Sie bei Bedarf &auml;ndern k&ouml;nnen.<br>"
-			+ " Achten Sie darauf, dass sie eine g&uuml;tige numerische Zeichenfolge eingeben, sonst wird ihre Transaktion vom System verworfen.<br>"
-			+ "<br>"
-			+ "Beachten Sie, dass Sie die Branche wahlweise aus den vorgeschlagenen Optionen aus&auml;hlen oder aber textuell eingeben k&ouml;nnen. <br>"
-			+ "</html>";
+	static final String[] KUNDENPFLEGE_COMBO_STRINGS = {">> Wählen Sie eine Kunden-Transaktion aus <<", "Neuer Kunde",	"Kunde editieren" };
+	static final String KUNDENPFLEGE_LABEL_INFOTEXT = "<html><div style='border:1px solid #000000;padding:25px;margin-top:-30px;'><center><p>In diesem Reiter k&ouml;nnen Sie neue Kunden anlegen oder bearbeiten.</p></center>"
+			+ " <br><br>"
+			+ " <p>Wenn Sie einen neuen Kunden anlegen, dann wird Ihnen vom System automatisch eine passende Kundennummer vorgeschlagen, welche Sie bei Bedarf &auml;ndern k&ouml;nnen."
+			+ " Achten Sie aber darauf, dass sie eine g&uuml;tige numerische Zeichenfolge eingeben, sonst wird ihre Transaktion vom System verworfen."
+			+ " Beachten Sie, dass Sie die Branche wahlweise aus den vorgeschlagenen Optionen aus&auml;hlen oder aber textuell eingeben k&ouml;nnen. </p>"
+			+ "<br><br>"
+			+ "<p>Wenn Sie einen Kunden editieren wollen, dann geben Sie zuerst die gew&uuml;nschte Kunden-ID in das vorgesehene Feld ein und dr&uuml;cken Sie den 'Suchen & &auml;ndern'-Button." +
+			" Wenn es sich um eine g&uuml;tige Kunden-ID handelt, dann werden die entsprechenden Daten aus der Datenbank direkt in die vorgesehenen Felder eingelesen und sie k&ouml;nnen diese bearbeiten.</p>"
+			+ "</div></html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
 	static final String KUNDENPFLEGE_LABEL_KID = "<html>Kunden-ID</html>";
@@ -73,10 +77,13 @@ public interface Configuration {
 
 	/* ##### Produktverwaltung  #####*/
 	static final String PRODUKTVERWALTUNG_CARD_TITLE = "<html>Zulieferung einbuchen und Best&auml;nde umbuchen</html>";
-	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Zulieferung einbuchen", "Bestand umbuchen" };
-	static final String PRODUKTVERWALTUNG_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Produkt-Zulieferungen ein- oder bereits bestehene Best&auml;nde auf ein anderes Lager umbuchen<br>"
+	static final String[] PRODUKTVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Produkt-Transaktion aus <<", "Zulieferung einbuchen", "Bestand umbuchen" };
+	static final String PRODUKTVERWALTUNG_LABEL_INFOTEXT = "<html><div style='border:1px solid #000000;padding:25px;margin-top:-30px;'><center><p>In diesem Reiter k&ouml;nnen Sie neue Produkt-Zulieferungen ein- oder bereits bestehene Best&auml;nde auf ein anderes Lager umbuchen</p></center>"
 			+ " <br>"
-			+ "</html>";
+			+ "<p>Wenn Sie eine neue Zulieferung einbuchen und best&auml;tigen wollen, dann geben Sie einfach die Zulieferungs-ID in das vorgesehene Feld ein und dr&uuml;cken Sie den 'Einbuchen'-Button. Das System pr&uuml;ft, ob es sich um eine g&uuml;tige ID handelt und f&uuml;hrt bei erfolgreicher Pr&uuml;fung die Transaktion aus.</p>"
+			+ "<br>"
+			+ "<p>Bei der Umbuchung von Best&auml;nden von einem Lager auf ein anderes m&uuml;ssen Sie die IDs beider Lager angeben, sowie die ID und Menge des Produktes, welches Sie umbuchen wollen. Das System pr&uuml;ft Ihre Eingaben und f&uuml;hrt nach erfolgreicher Pr&uuml;fung die Transaktion aus.</p>"
+			+ "</div></html>";
 	static final String PRODUKTVERWALTUNG_TITLE_ZULIEFERUNG_NEU = "<html>Neue Zulieferung einbuchen</html>";
 	static final String PRODUKTVERWALTUNG_TITLE_BESTAND_EDIT = "<html>Bestand auf ein anderes Lager umbuchen</html>";
 	static final String PRODUKTVERWALTUNG_LABEL_ZLID = "<html>Zulieferungs-ID</html>";
@@ -93,14 +100,23 @@ public interface Configuration {
 
 	/* ##### Bestellverwaltung  #####*/
 	static final String BESTELLVERWALTUNG_CARD_TITLE = "<html>Bestellungen anlegen, editieren &amp; ausliefern</html>";
-	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Transaktion aus <<", "Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
-	static final String BESTELLVERWALTUNG_LABEL_INFOTEXT = "<html>In diesem Reiter k&ouml;nnen Sie neue Bestellungen anlegen, bearbeiten und auslifern.<br>"
+	static final String[] BESTELLVERWALTUNG_COMBO_STRINGS = {">> Wählen Sie eine Bestell-Transaktion aus <<", "Bestellung anlegen", "Bestellungen editieren", "Bestellung ausliefern" };
+	static final String BESTELLVERWALTUNG_LABEL_INFOTEXT = "<html><div style='border:1px solid #000000;padding:15px'><center><p>In diesem Reiter k&ouml;nnen Sie neue Bestellungen anlegen, bearbeiten und auslifern.</p></center>"
 			+ " <br>"
-			+ "</html>";
+			+ "<p>Wenn Sie eine neue Bestellung anlegen m&ouml;chten, dann f&uuml;llen Sie zun&auml;chst den Bestellkopf aus (Kunden-ID, Anleger, Bestelltermin, Bestelltext). Dannach k&ouml;nnen Sie eine oder mehrere Bestellposition hinzuf&uuml;gen. <br> Achten Sie bei den Feldern Bestelltermin und Bestellposition bitte darauf, dass Sie die richtige Formattierung verwenden:" +
+			"<ul><li><b>Bestelltermin:</b> dd.mm.yy, z.B. 31.12.14 oder 01.03.14</li><li><b>Bestellposition:</b> Eine Position erfordert die Angabe von Produkt-ID und der gew&uuml;nschten Menge. Der Positionstext ist optional. Achten Sie bei der Eingabe darauf, dass Sie die Werte mit einem <i>Semikolon (';')<i> trennen. Falls Sie keinen Positionstext eingeben ist kein abschlie&szlig;endes Semikolon erforderlich.</li></ul>" +
+			"Das System pr&uuml;ft die Produkt-ID und berechnet bei erfolgreicher Pr&uuml;fung den Gesamtpreis der Position." +
+			"<br> Nachdem Sie alle Eingabe get&auml;tigt haben, k&ouml;nnen Sie die Bestellung entweder <i>speichern</i> oder <i>best&auml;tigen</i>. 'Speichern' hinterlegt die Bestellung mit dem Status 'OFFEN' in der Datenbank, wohingegen 'Best&auml;tigen' pr&uuml;ft, ob der gew&uuml;nschte Liefertermin eingehalten werden kann. Falls ja, dann wird die Bestellung mit dem Stauts 'BESTAETIGT' abgespeichert oder es wird angeboten, den Bestelltermin zu &auml;ndern.</p>"
+			+ "<br>"
+			+ "<p>Sie k&ouml;nnen alle nicht-best&auml;tigten Bestellungen editieren. Bei einer offenen Bestellungen steht es Ihnen frei alle Felder zu bearbeiten, bei einer best&auml;tigten Bestellung wird hingegen wieder eine Pr&uuml;fung durchgef&uuml;hrt, ob der aktuelle Liefertermin eingehalten werden kann.</p>"
+			+ "<br>"
+			+ "<p>Es steht Ihnen ebenfalls offen, bereits best&auml;tigte Bestellungen auszulifern. Hierf&uuml;r geben Sie bitte die gew&uuml;nschte Bestellungs-ID ein, danach pr&uuml;ft das System ob die ID g&uuml;tig und die Bestellung best&auml;tigt ist und f&uuml;hrt bei erfolgreicher Pr&uuml;fung die Transaktion aus.</p>"
+			+ "</div></html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_NEU = "<html>Neue Bestellung anlegen</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_EDIT = "<html>Vorhandene Bestellung editieren</html>";
 	static final String BESTELLVERWALTUNG_TITLE_BESTELLUNG_GO = "<html>Bestellung an Kunden ausliefern</html>";
 	static final String BESTELLVERWALTUNG_LABEL_BSTID = "<html>Bestellungs-ID</html>";
+	static final String BESTELLVERWALTUNG_LABEL_KID = "<html>Kunden-ID</html>";
 	static final String BESTELLVERWALTUNG_LABEL_BSTTEXT = "<html>Bestelltext</html>";
 	static final String BESTELLVERWALTUNG_LABEL_ANLEGER = "<html>Anleger</html>";
 	static final String BESTELLVERWALTUNG_LABEL_ANLAGEDATUM = "<html>Anlagedatum</html>";
@@ -114,9 +130,11 @@ public interface Configuration {
 	static final String BESTELLVERWALTUNG_LABEL_PREIS = "<html>Preis</html>";
 	static final String BESTELLVERWALTUNG_LABEL_POSTEXT = "<html>Positionstext</html>";
 	static final String BESTELLVERWALTUNG_LABEL_PRODUKT = "<html>Produkt-ID</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_SUCHE = "<html>Suchen & &Auml;ndern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_SPEICHERN = "<html>Speichern</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_BESTAETIGEN = "<html>Best&auml;tigen</html>";
 	static final String BESTELLVERWALTUNG_BUTTON_AUSLIEFERN = "<html>Ausliefern</html>";
+	static final String BESTELLVERWALTUNG_BUTTON_EXECUTE_FERTIG = "<html>Fertig</html>"; // Soni
 
 	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTID = "<html>Ung&uuml;ltige Eingabe. Die Bestellungs-ID darf nur positive numerische Werte haben, z.B. 1, 2, 16, 89, 432 ...</html>";
 	static final String BESTELLVERWALTUNG_MESSAGE_INVALID_BSTTERMIN = "<html>Bitte geben Sie ein Datum mit dem Format dd.mm.yy ein, z.B. 31.12.14.</html>";
@@ -196,6 +214,7 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE = "textfield_produktverwaltung_edit_menge";
 	// Bestellverwaltung
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID = "textfield_bestellverwaltung_neu_bstid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID = "textfield_bestellverwaltung_neu_kid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT = "textfield_bestellverwaltung_neu_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER = "textfield_bestellverwaltung_neu_anleger";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN = "textfield_bestellverwaltung_neu_bsttermin";
@@ -204,6 +223,7 @@ public interface Configuration {
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_MENGE = "textfield_bestellverwaltung_neu_bstpos_menge";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTPOS_PREIS = "textfield_bestellverwaltung_neu_bstpos_preis";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID = "textfield_bestellverwaltung_edit_bstid";
+	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID = "textfield_bestellverwaltung_edit_kid";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT = "textfield_bestellverwaltung_edit_bsttext";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER = "textfield_bestellverwaltung_edit_anleger";
 	static final String COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN = "textfield_bestellverwaltung_edit_bsttermin";
@@ -268,9 +288,11 @@ public interface Configuration {
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSHINZUFUEGEN = "button_bestellverwaltung_edit_bstposhinzufuegen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSAENDERN = "button_bestellverwaltung_edit_bstposaendern";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BSTPOSLOESCHEN = "button_bestellverwaltung_edit_loeschen";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SUCHEN = "button_bestellverwaltung_edit_suchen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN = "button_bestellverwaltung_edit_speichern";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN = "button_bestellverwaltung_edit_bestaetigen";
 	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN = "button_bestellverwaltung_bestellung_go_ausliefern";
+	static final String COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG = "button_bestellverwaltung_edit_aendern_fertig"; // Soni
 
 	static final String COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN = "button_produktanalyse_ausfuehren";
 	static final String COMPONENT_BUTTON_LIEFERKOSTEN_AUSFUEHREN = "button_lieferkosten_ausfuehren";
@@ -284,6 +306,9 @@ public interface Configuration {
 
 	/* #### Tabellen, Sequence #### */
 	static final String TABLE_KUNDE = "KUNDE";
+	static final String TABLE_BESTELLUNG = "BESTELLUNG";
+	static final String TABLE_BESTELLPOSITION = "BESTELLPOSITION";
+	static final String TABLE_PRODUKT = "PRODUKT";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID";
 	static final String SEQUENCE_BESTELLUNG_BSTID = "SEQ_BESTELLUNG_BSTID";
 
