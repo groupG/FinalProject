@@ -5,6 +5,7 @@ import gui.components.Explorer;
 import gui.components.Transaktionen;
 import gui.components.Auswertung;
 import gui.components.MainMenuBar;
+import gui.components.Bestellpositionen;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -16,7 +17,9 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,18 +29,25 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.swing.AbstractButton;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import main.Main;
 import model.Configuration;
 import model.DB;
 import model.OutputTableModel;
@@ -67,8 +77,7 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((MainMenuBar) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: " + pairs.getKey());
+			if (pairs.getValue() instanceof JMenuItem){
 				this.client.getMenu().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 		}
@@ -78,13 +87,10 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((Transaktionen) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-//			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: " + pairs.getKey());
 				this.client.getTransaktionen().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 			else if (pairs.getValue() instanceof JComboBox){
-//				System.out.println("ComboBox registriert: " + pairs.getKey());
 				this.client.getTransaktionen().addItemListeners(pairs.getValue(), new ItemEventListener());
 			}
 		}
@@ -94,9 +100,7 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((Auswertung) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-//			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: " + pairs.getKey());
 				this.client.getAuswertung().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 		}
@@ -106,9 +110,7 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((Explorer) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JTree){
-				System.out.println("Tree registriert: " + pairs.getKey());
 				this.client.getExplorer().addTreeSelectionListeners(pairs.getValue(), new TreeEventListener());
 			}
 		}
@@ -197,57 +199,157 @@ public class MainController implements Configuration{
 				}
 			}
 
-			//----------------- BESTELLVERWALTUNG - BSTPOSITION - HINZUFUEGEN BUTTON
-			if (ae.getActionCommand() == "add"){
-				System.out.println("add");
-				String pos = (String) ((JTextField) client.getComponentByName("bstPosInput")).getText();
+			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - POS HINZUFUEGEN BUTTON
+			if (ae.getActionCommand() == "addNeu"){
+				String pos = (String) ((JTextField) client.getComponentByName("inpNeu")).getText();
+				if (!pos.contains(";")){
+					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
+					return;
+				}
 
-					if (!pos.contains(";")){
-						JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
-						return;
-					}
-					pos.split("\\;");
-					int elementCount = pos.split("\\;").length;
-					if (elementCount <= 3 ){
-					for (int j = 0; j < elementCount; j++){
-						// OK
-					}
-					} else if (elementCount > 3) {
-						JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie nur Produkt-ID, Menge und den Positionstext an und achten Sie darauf, dass Sie ';' nur zum Trennen der Werte verwenden.</html>");
-						return;
-					} else {
-						JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie zumindest die Produkt-ID und Menge an. </html>");
-						return;
-					}
+				if (!pos.contains(";")){
+					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
+					return;
+				}
 
+				pos.split("\\;");
+				int elementCount = pos.split("\\;").length;
+				if (elementCount <= 3 ){
+					String posPid = pos.split("\\;")[0];
+					String posMenge = pos.split("\\;")[1];
+					try {
+						Double totalPrice = db.calcTotalPrice(posPid, Integer.parseInt(posMenge));
+						JOptionPane.showMessageDialog(client, "<html>Gesamtpreis der Position: "+totalPrice.toString() +" €</html>");
+					} catch (NotExistInDatabaseException e) {
+						client.showException(e);
+					} catch (SQLException e1){
+						client.showException(e1);
+					} catch (NumberFormatException e2){
+						client.showException(e2);
+					}
+				} else if (elementCount > 3) {
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie nur Produkt-ID, Menge und den Positionstext an und achten Sie darauf, dass Sie ';' nur zum Trennen der Werte verwenden.</html>");
+					return;
+				} else {
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie zumindest die Produkt-ID und Menge an. </html>");
+					return;
+				}
+			}
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - POS HINZUFUEGEN BUTTON
+			if (ae.getActionCommand() == "addEdit"){
+				client.getTransaktionen().getPosEdit().invalidate();
+				String pos = (String) ((JTextField) client.getComponentByName("inpEdit")).getText();
+				if (!pos.contains(";")){
+					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
+					return;
+				}
+
+				if (!pos.contains(";")){
+					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
+					return;
+				}
+
+				pos.split("\\;");
+				int elementCount = pos.split("\\;").length;
+
+				Double totalPrice = null;
+				if (elementCount <= 3 ){
+					String posPid = pos.split("\\;")[0];
+					String posMenge = pos.split("\\;")[1];
+					try {
+						totalPrice = db.calcTotalPrice(posPid, Integer.parseInt(posMenge));
+						JOptionPane.showMessageDialog(client, "<html>Gesamtpreis der Position: "+totalPrice.toString() +" €</html>");
+					} catch (NotExistInDatabaseException e) {
+						client.showException(e);
+					} catch (SQLException e1){
+						client.showException(e1);
+					} catch (NumberFormatException e2){
+						client.showException(e2);
+					}
+				} else if (elementCount > 3) {
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie nur Produkt-ID, Menge und den Positionstext an und achten Sie darauf, dass Sie ';' nur zum Trennen der Werte verwenden.</html>");
+					return;
+				} else {
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie zumindest die Produkt-ID und Menge an. </html>");
+					return;
+				}
+
+				List<String> tooltips = client.getTransaktionen().getPosEdit().getToolTips();
+				tooltips.add("Gesamtpreis der Position: "+ totalPrice.toString() +" €");
+				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+				client.getTransaktionen().getPosEdit().addListener();
+				client.revalidate();
+				client.repaint();
+			}
+
+			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - POS ENTFERNEN BUTTON
+			if (ae.getActionCommand() == "delNEU"){
+				client.getTransaktionen().getPosEdit().invalidate();
+
+				List<String> tooltips = client.getTransaktionen().getPosNeu().getToolTips();
+				tooltips.remove(client.getTransaktionen().getPosNeu().getList().getSelectedIndex());
+				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+				client.getTransaktionen().getPosEdit().addListener();
+				client.revalidate();
+				client.repaint();
+			}
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - POS ENTFERNEN BUTTON
+			if (ae.getActionCommand() == "delEdit"){
+				client.getTransaktionen().getPosEdit().invalidate();
+
+				List<String> tooltips = client.getTransaktionen().getPosEdit().getToolTips();
+				tooltips.remove(client.getTransaktionen().getPosEdit().getList().getSelectedIndex());
+				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+				client.getTransaktionen().getPosEdit().addListener();
+				client.revalidate();
+				client.repaint();
 			}
 
 			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - SPEICHERN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN){
 
+				if (client.getTransaktionen().getPosNeu().getListModel().getSize() == 0){
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie mind. eine Bestellposition an.</html>");
+					return;
+				}
+
 				// Bestellkopf
 				String bstid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID)).getText();
+				String bstKid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID)).getText();
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).getText();
 				String bsttermin = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN)).getText();
 				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
-				String bsttext = ((JTextArea) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
+				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
 
 				// Bestellpositionen
-				int bstposCount = ((JList<?>) client.getComponentByName("bestellPosListNeu")).getModel().getSize();
+				int bstposCount = client.getTransaktionen().getPosNeu().getListModel().getSize();
 				String[][] bstpos = new String[bstposCount][3];
+				List<String> tooltips = new ArrayList<String>();
 				for (int i = 0; i < bstposCount; i++){
-					String pos = (String) ((JList<?>) client.getComponentByName("bestellPosListNeu")).getModel().getElementAt(i);
+					String pos = (String) (client.getTransaktionen().getPosNeu().getListModel().getElementAt(i));
 					if (!pos.contains(";")){
 						JOptionPane.showMessageDialog(client, "<html>Fehler bei Postion "+(i+1)+": Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
 						return;
 					}
 					pos.split("\\;");
+
 					int elementCount = pos.split("\\;").length;
 					if (elementCount <= 3 ){
-					for (int j = 0; j < elementCount; j++){
-						bstpos[i][j] = pos.split("\\;")[j];
-						System.out.println(bstpos[i][j]);
-					}
+						for (int j = 0; j < elementCount; j++){
+							bstpos[i][j] = pos.split("\\;")[j];
+						}
+						try {
+							Double totalPrice = db.calcTotalPrice(""+bstpos[i][0], Integer.parseInt(bstpos[i][1]) );
+							tooltips.add("Gesamtpreis der Position: "+totalPrice.toString() +" €");
+						} catch (NotExistInDatabaseException e) {
+							client.showException(e);
+						} catch (SQLException e1){
+							client.showException(e1);
+						} catch (NumberFormatException e2){
+							client.showException(e2);
+						}
 					} else if (elementCount > 3) {
 						JOptionPane.showMessageDialog(client, "<html>Fehler bei Postion "+(i+1)+": Bitte geben Sie nur Produkt-ID, Menge und den Positionstext an und achten Sie darauf, dass Sie ';' nur zum Trennen der Werte verwenden.</html>");
 						return;
@@ -256,6 +358,34 @@ public class MainController implements Configuration{
 						return;
 					}
 				}
+
+				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+				client.getTransaktionen().getPosEdit().addListener();
+
+				if ( Integer.parseInt(bstid) == db.getBufferedBestellungsID() )
+					db.needNextBestellungsID(true); // DB darf wieder naechsten bstID liefern.
+
+
+				// Check, if the textfields are empty and have to be filled.
+				String[] bestellDaten = { bstid, bstKid, anleger, bsttermin };
+				for ( String datum : bestellDaten ) {
+					if ( datum.replaceAll("\\s+", "").isEmpty() ) {
+						JOptionPane.showMessageDialog(client, BESTELLVERWALTUNG_MESSAGE_FILL_ALL_FIELDS);
+						return;
+					}
+				}
+				// Trying to insert new order.
+				try {
+					db.bestellungSpeichern(bstid, bsttext, anleger, "OFFEN", bsttermin, bstKid, bstpos);
+				} catch (SQLException e) {
+					client.showException(e);
+					return;
+				} catch (NotExistInDatabaseException e) {
+					client.showException(e);
+					return;
+				}
+				JOptionPane.showMessageDialog(client, "<html>Neue Bestellung mit der Bestellungs-ID " + bstid + " wurde erstellt. </html>");
+				clearInputComponentsOfBestellverwaltungNeu();
 			}
 
 
@@ -265,9 +395,114 @@ public class MainController implements Configuration{
 
 			}
 
-			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - AENDERN BUTTON
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - SUCHEN BUTTON
+			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SUCHEN){
+			//	((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_AENDERN_FERTIG)).setVisible(false);
+				String bstID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID)).getText();
+
+				// Check if the given BSTID is valid.
+				if ( !isValidBstID(bstID) )
+					return;
+				// Check if the given BSTID really exists in the database.
+				try {
+					if ( !db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstID) ) {
+						JOptionPane.showMessageDialog(client, "<html>Es ist keine Bestellung mit der ID " + bstID + " in der Datenbank vorhanden.</html>");
+						return;
+					}
+
+					// Bestellkopf ausfuellen
+					Vector<Vector<Object>> bestellKopf = db.selectFromTable(TABLE_BESTELLUNG, "bstid = " + bstID);
+					Iterator<Vector<Object>> itKopf = bestellKopf.iterator();
+					client.invalidate();
+					while (itKopf.hasNext()){
+						Vector<Object> v = itKopf.next();
+						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).setText(""+v.get(1));
+						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setText(""+v.get(2));
+						((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM)).setText(""+v.get(3));
+						((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM)).setText(""+ v.get(4));
+						((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_STATUS)).setText(""+v.get(5));
+						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).setText(""+v.get(6));
+						((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN)).setText(""+v.get(7));
+						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setText(""+ v.get(8));
+					}
+
+					Vector<Vector<Object>> values = db.selectFromTable(TABLE_BESTELLPOSITION, "bstid = " + bstID);
+					List<String> tooltips = new ArrayList<String>();
+					DefaultListModel<String> listModel = new DefaultListModel<String>();
+					Iterator<Vector<Object>> it = values.iterator();
+					while (it.hasNext()){
+						Vector<Object> v = it.next();
+						String itPos = v.get(2)+";"+v.get(3)+((v.get(5) != null)?";"+v.get(5):"");
+						try {
+							Double totalPrice = db.calcTotalPrice(""+v.get(2), ((BigDecimal) v.get(3)).intValue() );
+							tooltips.add("Gesamtpreis der Position: "+totalPrice.toString() +" €");
+							//client.getTransaktionen().getPosEdit().setToolTipText("Gesamtpreis der Position "+v.get(0)+": "+totalPrice.toString() +" €",((BigDecimal) v.get(0)).intValue()-1);
+						} catch (NotExistInDatabaseException e) {
+							client.showException(e);
+						}
+						listModel.addElement(itPos);
+					}
+					client.getTransaktionen().getPosEdit().removeList();
+					client.getTransaktionen().getPosEdit().setModel(listModel);
+					client.getTransaktionen().getPosEdit().addListToPane("listEdit", values.size()-1);
+					client.getTransaktionen().getPosEdit().addModel();
+					client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+					client.getTransaktionen().getPosEdit().addListener();
+					client.revalidate();
+					client.repaint();
+
+					this.setInputComponentsOfBestellverwaltungEditEditable(true);
+					this.setInputComponentsOfBestellverwaltungEditEnabled(true);
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN)).setEnabled(true);
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN)).setEnabled(true);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					client.showException(e);
+				}
+			}
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - SPEICHERN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN){
 
+			}
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - BESTAETIGEN BUTTON
+			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SPEICHERN){
+
+			}
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AUSLIEFERN - AUSLIEFERN BUTTON
+			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN) {
+				String bstid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID)).getText();
+				// Check if the given KID is valid.
+				if ( !isValidBstID(bstid) )
+					return;
+
+				// Check if the given KID really exists in the database.
+				try {
+					if ( !db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstid ) ) {
+						JOptionPane.showMessageDialog(client, "<html>Die Bestellung " + bstid + " ist nicht in der Datenbank vorhanden.</html>");
+						return;
+					}
+
+					boolean success = db.bestellungAusliefern(bstid);
+					String msg = "";
+					if ( !success ) {
+						msg = "<html>Die Bestellung mit der ID " + bstid + " kann nicht beliefert werden.</html>";
+					} else {
+						msg = "<html>Die Bestellung mit der ID " + bstid + " wurde erfolgreich beliefert.</html>";
+					}
+					JOptionPane.showMessageDialog(client, msg);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					e.printStackTrace();
+				} catch (NotExistInDatabaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
@@ -291,8 +526,8 @@ public class MainController implements Configuration{
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
 					((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  (BigDecimal) values.get(4));
-					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
-					((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
+					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
+					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
 
 
 					this.setInputComponentsOfKudenpflegeEditable(true);
@@ -506,15 +741,30 @@ public class MainController implements Configuration{
 			}
 
 			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_LOGOUT){
-
+				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie sich wirklich abmelden?", "Haufkof Client - Abmelden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+				client.repaint();
+				if (inputPrompt == 0){
+					client.dispose();
+					try {
+						db._DB();
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					Main.createAndBuildLoginGui();
+				}
 			}
 
 			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_EXIT){
-				String[] buttons = {"Ja", "Nein"};
-				int inputPrompt = JOptionPane.showOptionDialog(client, "Wollen Sie die Anwendung wirklich beenden?", "Haufkof Client", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, buttons, buttons[2]);
-				if (inputPrompt == 1){
+				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie die Anwendung wirklich beenden?", "Haufkof Client - Beenden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+				client.repaint();
+				if (inputPrompt == 0){
 					System.exit(0);
 				}
+			}
+
+			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_INFO){
+				JOptionPane.showMessageDialog(client, "<html>Haufkof-Client, Betaversion </html>", "Haufkof Client - Info", JOptionPane.INFORMATION_MESSAGE, null);
+				client.repaint();
 			}
 		}
 
@@ -531,6 +781,21 @@ public class MainController implements Configuration{
 			}
 			return result;
 		}
+
+		/**
+		 * Diese Methode &uuml;berpr&uuml;ft, ob der Input sich nur aus numerischen Werte (Ziffern) besteht.
+		 * @param input
+		 * @return <i>true</i>, falls der Input nur numerische Werte hat. Sonst <i>false</i>.
+		 */
+		private boolean isValidBstID(String input) {
+			boolean result = Pattern.matches("\\d*", input);  // nur positive nummerische Werte.
+			if ( !result ) {
+				JOptionPane.showMessageDialog(client, BESTELLVERWALTUNG_MESSAGE_INVALID_BSTID);
+			}
+			return result;
+		}
+
+
 
 		/**
 		 * Diese Methode bildet die NID einer Nation auf deren Namen ab. StandardmA6uml;&szlig; gibt es nur 3 Nationen:
@@ -554,8 +819,8 @@ public class MainController implements Configuration{
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEditable(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEditable(b);
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setEditable(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEditable(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEditable(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEditable(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEditable(b);
 		}
 
 		private void setInputComponentsOfKudenpflegeEnabled(boolean b) {
@@ -563,8 +828,8 @@ public class MainController implements Configuration{
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEnabled(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEnabled(b);
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setEnabled(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEnabled(b);
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEnabled(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setEnabled(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEnabled(b);
 		}
 
 		private void clearInputComponentsOfKundePflege() {
@@ -572,8 +837,96 @@ public class MainController implements Configuration{
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText("");
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText("");
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("");
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem("");
-			((JComboBox) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("");
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem("");
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("");
+		}
+
+		private void setInputComponentsOfBestellverwaltungEditEditable(boolean b) {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_STATUS)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setEditable(b);
+			((JTextField) ((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpEdit")).setEditable(b);
+		}
+
+		private void setInputComponentsOfBestellverwaltungEditEnabled(boolean b) {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).setEnabled(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setEnabled(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_STATUS)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).setEnabled(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setEnabled(b);
+			((JTextField) ((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpEdit")).setEnabled(b);
+		}
+
+		private void setInputComponentsOfBestellverwaltungNeuEditable(boolean b) {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID)).setEditable(b);
+			((JTextField) ((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpNeu")).setEditable(b);
+		}
+
+		private void setInputComponentsOfBestellverwaltungNeuEnabled(boolean b) {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).setEnabled(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).setEnabled(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM)).setEditable(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN)).setEnabled(b);
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID)).setEnabled(b);
+			((JTextField) ((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpNeu")).setEnabled(b);
+		}
+
+		private void clearInputComponentsOfBestellverwaltungNeu() {
+			client.invalidate();
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ANLAGEDATUM)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_AENDERUNGSDATUM)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_ERLEDIGTTERMIN)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_KID)).setText("");
+			((JTextField) ((Bestellpositionen) client.getTransaktionen().getPosNeu()).getComponentByName("inpNeu")).setText("");
+			DefaultListModel listModel = new DefaultListModel();
+			client.getTransaktionen().getPosNeu().removeList();
+			client.getTransaktionen().getPosNeu().setModel(listModel);
+			client.getTransaktionen().getPosNeu().addListToPane("listNeu",-1);
+			client.getTransaktionen().getPosNeu().addModel();
+			client.revalidate();
+			client.repaint();
+		}
+
+		private void clearInputComponentsOfBestellverwaltungEdit() {
+			client.invalidate();
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTEXT)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ANLAGEDATUM)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_AENDERUNGSDATUM)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_STATUS)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTTERMIN)).setText("");
+//			((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_EDIT_ERLEDIGTTERMIN)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_KID)).setText("");
+			((JTextField) ((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpEdit")).setText("");
+			DefaultListModel listModel = new DefaultListModel();
+			client.getTransaktionen().getPosEdit().removeList();
+			client.getTransaktionen().getPosEdit().setModel(listModel);
+			client.getTransaktionen().getPosEdit().addListToPane("listEdit",-1);
+			client.getTransaktionen().getPosEdit().addModel();
+			client.revalidate();
+			client.repaint();
 		}
 
 		private boolean isValidBSTID(String inputBSTID){
@@ -604,14 +957,10 @@ public class MainController implements Configuration{
 	class ItemEventListener implements ItemListener{
 	    @Override
 	    public void itemStateChanged(ItemEvent ie) {
-
-	    	System.out.println(COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS);
-	    	System.out.println(ie.getSource());
 	    	if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS)){
 
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
@@ -623,7 +972,6 @@ public class MainController implements Configuration{
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
@@ -634,8 +982,8 @@ public class MainController implements Configuration{
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
+	    		((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpEdit").setEnabled(false);
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
@@ -657,9 +1005,9 @@ public class MainController implements Configuration{
 		@Override
 		public void valueChanged(TreeSelectionEvent te) {
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) client.getExplorer().getTree().getLastSelectedPathComponent();
-			System.out.println(selectedNode.getUserObject().toString());
+
 			if (selectedNode.getChildCount() > 0){
-				System.out.println("if: " + selectedNode.getUserObject().toString());
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				OutputTableModel tableModel = null;
 				try {
 				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 10000");
@@ -671,6 +1019,7 @@ public class MainController implements Configuration{
 				client.getDBOutput().addTableToPane();
 				client.revalidate();
 				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
 			}
 		}
 
