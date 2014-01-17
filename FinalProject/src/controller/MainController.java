@@ -562,7 +562,7 @@ public class MainController implements Configuration{
 					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde bestaetigt. </html>");
 					clearInputComponentsOfBestellverwaltungNeu();
 				} else {
-					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? Falls nicht wird Ihre Bestellung verworfen.</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? <b>Vorsicht:</b> Falls nicht wird Ihre Bestellung verworfen.</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 					client.repaint();
 					if (inputPrompt == 1){
 						try {
@@ -864,7 +864,7 @@ public class MainController implements Configuration{
 					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde bestaetigt. </html>");
 					this.clearInputComponentsOfBestellverwaltungEdit();
 				} else {
-					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? Falls nicht wird Ihre Bestellung verworfen.</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? <b>Vorsicht:</b> Falls nicht wird Ihre Bestellung verworfen!</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 					client.repaint();
 					if (inputPrompt == 1){
 						try {

@@ -20,8 +20,8 @@ public interface Configuration {
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-	static final String TABLE_OWNER = "BORECKI";
-//	static final String TABLE_OWNER = "PROJEKT_2013_G";
+//	static final String TABLE_OWNER = "BORECKI";
+	static final String TABLE_OWNER = "PROJEKT_2013_G";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
 
