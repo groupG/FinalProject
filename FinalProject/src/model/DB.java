@@ -999,7 +999,8 @@ public class DB implements Configuration {
 	 * @throws SQLException
 	 * @throws NotExistInDatabaseException
 	 */
-	public boolean bestellungAendern(String bstid, String bestelltext, String anleger, String bestelltermin) throws SQLException, NotExistInDatabaseException{
+	public boolean bestellungAendern(String bstid, String bestelltext, String anleger,
+									 String bestelltermin, String kid, String[][] bpos) throws SQLException, NotExistInDatabaseException{
 		this.connection.setAutoCommit(false);
 		Statement stmt = null;
 		String sql_query;
@@ -1020,16 +1021,16 @@ public class DB implements Configuration {
 			}
 
 			if ( status.trim().equals("BESTAETIGT") ) {
-				boolean lieferterminHaltbar = true;
-				sql_query = "SELECT posnr, anzahl, pid FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
-							"WHERE bstid = " + bstid;
-				rs = stmt.executeQuery(sql_query);
-				while ( rs.next() ) { // Iteriere jede Bestellposition in einer Bestellung bstid.
-					int pid = rs.getInt("PID");
-					int menge = rs.getInt("ANZAHL");
-					lieferterminHaltbar = callProcedureCheckLiefertermin(pid, menge, bestelltermin);
+				/*
+				 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
+				 */
+				for ( int i = 0; i < bpos.length; i++ ) {
+					// [pid, menge, text]
+					int pid = Integer.parseInt(bpos[i][0]);
+					int menge = Integer.parseInt(bpos[i][1]);
+					boolean lieferterminHaltbar = this.callProcedureCheckLiefertermin(pid, menge, bestelltermin);
 					if ( !lieferterminHaltbar ) {
-						return false; /// << keine Aenderung kann betaetigt werden.
+						return false; // << Liefertermin nicht haltbar. Daher keine Aenderung.
 					}
 				}
 			}
@@ -1040,6 +1041,25 @@ public class DB implements Configuration {
 						",   aenderungsdatum = to_date(" + now.toString() + ", 'DD-MM-YY')" + ", bestelltermin = " + bestelltermin + " " +
 						"WHERE bstid = " + bstid;
 			stmt.executeQuery(sql_query);
+			/*
+			 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
+			 */
+			if ( bpos != null ) { // UPDATE Bestellpositionen
+				for ( int i = 0; i < bpos.length; i++ ) {
+					int anzahl = Integer.parseInt(bpos[i][1]);
+					String pid = bpos[i][0];
+					double preis = calcTotalPrice(pid, anzahl);
+					String positionstext = bpos[i][2];
+
+					sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLPOSITION " +
+								"SET anzahl = " + anzahl + ", " +
+									"preis = "	+ preis + ", " +
+									"positionstext = " + positionstext +  ", " +
+									"pid = " + pid + " " +
+								"WHERE posnr = " + i + " AND bstid = " + bstid;
+					stmt.executeUpdate(sql_query);
+				}
+			}
 			this.connection.commit();
 		} catch ( SQLException e ) {
 			e.printStackTrace();
@@ -1053,6 +1073,7 @@ public class DB implements Configuration {
 
 		return success;
 	}
+
 
 	/**
 	 * Diese Methode liefert eine bereits best&auml;tigte Bestellung aus.
@@ -1149,6 +1170,7 @@ public class DB implements Configuration {
 		}
 		return success;
 	}
+
 
 	/**
 	 * Diese Methode formattiert ein Datum (Date) nach einem vorgegebenen Muster.
