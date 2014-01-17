@@ -940,7 +940,7 @@ public class DB implements Configuration {
 					double preis = calcTotalPrice(pid, anzahl);
 
 					sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLPOSITION " +
-								"VALUES (" + i + ", "  // posnr
+								"VALUES (" + (i+1) + ", "  // posnr
 										   + bstid + ", "  // bstid
 										   + pid  + ", "  // pid
 										   + anzahl + ", "  // anzahl
