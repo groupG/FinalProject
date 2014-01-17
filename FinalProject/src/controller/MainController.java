@@ -742,6 +742,40 @@ public class MainController implements Configuration{
 				}
 			}
 
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AUSLIEFERN - AUSLIEFERN BUTTON
+			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN) {
+				String bstid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_GO_BSTID)).getText();
+				// Check if the given KID is valid.
+				if ( !isValidBstID(bstid) )
+					return;
+
+				// Check if the given KID really exists in the database.
+				try {
+					if ( !db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstid ) ) {
+						JOptionPane.showMessageDialog(client, "<html>Die Bestellung " + bstid + " ist nicht in der Datenbank vorhanden.</html>");
+						return;
+					}
+
+					boolean success = db.bestellungAusliefern(bstid);
+					String msg = "";
+					if ( !success ) {
+						msg = "<html>Die Bestellung mit der ID " + bstid + " kann nicht beliefert werden.</html>";
+					} else {
+						msg = "<html>Die Bestellung mit der ID " + bstid + " wurde erfolgreich beliefert.</html>";
+					}
+					JOptionPane.showMessageDialog(client, msg);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					e.printStackTrace();
+				} catch (NotExistInDatabaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
 			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - EDIT BUTTON
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN ) {
 				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
