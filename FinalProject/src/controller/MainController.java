@@ -327,7 +327,7 @@ public class MainController implements Configuration{
 
 				// Trying to insert new order.
 				try {
-					db.bestellungSpeichern(bstid, bsttext, anleger, bsttermin, bstKid, bstpos);
+					db.bestellungSpeichern(bstid, bsttext, anleger, "OFFEN", bsttermin, bstKid, bstpos);
 					JOptionPane.showMessageDialog(client, "<html>Neue Bestellung mit der Bestellungs-ID " + bstid + " wurde erstellt. </html>");
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
