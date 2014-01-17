@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -920,10 +921,11 @@ public class DB implements Configuration {
 			String aenderungsdatum = anlagedatum;
 
 			sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLUNG " +
-						"VALUES (" + bstid + ", " + bestelltext + ", " + anleger + ", "
+						"VALUES (" + bstid + ", '" + ((bestelltext.length() <= 0) ? "NULL" : bestelltext) + "', '" + anleger + "', "
 								   + "to_date('" + anlagedatum + "', 'dd.mm.yy'), "
-								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), "
-								   + status + ", to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
+								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), '"
+								   + status + "', to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
+			System.out.println(sql_query);
 			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
 
 			/*
@@ -1094,7 +1096,7 @@ public class DB implements Configuration {
 		boolean success = true; // true = Bestellung kann augeliefert werden.
 		try {
 			stmt = this.connection.createStatement();
-			sql_query = "SELECT betelltermin, status FROM " + TABLE_OWNER + ".BESTELLUNG " +
+			sql_query = "SELECT bestelltermin, status FROM " + TABLE_OWNER + ".BESTELLUNG " +
 						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
 
 			ResultSet rs = stmt.executeQuery(sql_query);
@@ -1186,7 +1188,16 @@ public class DB implements Configuration {
 		return df.format(date);
 	}
 
+	public String dateFormat(String date, String pattern) throws ParseException {
+		Date d = (Date) (new SimpleDateFormat(pattern).parse(date));
+		return d.toString();
+	}
+
 	public String dateFormat(Date date) {
+		return dateFormat(date, "dd.MM.yy");
+	}
+
+	public String dateFormat(String date) throws ParseException {
 		return dateFormat(date, "dd.MM.yy");
 	}
 
