@@ -920,10 +920,11 @@ public class DB implements Configuration {
 			String aenderungsdatum = anlagedatum;
 
 			sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLUNG " +
-						"VALUES (" + bstid + ", " + bestelltext + ", " + anleger + ", "
+						"VALUES (" + bstid + ", '" + ((bestelltext.length() <= 0) ? "NULL" : bestelltext) + "', '" + anleger + "', "
 								   + "to_date('" + anlagedatum + "', 'dd.mm.yy'), "
-								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), "
-								   + status + ", to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
+								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), '"
+								   + status + "', to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
+			System.out.println(sql_query);
 			stmt.executeUpdate(sql_query); // Neue Bestellung mit dem Status OFFEN wird auf DB angelegt.
 
 			/*

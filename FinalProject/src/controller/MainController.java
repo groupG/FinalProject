@@ -76,9 +76,7 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((MainMenuBar) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JMenuItem){
-				System.out.println("Button registriert: " + pairs.getKey());
 				this.client.getMenu().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 		}
@@ -88,13 +86,10 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((Transaktionen) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-//			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: " + pairs.getKey());
 				this.client.getTransaktionen().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 			else if (pairs.getValue() instanceof JComboBox){
-//				System.out.println("ComboBox registriert: " + pairs.getKey());
 				this.client.getTransaktionen().addItemListeners(pairs.getValue(), new ItemEventListener());
 			}
 		}
@@ -104,9 +99,7 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((Auswertung) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-//			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: " + pairs.getKey());
 				this.client.getAuswertung().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 		}
@@ -116,9 +109,7 @@ public class MainController implements Configuration{
 		Iterator<Entry<String, Component>> it = ((Explorer) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
-			System.out.println(pairs.getKey());
 			if (pairs.getValue() instanceof JTree){
-				System.out.println("Tree registriert: " + pairs.getKey());
 				this.client.getExplorer().addTreeSelectionListeners(pairs.getValue(), new TreeEventListener());
 			}
 		}
@@ -227,7 +218,6 @@ public class MainController implements Configuration{
 					String posMenge = pos.split("\\;")[1];
 					try {
 						Double totalPrice = db.calcTotalPrice(posPid, Integer.parseInt(posMenge));
-						System.out.println("hinzufügen: " + totalPrice);
 						JOptionPane.showMessageDialog(client, "<html>Gesamtpreis der Position: "+totalPrice.toString() +" €</html>");
 					} catch (NotExistInDatabaseException e) {
 						client.showException(e);
@@ -348,7 +338,6 @@ public class MainController implements Configuration{
 					if (elementCount <= 3 ){
 						for (int j = 0; j < elementCount; j++){
 							bstpos[i][j] = pos.split("\\;")[j];
-							System.out.println(bstpos[i][j]);
 						}
 						try {
 							Double totalPrice = db.calcTotalPrice(""+bstpos[i][0], Integer.parseInt(bstpos[i][1]) );
@@ -386,18 +375,16 @@ public class MainController implements Configuration{
 				}
 				// Trying to insert new order.
 				try {
-
 					db.bestellungSpeichern(bstid, bsttext, anleger, "OFFEN", bsttermin, bstKid, bstpos);
-					JOptionPane.showMessageDialog(client, "<html>Neue Bestellung mit der Bestellungs-ID " + bstid + " wurde erstellt. </html>");
-					clearInputComponentsOfBestellverwaltungNeu();
-
 				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
-					//client.showException(e);
+					client.showException(e);
+					return;
 				} catch (NotExistInDatabaseException e) {
 					client.showException(e);
+					return;
 				}
-
+				JOptionPane.showMessageDialog(client, "<html>Neue Bestellung mit der Bestellungs-ID " + bstid + " wurde erstellt. </html>");
+				clearInputComponentsOfBestellverwaltungNeu();
 			}
 
 
@@ -452,7 +439,6 @@ public class MainController implements Configuration{
 						} catch (NotExistInDatabaseException e) {
 							client.showException(e);
 						}
-						System.out.println(itPos);
 						listModel.addElement(itPos);
 					}
 					client.getTransaktionen().getPosEdit().removeList();
@@ -936,14 +922,10 @@ public class MainController implements Configuration{
 	class ItemEventListener implements ItemListener{
 	    @Override
 	    public void itemStateChanged(ItemEvent ie) {
-
-	    	System.out.println(COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS);
-	    	System.out.println(ie.getSource());
 	    	if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_KUNDENPFLEGE_ACTIONS)){
 
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
@@ -955,7 +937,6 @@ public class MainController implements Configuration{
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
 
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
@@ -966,7 +947,7 @@ public class MainController implements Configuration{
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)), (String) ie.getItem());
-	    		System.out.println((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex());
+
 	    		((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpEdit").setEnabled(false);
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
@@ -989,7 +970,7 @@ public class MainController implements Configuration{
 		@Override
 		public void valueChanged(TreeSelectionEvent te) {
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) client.getExplorer().getTree().getLastSelectedPathComponent();
-			System.out.println(selectedNode.getUserObject().toString());
+
 			if (selectedNode.getChildCount() > 0){
 				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				OutputTableModel tableModel = null;
