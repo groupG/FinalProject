@@ -3,7 +3,7 @@ package model;
 import java.net.ConnectException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -916,9 +916,9 @@ public class DB implements Configuration {
 			stmt = this.connection.createStatement();
 			// Anlagedatum.
 			Date date = new Date(System.currentTimeMillis()); // aktuelle Zeit
-			String anlagedatum = date.toString(); // yyyy-mm-dd
+			String anlagedatum = dateFormat(date, "dd.mm.yy"); // yyyy-mm-dd
 			// Aenderungsdatum
-			String aenderungsdatum = anlagedatum;
+			String aenderungsdatum = dateFormat(date, "dd.mm.yy");
 
 			sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLUNG " +
 						"VALUES (" + bstid + ", '" + ((bestelltext.length() <= 0) ? "NULL" : bestelltext) + "', '" + anleger + "', "
@@ -939,11 +939,12 @@ public class DB implements Configuration {
 
 					sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLPOSITION " +
 								"VALUES (" + i + ", "  // posnr
+										   + bstid + ", "  // bstid
+										   + pid  + ", "  // pid
 										   + anzahl + ", "  // anzahl
 										   + preis + ", "  // preis
-										   + bpos[i][2] + ", "  // positionstext
-										   + bstid + ", "  // bstid
-										   + pid  + ")";  // pid
+										   + bpos[i][1] + ")";  // positionstext
+					System.out.println(sql_query);
 					stmt.executeUpdate(sql_query);
 				}
 			}
@@ -1184,18 +1185,23 @@ public class DB implements Configuration {
 	 * @return
 	 */
 	public String dateFormat(Date date, String pattern) {
-		DateFormat df = new SimpleDateFormat(pattern);
-		return df.format(date);
+		DateFormat df;
+		df = DateFormat.getDateInstance(DateFormat.SHORT);
+		return df.format(new Date(date.getTime()));
 	}
 
 	public String dateFormat(String date, String pattern) throws ParseException {
 		Date d = (Date) (new SimpleDateFormat(pattern).parse(date));
-		return d.toString();
+
+		DateFormat df;
+		df = DateFormat.getDateInstance(DateFormat.SHORT);
+
+		return df.format(new Date(d.getTime()));
 	}
 
-	public String dateFormat(Date date) {
-		return dateFormat(date, "dd.MM.yy");
-	}
+//	public String dateFormat(Date date) {
+//		return dateFormat(date, "dd.MM.yy");
+//	}
 
 	public String dateFormat(String date) throws ParseException {
 		return dateFormat(date, "dd.MM.yy");

@@ -11,12 +11,14 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.regex.Pattern;
+import java.util.Date;
 
 import javax.sql.rowset.CachedRowSet;
 import javax.swing.AbstractButton;
@@ -170,6 +173,17 @@ public class MainController implements Configuration{
 				if ( !isValidKID(kID) )
 					return;
 
+				try {
+					if ( db.checkIfElementExists(TABLE_KUNDE, "kid", kID) ) {
+						JOptionPane.showMessageDialog(client, "<html>Der Kunde mit der Kunden-ID " + kID + " ist bereits vorhanden.</html>");
+						return;
+					}
+				} catch (HeadlessException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 				if ( Integer.parseInt(kID) == db.getBufferedKundenID() )
 					db.needNextKundenID(true); // DB darf wieder naechsten KID liefern.
 
@@ -196,6 +210,7 @@ public class MainController implements Configuration{
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					e.printStackTrace();
 				}
+				this.clearInputComponentsOfKundeNeuPflege();
 			}
 
 			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - POS HINZUFUEGEN BUTTON
@@ -322,6 +337,17 @@ public class MainController implements Configuration{
 				if (bsttermin.length() > 0) isValidDate(bsttermin); // checkt ob der bestelltermin den vorgaben entspricht
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
 
+				try {
+					if ( db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstid) ) {
+						JOptionPane.showMessageDialog(client, "<html>Es wurde bereits eine Bestellung mit der ID " + bstid + " angelegt.</html>");
+						return;
+					}
+				} catch (HeadlessException e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
 				// Bestellpositionen
 				int bstposCount = client.getTransaktionen().getPosNeu().getListModel().getSize();
 				String[][] bstpos = new String[bstposCount][3];
@@ -375,13 +401,15 @@ public class MainController implements Configuration{
 				}
 				// Trying to insert new order.
 				try {
-					db.bestellungSpeichern(bstid, bsttext, anleger, "OFFEN", bsttermin, bstKid, bstpos);
+					db.bestellungSpeichern(bstid, bsttext, anleger, "OFFEN", db.dateFormat(bsttermin), bstKid, bstpos);
 				} catch (SQLException e) {
 					client.showException(e);
 					return;
 				} catch (NotExistInDatabaseException e) {
 					client.showException(e);
 					return;
+				} catch (ParseException e) {
+					client.showException(e);
 				}
 				JOptionPane.showMessageDialog(client, "<html>Neue Bestellung mit der Bestellungs-ID " + bstid + " wurde erstellt. </html>");
 				clearInputComponentsOfBestellverwaltungNeu();
@@ -495,8 +523,8 @@ public class MainController implements Configuration{
 					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
 
 
-					this.setInputComponentsOfKudenpflegeEditable(true);
-					this.setInputComponentsOfKudenpflegeEnabled(true);
+					this.setInputComponentsOfKudenpflegeEditEditable(true);
+					this.setInputComponentsOfKudenpflegeEditEnabled(true);
 					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(true);
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
@@ -517,8 +545,8 @@ public class MainController implements Configuration{
 					}
 					JOptionPane.showMessageDialog(client, "<html>Der Kunde mit KID " + kID + " wird derzeit von einem anderen Benutzer bearbeitet." +
 														  "<br />Bitte versuchen Sie in einem späteren Zeitpunkt nochmals.</html>");
-					this.clearInputComponentsOfKundePflege();
-					this.setInputComponentsOfKudenpflegeEnabled(true);
+					this.clearInputComponentsOfKundeEditPflege();
+					this.setInputComponentsOfKudenpflegeEditEnabled(true);
 					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(false);
 
 				} catch (SQLException e) {
@@ -555,8 +583,8 @@ public class MainController implements Configuration{
 				finally {
 					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(false);
 					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setVisible(true);
-					this.setInputComponentsOfKudenpflegeEditable(false);
-					this.setInputComponentsOfKudenpflegeEnabled(false);
+					this.setInputComponentsOfKudenpflegeEditEditable(false);
+					this.setInputComponentsOfKudenpflegeEditEnabled(false);
 				}
 			}
 
@@ -779,7 +807,7 @@ public class MainController implements Configuration{
 			return name;
 		}
 
-		private void setInputComponentsOfKudenpflegeEditable(boolean b) {
+		private void setInputComponentsOfKudenpflegeEditEditable(boolean b) {
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setEditable(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEditable(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEditable(b);
@@ -788,7 +816,7 @@ public class MainController implements Configuration{
 			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEditable(b);
 		}
 
-		private void setInputComponentsOfKudenpflegeEnabled(boolean b) {
+		private void setInputComponentsOfKudenpflegeEditEnabled(boolean b) {
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setEnabled(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setEnabled(b);
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setEnabled(b);
@@ -797,13 +825,40 @@ public class MainController implements Configuration{
 			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setEnabled(b);
 		}
 
-		private void clearInputComponentsOfKundePflege() {
+		private void clearInputComponentsOfKundeEditPflege() {
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setText("");
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText("");
 			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText("");
 			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("");
 			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem("");
 			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem("");
+		}
+
+		private void setInputComponentsOfKudenpflegeNeuEditable(boolean b) {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).setEditable(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).setEditable(b);
+			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).setEditable(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).setEditable(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).setEditable(b);
+		}
+
+		private void setInputComponentsOfKudenpflegeNeuEnabled(boolean b) {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setEnabled(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).setEnabled(b);
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).setEnabled(b);
+			((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).setEnabled(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).setEnabled(b);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).setEnabled(b);
+		}
+
+		private void clearInputComponentsOfKundeNeuPflege() {
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).setText("");
+			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).setText("");
+		//	((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KONTO)).setText("");
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).setSelectedIndex(0);
+			((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION)).setSelectedIndex(0);
 		}
 
 		private void setInputComponentsOfBestellverwaltungEditEditable(boolean b) {
@@ -937,24 +992,12 @@ public class MainController implements Configuration{
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_PRODUKTVERWALTUNG)), (String) ie.getItem());
-
-	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
-	    		{
-	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
-	    			client.repaint();
-	    		}
 	    	}
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS)){
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_BESTELLVERWALTUNG)), (String) ie.getItem());
 
 	    		((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("inpEdit").setEnabled(false);
-	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
-	    		{
-	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).setText("blubb");
-	    			client.repaint();
-	    		}
-
 	    		//----------- BESTELLUNG VERWALTUNG - Bestellung anlegen
 	    		if ( (int) ((JComboBox<String>) ie.getSource()).getSelectedIndex() == 1 ) {
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID)).setText("" + db.generateBSTID());
