@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import javax.sql.rowset.CachedRowSet;
@@ -940,7 +941,8 @@ public class DB implements Configuration {
 										   + pid  + ", "  // pid
 										   + anzahl + ", "  // anzahl
 										   + preis + ", "  // preis
-										   + bpos[i][1] + ")";  // positionstext
+										   + "'" + bpos[i][2] + "')";  // positionstext
+					System.out.println(sql_query);
 					stmt.executeUpdate(sql_query);
 				}
 			}
@@ -1290,13 +1292,13 @@ public class DB implements Configuration {
 	 */
 	public String dateFormat(Date date, String pattern) {
 		DateFormat df;
-		df = DateFormat.getDateInstance(DateFormat.SHORT);
+		df = DateFormat.getDateInstance(DateFormat.SHORT, new Locale("de", "DE"));
 		return df.format(new Date(date.getTime()));
 	}
 
 	public String dateFormat(Timestamp timestamp){
 		Date d = new Date(timestamp.getTime());
-		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+		DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT, new Locale("de", "DE"));
 		return df.format(new Date(d.getTime()));
 	}
 
@@ -1304,15 +1306,11 @@ public class DB implements Configuration {
 		Date d = (Date) (new SimpleDateFormat(pattern).parse(date));
 
 		DateFormat df;
-		df = DateFormat.getDateInstance(DateFormat.SHORT);
+		df = DateFormat.getDateInstance(DateFormat.SHORT, new Locale("de", "DE"));
 		//Testdfsa
 
 		return df.format(new Date(d.getTime()));
 	}
-
-//	public String dateFormat(Date date) {
-//		return dateFormat(date, "dd.MM.yy");
-//	}
 
 	public String dateFormat(String date) throws ParseException {
 		return dateFormat(date, "dd.MM.yy");
