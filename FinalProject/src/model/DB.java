@@ -245,25 +245,65 @@ public class DB implements Configuration {
 	 * @return kid : Vorgeschlagener KID f&uuml;r den neuen Kunden.
 	 *
 	 */
+//	public int getKundenID() {
+//		if ( needNextKID ) {
+//			Statement stmt = null;
+//			String sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_KUNDE_KID + ".NEXTVAL FROM DUAL";
+//			try {
+//				stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+//				ResultSet rs = stmt.executeQuery(sql_query);
+//				//rs.beforeFirst();
+//				rs.next();				
+//				this.kid_buffered = rs.getInt(1);
+//				rs.close();
+//			}
+//			catch ( SQLException e ) {
+//				e.printStackTrace();
+//			}
+//			finally {
+//				if ( stmt != null ) {
+//					try {
+//						stmt.close();
+//					} catch (SQLException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//				this.needNextKID = false; // ab hier werden voruebergehend keine weitere KIDs vorgeschlagen.
+//			}
+//		}
+//		return kid_buffered;
+//	}
+	
 	public int getKundenID() {
 		if ( needNextKID ) {
-			Statement stmtKID = null;
-			String sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_KUNDE_KID + ".NEXTVAL FROM DUAL";
+			Statement stmt = null;
+			String sql_query;
 			try {
-				stmtKID = connection.createStatement();
-				ResultSet rs = stmtKID.executeQuery(sql_query);
-				//rs.beforeFirst();
-				rs.next();
-				this.kid_buffered = rs.getInt(1);
+				stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = null;
+				int tmp_kid = -1;
+				
+				do {
+					sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_KUNDE_KID + ".NEXTVAL FROM DUAL";
+					rs = stmt.executeQuery(sql_query);
+					//rs.beforeFirst();
+					rs.next();				
+					tmp_kid = rs.getInt(1);				
+					sql_query = "SELECT * FROM " + TABLE_OWNER + ".KUNDE " + 
+								"WHERE kid = " + tmp_kid;
+					rs = stmt.executeQuery(sql_query);
+				} while ( rs.next() );
+				
 				rs.close();
+				this.kid_buffered = tmp_kid;
 			}
 			catch ( SQLException e ) {
 				e.printStackTrace();
 			}
 			finally {
-				if ( stmtKID != null ) {
+				if ( stmt != null ) {
 					try {
-						stmtKID.close();
+						stmt.close();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
