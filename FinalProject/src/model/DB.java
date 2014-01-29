@@ -28,7 +28,6 @@ import utils.NotExistInDatabaseException;
 /**
  * Klasse, welche den Verbindungsaufbau zur Oracle-Datenbank managed.
  *
- * @author borecki, dang
  */
 public class DB implements Configuration {
 
@@ -836,7 +835,7 @@ public class DB implements Configuration {
 		String sql_query;
 		try {
 			stmt = this.connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-			sql_query = "SELECT einzelverkaufspreis FROM PRODUKT " +
+			sql_query = "SELECT einzelverkaufspreis FROM " + TABLE_OWNER + ".PRODUKT " +
 						"WHERE pid = " + pid;
 			ResultSet rs = stmt.executeQuery(sql_query);
 			if ( !rs.first() ) {
