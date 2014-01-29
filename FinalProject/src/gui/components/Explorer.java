@@ -31,7 +31,6 @@ public class Explorer extends JPanel implements Configuration {
 	private JTree tree;
 	private DefaultMutableTreeNode root;
 	private JScrollPane scrollPane;
-	private JLabel selectedNode;
 
 	private DB db;
 	protected HashMap<String, Component> componentMap;
@@ -40,9 +39,7 @@ public class Explorer extends JPanel implements Configuration {
 		super(new GridBagLayout());
 		this.db = db;
 
-		this.selectedNode = new JLabel();
 		addComponent(this, createExplorerPanel(owner), new Insets(0, 5, 0, 5), 0, 0);
-//		addComponent(this, this.selectedNode, new Insets(0, 5, 0, 5), 0, 1);
 
 		this.componentMap = new HashMap<String, Component>();
 		createComponentMap(this);
@@ -117,10 +114,6 @@ public class Explorer extends JPanel implements Configuration {
 
 		return scrollPane;
 	}
-
-//	public void addTreeSelectionListener(TreeSelectionListener e) {
-//		this.tree.addTreeSelectionListener(e);
-//	}
 
 	public JTree getTree() {
 		return this.tree;

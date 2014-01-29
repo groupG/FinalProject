@@ -147,10 +147,10 @@ public class DB implements Configuration {
 		return columns;
 	}
 
-	public CachedRowSet getContentsOfOutputTable(String query){
+	public CachedRowSet getContentsOfOutputTable(String query) throws SQLException{
 		CachedRowSet row_set = null;
 
-		try {
+//		try {
 			row_set = new CachedRowSetImpl();
 			row_set.setType(ResultSet.TYPE_SCROLL_INSENSITIVE);
 			row_set.setConcurrency(ResultSet.CONCUR_UPDATABLE);
@@ -159,9 +159,9 @@ public class DB implements Configuration {
 			row_set.setUrl(getUrl());
 			row_set.setCommand(query);
 			row_set.execute();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
 		return row_set;
 	}
 

@@ -6,6 +6,7 @@ import gui.components.Bestellpositionen;
 import gui.components.Explorer;
 import gui.components.MainMenuBar;
 import gui.components.Transaktionen;
+import gui.components.DBOutput;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -30,6 +31,7 @@ import java.util.Vector;
 import java.util.regex.Pattern;
 
 import javax.sql.rowset.CachedRowSet;
+import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -64,6 +66,7 @@ public class MainController implements Configuration{
 		this.client = client;
 		this.componentMap = new HashMap<String, Component>();
 		addTransaktionenListeners(this.client.getTransaktionen());
+		addOutputListeners(this.client.getDBOutput());
 		addExplorerListeners(this.client.getExplorer());
 		addAuswertungenListeneres(this.client.getAuswertung());
 		addMenuListeners(this.client.getMenu());
@@ -112,29 +115,40 @@ public class MainController implements Configuration{
 		}
 	}
 
-	public List<String> getTables(String owner){
-		List<String> tables = new ArrayList<String>();
-		try {
-			tables =  this.db.getTables(owner);
-		} catch (SQLException e) {
-			this.client.showException(e);
+	void addOutputListeners(Component component){
+		Iterator<Entry<String, Component>> it = ((DBOutput) component).getComponentMap().entrySet().iterator();
+		while (it.hasNext()){
+			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
+			if (pairs.getValue() instanceof JButton){
+				System.out.println("Button registriert: "+pairs.getKey());
+				this.client.getDBOutput().addActionListeners(pairs.getValue(), new ActionEventListener());
+			}
 		}
-		return tables;
 	}
 
-	public List<String> getColumns(String owner, String table){
-		List<String> columns = new ArrayList<String>();
-		try {
-			columns =  this.db.getColumns(owner, table);
-		} catch (SQLException e) {
-			this.client.showException(e);
-		}
-		return columns;
-	}
+//	public List<String> getTables(String owner){
+//		List<String> tables = new ArrayList<String>();
+//		try {
+//			tables =  this.db.getTables(owner);
+//		} catch (SQLException e) {
+//			this.client.showException(e);
+//		}
+//		return tables;
+//	}
+//
+//	public List<String> getColumns(String owner, String table){
+//		List<String> columns = new ArrayList<String>();
+//		try {
+//			columns =  this.db.getColumns(owner, table);
+//		} catch (SQLException e) {
+//			this.client.showException(e);
+//		}
+//		return columns;
+//	}
 
-	public CachedRowSet getContentsOfOutputTable(String query){
-		return this.db.getContentsOfOutputTable(query);
-	}
+//	public CachedRowSet getContentsOfOutputTable(String query){
+//		return this.db.getContentsOfOutputTable(query);
+//	}
 
 	public void createComponentMap(Component component)
 	{
@@ -1241,6 +1255,28 @@ public class MainController implements Configuration{
 				JOptionPane.showMessageDialog(client, "<html>Haufkof-Client, Betaversion </html>", "Haufkof Client - Info", JOptionPane.INFORMATION_MESSAGE, null);
 				client.repaint();
 			}
+
+			if (ae.getActionCommand() == "button_dboutput_filter"){
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				OutputTableModel tableModel = null;
+				String table = client.getDBOutput().getFilterTable();
+				String query = ((JTextField) client.getDBOutput().getComponentByName("textfield_dboutput_filter")).getText();
+				try {
+					if (query.length() == 0)
+				        tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 1000");
+					else
+						tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE " + query);
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().setFilterTable(table);
+				client.getDBOutput().removeScrollPane();
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
+			}
 		}
 
 		//-------------------- Private auxiliary methods for KUNDENPFLEGE
@@ -1542,11 +1578,13 @@ public class MainController implements Configuration{
 			if (selectedNode.getChildCount() > 0){
 				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 				OutputTableModel tableModel = null;
+				String table = selectedNode.getUserObject().toString();
 				try {
-				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + selectedNode.getUserObject().toString() + " WHERE ROWNUM <= 10000");
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 10000");
 				} catch (SQLException e) {
 					client.showException(e);
 				}
+				client.getDBOutput().setFilterTable(table);
 				client.getDBOutput().removeScrollPane();
 				client.getDBOutput().addTableModel(tableModel);
 				client.getDBOutput().addTableToPane();

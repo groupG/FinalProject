@@ -55,7 +55,7 @@ public class Client extends JFrame implements Configuration {
 	public Component initComponents(int width, int height){
 		try {
 			this.explorer = new Explorer(this.db, TABLE_OWNER);
-			this.dboutput = new DBOutput(this.db,"Select table_name from all_tables where owner='"+TABLE_OWNER+"'");
+			this.dboutput = new DBOutput(this.db,"Select table_name from all_tables where owner = '"+TABLE_OWNER+"'");
 			this.transaktionen = new Transaktionen();
 			this.auswertung = new Auswertung();
 		} catch (SQLException e) {

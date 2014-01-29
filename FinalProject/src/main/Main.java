@@ -33,8 +33,8 @@ public class Main implements Configuration {
 							break;
 						}
 					}
-//					createAndBuildGUI();
-					createAndBuildLoginGui();
+					createAndBuildGUI();
+//					createAndBuildLoginGui();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -43,8 +43,8 @@ public class Main implements Configuration {
 	}
 
 	public static void createAndBuildGUI() throws Exception {
-		DB db = new DB(DRIVER, CONNECTION_THIN_LOCALHOST + "", "",
-				"");
+		DB db = new DB(DRIVER, CONNECTION_THIN + "dbprakt", "projekt_2013_g",
+				"dbprakt");
 		Client client = new Client(db,CLIENT_WIDTH, CLIENT_HEIGHT);
 		MainController controller = new MainController(db, client);
 	}
