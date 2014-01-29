@@ -51,8 +51,6 @@ import utils.NotExistInDatabaseException;
 
 /**
  *
- * @author borecki, dang
- *
  */
 public class MainController implements Configuration{
 	private DB db;
@@ -155,7 +153,11 @@ public class MainController implements Configuration{
 		} else
 			return null;
 	}
-
+	
+	/**
+	 * 
+	 *
+	 */
 	class ActionEventListener implements ActionListener {
 
 		@Override
@@ -169,11 +171,13 @@ public class MainController implements Configuration{
 
 				try {
 					if ( db.checkIfElementExists(TABLE_KUNDE, "kid", kID) ) {
-						JOptionPane.showMessageDialog(client, "<html>Der Kunde mit der Kunden-ID " + kID + " ist bereits vorhanden.</html>");
+						JOptionPane.showMessageDialog(client, "<html>Der Kunde mit der Kunden-ID " + kID + " ist bereits vorhanden.");
+						((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).setText("" + db.getKundenID());
+						this.clearInputComponentsOfKundeNeuPflege();
 						return;
 					}
-				} catch (HeadlessException e1) {
-					e1.printStackTrace();
+				} catch (HeadlessException e) {
+					e.printStackTrace();
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -211,10 +215,11 @@ public class MainController implements Configuration{
 					}
 				}
 
-				// Trying to inset new customer.
+				// Trying to insert new customer.
 				try {
 					db.insertKunde(kID, kName, kAdresse, kTelNr, kBranche, kNation);
 					JOptionPane.showMessageDialog(client, "<html>Neuer Kunde mit Kunden-ID " + kID + " wurde erstellt. </html>");
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).setText("" + db.getKundenID());
 				} catch (SQLException e) {
 					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					e.printStackTrace();
