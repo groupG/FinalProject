@@ -68,8 +68,9 @@ public class DBOutput extends JPanel implements Configuration {
 		this.table = new JTable(model);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 		this.table.setRowSelectionAllowed(false);
-		this.table.setColumnSelectionAllowed(true);
+		this.table.setColumnSelectionAllowed(false);
 		this.table.setFillsViewportHeight(true);
+		this.table.setCellSelectionEnabled(true);
 		this.table.setAutoCreateRowSorter(true);
 		this.table.getTableHeader().setBackground(Color.YELLOW);
 	}

@@ -3,10 +3,10 @@ package controller;
 import gui.Client;
 import gui.components.Auswertung;
 import gui.components.Bestellpositionen;
+import gui.components.DBOutput;
 import gui.components.Explorer;
 import gui.components.MainMenuBar;
 import gui.components.Transaktionen;
-import gui.components.DBOutput;
 
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -30,8 +30,6 @@ import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-import javax.sql.rowset.CachedRowSet;
-import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -52,6 +50,8 @@ import model.OutputTableModel;
 import utils.NotExistInDatabaseException;
 
 /**
+ * Controller-Klasse. Faengt alle Events ab, die in der GUI ausgeloest werden und verarbeitet diese. Greift auf die DB-Klasse zu und aendert die Anzeige der GUI.
+ * @author borecki, dang
  *
  */
 public class MainController implements Configuration{
@@ -70,6 +70,10 @@ public class MainController implements Configuration{
 		addMenuListeners(this.client.getMenu());
 	}
 
+	/**
+	 * Registriert Listener fuer das Menue.
+	 * @param component
+	 */
 	void addMenuListeners(Component component){
 		Iterator<Entry<String, Component>> it = ((MainMenuBar) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
@@ -80,6 +84,10 @@ public class MainController implements Configuration{
 		}
 	}
 
+	/**
+	 * Registriert Listener fuer das Transaktionen-Panel.
+	 * @param component
+	 */
 	void addTransaktionenListeners(Component component){
 		Iterator<Entry<String, Component>> it = ((Transaktionen) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
@@ -93,6 +101,10 @@ public class MainController implements Configuration{
 		}
 	}
 
+	/**
+	 * Registriert Listener fuer das Auswertungen-Panel.
+	 * @param component
+	 */
 	void addAuswertungenListeneres(Component component){
 		Iterator<Entry<String, Component>> it = ((Auswertung) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
@@ -103,6 +115,10 @@ public class MainController implements Configuration{
 		}
 	}
 
+	/**
+	 * Registriert Listener fuer den DB-Explorer.
+	 * @param component
+	 */
 	void addExplorerListeners(Component component){
 		Iterator<Entry<String, Component>> it = ((Explorer) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
@@ -113,41 +129,24 @@ public class MainController implements Configuration{
 		}
 	}
 
+	/**
+	 * Registriert Listener fuer den DB-Output.
+	 * @param component
+	 */
 	void addOutputListeners(Component component){
 		Iterator<Entry<String, Component>> it = ((DBOutput) component).getComponentMap().entrySet().iterator();
 		while (it.hasNext()){
 			Map.Entry<String, Component> pairs = (Map.Entry<String, Component>)it.next();
 			if (pairs.getValue() instanceof JButton){
-				System.out.println("Button registriert: "+pairs.getKey());
 				this.client.getDBOutput().addActionListeners(pairs.getValue(), new ActionEventListener());
 			}
 		}
 	}
 
-//	public List<String> getTables(String owner){
-//		List<String> tables = new ArrayList<String>();
-//		try {
-//			tables =  this.db.getTables(owner);
-//		} catch (SQLException e) {
-//			this.client.showException(e);
-//		}
-//		return tables;
-//	}
-//
-//	public List<String> getColumns(String owner, String table){
-//		List<String> columns = new ArrayList<String>();
-//		try {
-//			columns =  this.db.getColumns(owner, table);
-//		} catch (SQLException e) {
-//			this.client.showException(e);
-//		}
-//		return columns;
-//	}
-
-//	public CachedRowSet getContentsOfOutputTable(String query){
-//		return this.db.getContentsOfOutputTable(query);
-//	}
-
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -161,6 +160,11 @@ public class MainController implements Configuration{
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
@@ -169,13 +173,18 @@ public class MainController implements Configuration{
 	}
 
 	/**
-	 *
+	 * Eigene Implemntierung einer ActionListner-Klasse, welche alle Actionevent abfaengt und verarbeitet.
+	 * @author borecki, dang
 	 *
 	 */
 	class ActionEventListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent ae) {
+
+			/* ##########################*/
+			/* ###### Kundenpflege  #####*/
+			/* ##########################*/
 
 			//-----------------  KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
 			String msg_invalid_customerName = "<html>Der Kundenname darf nur Buchstaben enthalten, z.B. Konrad Zuse, Alibaba usw.<br />"
@@ -208,11 +217,6 @@ public class MainController implements Configuration{
 					}
 				}
 				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText();
-//				if (kAdresse.length() > 0) {
-//					if(!isValidInput(kAdresse)){
-//						return;
-//					}
-//				}
 				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText();
 				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString();
 				if (kBranche.length() > 0) {
@@ -242,6 +246,223 @@ public class MainController implements Configuration{
 				}
 				this.clearInputComponentsOfKundeNeuPflege();
 			}
+
+			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN ) {
+				((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(false);
+				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
+				// Check if the given KID is valid.
+				if ( !isValidKID(kID) )
+					return;
+				// Check if the given KID really exists in the database.
+				try {
+					if ( !db.checkIfElementExists(TABLE_KUNDE, "kid", kID) ) {
+						JOptionPane.showMessageDialog(client, "<html>Der Kunde mit KID " + kID + " ist nicht in der Datenbank vorhanden.</html>");
+						return;
+					}
+
+					Vector<Object> values = db.selectFromTable(TABLE_KUNDE, "kid = " + kID).firstElement();
+
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setText((String) values.get(1));
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
+					((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  (BigDecimal) values.get(4));
+					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
+					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
+
+					this.setInputComponentsOfKudenpflegeEditEditable(true);
+					this.setInputComponentsOfKudenpflegeEditEnabled(true);
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(true);
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+
+			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - EDIT BUTTON
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN ) {
+				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
+				try {
+					// Check if the table is locked and used by another user first.
+					boolean isLocked = db.lockRows(TABLE_KUNDE, "kid = " + kID);
+					if ( isLocked ) {
+						((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(true);
+						((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(false);
+						return;
+					}
+					JOptionPane.showMessageDialog(client, "<html>Der Kunde mit KID " + kID + " wird derzeit von einem anderen Benutzer bearbeitet." +
+														  "<br />Bitte versuchen Sie in einem späteren Zeitpunkt nochmals.</html>");
+					this.clearInputComponentsOfKundeEditPflege();
+					this.setInputComponentsOfKudenpflegeEditEnabled(true);
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(false);
+
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+
+			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - FERTIG BUTTON
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG ) {
+				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
+				String kName = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).getText();
+				if (kName.length() > 0) {
+					if(!isValidName(kName, msg_invalid_customerName)){
+						return;
+					}
+				}
+				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).getText();
+//				if (kAdresse.length() > 0) {
+//					if(!isValidInput(kAdresse)){
+//						return;
+//					}
+//				}
+				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).getText();
+				double kKonto = ((Number) ((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).getValue()).doubleValue();
+				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getSelectedItem().toString();
+				if (kBranche.length() > 0) {
+					if(!isValidInput(kBranche)){
+						return;
+					}
+				}
+				String kNation = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).getSelectedItem().toString();
+
+				String[] kundenDaten = { kName, kAdresse, kTelNr, kBranche, kNation };
+				for ( String datum : kundenDaten ) {
+					if ( datum.replaceAll("\\s+", "").isEmpty() ) {
+						JOptionPane.showMessageDialog(client, KUNDENPFLEGE_MESSAGE_FILL_ALL_FIELDS);
+						return;
+					}
+				}
+
+				try {
+					db.updateKunde(kID, kName, kAdresse, kTelNr, kKonto, kBranche, kNation);
+					JOptionPane.showMessageDialog(client, "<html>Der Kunde mit Kunden-ID " + kID + " wurde aktualisiert. </html>");
+				} catch (SQLException e) {
+					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
+					e.printStackTrace();
+				}
+				finally {
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(false);
+					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setVisible(true);
+					this.setInputComponentsOfKudenpflegeEditEditable(false);
+					this.setInputComponentsOfKudenpflegeEditEnabled(false);
+				}
+			}
+
+
+
+			/* ##############################*/
+			/* ##### Produktverwaltung  #####*/
+			/* ##############################*/
+
+			//----------------- PRODUKTVERWALTUNG - ZULIEFERUNG EINBUCHEN
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN ) {
+				String zlid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID)).getText();
+
+				// Check if the textfield for zlid is empty.
+				if ( zlid.isEmpty() ) {
+					JOptionPane.showMessageDialog(client, "Bitte geben Sie eine Zulieferungs-ID an.");
+					return;
+				}
+
+				// Check if the given KID is valid.
+				if ( !Pattern.matches("\\d*", zlid) ) { // nur positive nummerische Werte.
+					JOptionPane.showMessageDialog(client, PRODUKTVERWALTUNG_MESSAGE_INVALID_ZLID);
+					return;
+				}
+
+				// Neue Zulieferung einbuchen.
+				boolean success = true;
+				try {
+					success = db.zulieferungEinbuchen(zlid);
+				} catch ( NotExistInDatabaseException  ne ) {
+					JOptionPane.showMessageDialog(client, "<html>Die Zulieferung mit der ID " + zlid + " ist nicht in der Datenbank vorhanden.</html>");
+					ne.printStackTrace();
+					return;
+				} catch ( SQLException e ) {
+					e.printStackTrace();
+					return;
+				}
+
+				String msg = "";
+				if ( !success ) {
+					msg = "<html>Die Zulieferung mit der ID " + zlid + " kann nicht mehr eingebucht werden. Sie wurde bereits erledigt.</html>";
+				} else {
+					msg = "<html>Die Zuliefeung mit der ID " + zlid + " wurde erfolgreich eingebucht.</html>";
+				}
+				JOptionPane.showMessageDialog(client, msg);
+			}
+
+			//----------------- PRODUKTVERWALTUNG - BESTAND UMBUCHEN
+			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN ) {
+				String srcLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER)).getText();
+				String destLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER)).getText();
+				String pid  = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT)).getText();
+				String menge = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE)).getText();
+
+				try {
+					if ( !db.checkIfElementExists(TABLE_LAGER, "lagid", "'"+srcLager+"'") ) {
+						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Lager mit der ID '" + srcLager + "'.</html>");
+						return;
+					}
+					if ( !db.checkIfElementExists(TABLE_LAGER, "lagid", "'"+destLager+"'") ) {
+						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Lager mit der ID '" + destLager + "'.</html>");
+						return;
+					}
+					if ( !db.checkIfElementExists(TABLE_PRODUKT, "pid", "'"+pid+"'") ) {
+						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Produkt mit der ID '" + pid + "'.</html>");
+						return;
+					}
+				} catch (HeadlessException e) {
+					client.showException(e);
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+
+				// Check the input strings on valid numeric values, or if they are empty.
+				String[] inputs = { srcLager, destLager, pid, menge };
+				for ( String s : inputs ) {
+					if ( !Pattern.matches("\\d*", s ) ) {
+						JOptionPane.showMessageDialog(client, "Die Eingabe darf nur positive numerische Werte enthalten, z.B. 1, 5, 98, 2098...");
+						return;
+					}
+					if ( s.isEmpty() ) { // Check empty string.
+						JOptionPane.showMessageDialog(client, "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>");
+						return;
+					}
+				}
+
+				if ( srcLager.equals(destLager) ) {
+					JOptionPane.showMessageDialog(client, "Es kann nichts umgebucht werden. Ursprungs- und Ziellager sind gleich.");
+					return;
+				}
+
+				// Bestaende umbuchen.
+				int success = -999;
+				try {
+					success = db.bestandUmbuchen(srcLager, destLager, pid, Integer.parseInt(menge));
+				} catch ( NotExistInDatabaseException ne ) {
+					JOptionPane.showMessageDialog(client, "<html>Ursprungslager + " + srcLager + " oder Produkt " + pid + " ist nicht in der Datenbank vorhanden.</html>");
+					// ne.printStackTrace();
+					return;
+				} catch ( SQLException e ) {
+					e.printStackTrace();
+					return;
+				}
+
+				String msg = "";
+				if ( success != -999 ) {
+					msg = "<html>Bestand reicht nicht aus! Nur " + success + " St&uuml;ck vorr&auml;tig.</html>";
+				} else {
+					msg = "<html>Die Best&auml;nde wurden erfolgreich vom Lager " + srcLager + " auf Ziellager " + destLager + " umgebucht.</html>";
+				}
+				JOptionPane.showMessageDialog(client, msg);
+			}
+
+			/* ###############################*/
+			/* ###### Bestellverwaltung  #####*/
+			/* ###############################*/
 
 			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - POS HINZUFUEGEN BUTTON
 			if (ae.getActionCommand() == "addNeu"){
@@ -280,71 +501,12 @@ public class MainController implements Configuration{
 				}
 			}
 
-			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - POS HINZUFUEGEN BUTTON
-			if (ae.getActionCommand() == "addEdit"){
-				client.getTransaktionen().getPosEdit().invalidate();
-				String pos = (String) ((JTextField) client.getComponentByName("inpEdit")).getText();
-				if (!pos.contains(";")){
-					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
-					return;
-				}
-
-				if (!pos.contains(";")){
-					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
-					return;
-				}
-
-				pos.split("\\;");
-				int elementCount = pos.split("\\;").length;
-
-				Double totalPrice = null;
-				if (elementCount <= 3 ){
-					String posPid = pos.split("\\;")[0];
-					String posMenge = pos.split("\\;")[1];
-					try {
-						totalPrice = db.calcTotalPrice(posPid, Integer.parseInt(posMenge));
-						JOptionPane.showMessageDialog(client, "<html>Gesamtpreis der Position: "+totalPrice.toString() +" €</html>");
-					} catch (NotExistInDatabaseException e) {
-						client.showException(e);
-					} catch (SQLException e1){
-						client.showException(e1);
-					} catch (NumberFormatException e2){
-						client.showException(e2);
-					}
-				} else if (elementCount > 3) {
-					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie nur Produkt-ID, Menge und den Positionstext an und achten Sie darauf, dass Sie ';' nur zum Trennen der Werte verwenden.</html>");
-					return;
-				} else {
-					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie zumindest die Produkt-ID und Menge an. </html>");
-					return;
-				}
-
-				List<String> tooltips = client.getTransaktionen().getPosEdit().getToolTips();
-				tooltips.add("Gesamtpreis der Position: "+ totalPrice.toString() +" €");
-				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
-				client.getTransaktionen().getPosEdit().addListener();
-				client.revalidate();
-				client.repaint();
-			}
-
 			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - POS ENTFERNEN BUTTON
 			if (ae.getActionCommand() == "delNEU"){
 				client.getTransaktionen().getPosEdit().invalidate();
 
 				List<String> tooltips = client.getTransaktionen().getPosNeu().getToolTips();
 				tooltips.remove(client.getTransaktionen().getPosNeu().getList().getSelectedIndex());
-				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
-				client.getTransaktionen().getPosEdit().addListener();
-				client.revalidate();
-				client.repaint();
-			}
-
-			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - POS ENTFERNEN BUTTON
-			if (ae.getActionCommand() == "delEdit"){
-				client.getTransaktionen().getPosEdit().invalidate();
-
-				List<String> tooltips = client.getTransaktionen().getPosEdit().getToolTips();
-				tooltips.remove(client.getTransaktionen().getPosEdit().getList().getSelectedIndex());
 				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
 				client.getTransaktionen().getPosEdit().addListener();
 				client.revalidate();
@@ -480,8 +642,6 @@ public class MainController implements Configuration{
 				client.setCursor(Cursor.getDefaultCursor());
 			}
 
-
-
 			//----------------- BESTELLVERWALTUNG - NEUE BESTELLUNG - BESTAETIGEN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN){
 
@@ -601,6 +761,67 @@ public class MainController implements Configuration{
 				client.setCursor(Cursor.getDefaultCursor());
 			}
 
+
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - POS HINZUFUEGEN BUTTON
+			if (ae.getActionCommand() == "addEdit"){
+				client.getTransaktionen().getPosEdit().invalidate();
+				String pos = (String) ((JTextField) client.getComponentByName("inpEdit")).getText();
+				if (!pos.contains(";")){
+					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
+					return;
+				}
+
+				if (!pos.contains(";")){
+					JOptionPane.showMessageDialog(client, "<html>Bitte achten Sie auf die korrekte Trennung der einzelnen Felder durch ein ';'-Zeichen. </html>");
+					return;
+				}
+
+				pos.split("\\;");
+				int elementCount = pos.split("\\;").length;
+
+				Double totalPrice = null;
+				if (elementCount <= 3 ){
+					String posPid = pos.split("\\;")[0];
+					String posMenge = pos.split("\\;")[1];
+					try {
+						totalPrice = db.calcTotalPrice(posPid, Integer.parseInt(posMenge));
+						JOptionPane.showMessageDialog(client, "<html>Gesamtpreis der Position: "+totalPrice.toString() +" €</html>");
+					} catch (NotExistInDatabaseException e) {
+						client.showException(e);
+					} catch (SQLException e1){
+						client.showException(e1);
+					} catch (NumberFormatException e2){
+						client.showException(e2);
+					}
+				} else if (elementCount > 3) {
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie nur Produkt-ID, Menge und den Positionstext an und achten Sie darauf, dass Sie ';' nur zum Trennen der Werte verwenden.</html>");
+					return;
+				} else {
+					JOptionPane.showMessageDialog(client, "<html>Bitte geben Sie zumindest die Produkt-ID und Menge an. </html>");
+					return;
+				}
+
+				List<String> tooltips = client.getTransaktionen().getPosEdit().getToolTips();
+				tooltips.add("Gesamtpreis der Position: "+ totalPrice.toString() +" €");
+				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+				client.getTransaktionen().getPosEdit().addListener();
+				client.revalidate();
+				client.repaint();
+			}
+
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - POS ENTFERNEN BUTTON
+			if (ae.getActionCommand() == "delEdit"){
+				client.getTransaktionen().getPosEdit().invalidate();
+
+				List<String> tooltips = client.getTransaktionen().getPosEdit().getToolTips();
+				tooltips.remove(client.getTransaktionen().getPosEdit().getList().getSelectedIndex());
+				client.getTransaktionen().getPosEdit().addToolTips(tooltips);
+				client.getTransaktionen().getPosEdit().addListener();
+				client.revalidate();
+				client.repaint();
+			}
+
 			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - SUCHEN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_SUCHEN){
 				String bstID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_BSTID)).getText();
@@ -670,7 +891,6 @@ public class MainController implements Configuration{
 						((Bestellpositionen) client.getTransaktionen().getPosEdit()).getComponentByName("delEdit").setEnabled(false);
 					}
 				} catch (SQLException e) {
-					//JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
 					client.showException(e);
 				}
 			}
@@ -775,7 +995,7 @@ public class MainController implements Configuration{
 //				this.clearInputComponentsOfBestellverwaltungEdit();
 			}
 
-			//----------------- BESTELLVERWALTUNG - BESTELLUNG EDITIEREN - BESTAETIGEN BUTTON
+			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - BESTAETIGEN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_EDIT_BESTAETIGEN){
 
 				if (client.getTransaktionen().getPosEdit().getListModel().getSize() == 0){
@@ -901,39 +1121,7 @@ public class MainController implements Configuration{
 				client.setCursor(Cursor.getDefaultCursor());
 			}
 
-			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
-			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_SUCHEN ) {
-				((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(false);
-				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
-				// Check if the given KID is valid.
-				if ( !isValidKID(kID) )
-					return;
-				// Check if the given KID really exists in the database.
-				try {
-					if ( !db.checkIfElementExists(TABLE_KUNDE, "kid", kID) ) {
-						JOptionPane.showMessageDialog(client, "<html>Der Kunde mit KID " + kID + " ist nicht in der Datenbank vorhanden.</html>");
-						return;
-					}
 
-
-					Vector<Object> values = db.selectFromTable(TABLE_KUNDE, "kid = " + kID).firstElement();
-
-					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).setText((String) values.get(1));
-					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
-					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
-					((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  (BigDecimal) values.get(4));
-					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
-					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
-
-
-					this.setInputComponentsOfKudenpflegeEditEditable(true);
-					this.setInputComponentsOfKudenpflegeEditEnabled(true);
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(true);
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
-					e.printStackTrace();
-				}
-			}
 
 			//----------------- BESTELLVERWALTUNG - BESTELLUNG AUSLIEFERN - AUSLIEFERN BUTTON
 			if (ae.getActionCommand() == COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN) {
@@ -969,180 +1157,9 @@ public class MainController implements Configuration{
 				}
 			}
 
-			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - EDIT BUTTON
-			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN ) {
-				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
-				try {
-					// Check if the table is locked and used by another user first.
-					boolean isLocked = db.lockRows(TABLE_KUNDE, "kid = " + kID);
-					if ( isLocked ) {
-						((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(true);
-						((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(false);
-						return;
-					}
-					JOptionPane.showMessageDialog(client, "<html>Der Kunde mit KID " + kID + " wird derzeit von einem anderen Benutzer bearbeitet." +
-														  "<br />Bitte versuchen Sie in einem späteren Zeitpunkt nochmals.</html>");
-					this.clearInputComponentsOfKundeEditPflege();
-					this.setInputComponentsOfKudenpflegeEditEnabled(true);
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setEnabled(false);
-
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
-					e.printStackTrace();
-				}
-			}
-
-			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - FERTIG BUTTON
-			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG ) {
-				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
-				String kName = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).getText();
-				if (kName.length() > 0) {
-					if(!isValidName(kName, msg_invalid_customerName)){
-						return;
-					}
-				}
-				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).getText();
-//				if (kAdresse.length() > 0) {
-//					if(!isValidInput(kAdresse)){
-//						return;
-//					}
-//				}
-				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).getText();
-				double kKonto = ((Number) ((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).getValue()).doubleValue();
-				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getSelectedItem().toString();
-				if (kBranche.length() > 0) {
-					if(!isValidInput(kBranche)){
-						return;
-					}
-				}
-				String kNation = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).getSelectedItem().toString();
-
-				String[] kundenDaten = { kName, kAdresse, kTelNr, kBranche, kNation };
-				for ( String datum : kundenDaten ) {
-					if ( datum.replaceAll("\\s+", "").isEmpty() ) {
-						JOptionPane.showMessageDialog(client, KUNDENPFLEGE_MESSAGE_FILL_ALL_FIELDS);
-						return;
-					}
-				}
-
-				try {
-					db.updateKunde(kID, kName, kAdresse, kTelNr, kKonto, kBranche, kNation);
-					JOptionPane.showMessageDialog(client, "<html>Der Kunde mit Kunden-ID " + kID + " wurde aktualisiert. </html>");
-				} catch (SQLException e) {
-					JOptionPane.showMessageDialog(client, e.getClass().getName() + " : " + e.getMessage());
-					e.printStackTrace();
-				}
-				finally {
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN_FERTIG)).setVisible(false);
-					((JButton) client.getComponentByName(COMPONENT_BUTTON_KUNDENPFLEGE_EDIT_AENDERN)).setVisible(true);
-					this.setInputComponentsOfKudenpflegeEditEditable(false);
-					this.setInputComponentsOfKudenpflegeEditEnabled(false);
-				}
-			}
-
-			//----------------- PRODUKTVERWALTUNG - ZULIEFERUNG EINBUCHEN
-			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_NEU_EINBUCHEN ) {
-				String zlid = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID)).getText();
-
-				// Check if the textfield for zlid is empty.
-				if ( zlid.isEmpty() ) {
-					JOptionPane.showMessageDialog(client, "Bitte geben Sie eine Zulieferungs-ID an.");
-					return;
-				}
-
-				// Check if the given KID is valid.
-				if ( !Pattern.matches("\\d*", zlid) ) { // nur positive nummerische Werte.
-					JOptionPane.showMessageDialog(client, PRODUKTVERWALTUNG_MESSAGE_INVALID_ZLID);
-					return;
-				}
-
-				// Neue Zulieferung einbuchen.
-				boolean success = true;
-				try {
-					success = db.zulieferungEinbuchen(zlid);
-				} catch ( NotExistInDatabaseException  ne ) {
-					JOptionPane.showMessageDialog(client, "<html>Die Zulieferung mit der ID " + zlid + " ist nicht in der Datenbank vorhanden.</html>");
-					ne.printStackTrace();
-					return;
-				} catch ( SQLException e ) {
-					e.printStackTrace();
-					return;
-				}
-
-				String msg = "";
-				if ( !success ) {
-					msg = "<html>Die Zulieferung mit der ID " + zlid + " kann nicht mehr eingebucht werden. Sie wurde bereits erledigt.</html>";
-				} else {
-					msg = "<html>Die Zuliefeung mit der ID " + zlid + " wurde erfolgreich eingebucht.</html>";
-				}
-				JOptionPane.showMessageDialog(client, msg);
-			}
-
-			//----------------- PRODUKTVERWALTUNG - BESTAND UMBUCHEN
-			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN ) {
-				String srcLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER)).getText();
-				String destLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER)).getText();
-				String pid  = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT)).getText();
-				String menge = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE)).getText();
-
-				try {
-					if ( !db.checkIfElementExists(TABLE_LAGER, "lagid", "'"+srcLager+"'") ) {
-						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Lager mit der ID '" + srcLager + "'.</html>");
-						return;
-					}
-					if ( !db.checkIfElementExists(TABLE_LAGER, "lagid", "'"+destLager+"'") ) {
-						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Lager mit der ID '" + destLager + "'.</html>");
-						return;
-					}
-					if ( !db.checkIfElementExists(TABLE_PRODUKT, "pid", "'"+pid+"'") ) {
-						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Produkt mit der ID '" + pid + "'.</html>");
-						return;
-					}
-				} catch (HeadlessException e) {
-					client.showException(e);
-				} catch (SQLException e) {
-					client.showException(e);
-				}
-
-				// Check the input strings on valid numeric values, or if they are empty.
-				String[] inputs = { srcLager, destLager, pid, menge };
-				for ( String s : inputs ) {
-					if ( !Pattern.matches("\\d*", s ) ) {
-						JOptionPane.showMessageDialog(client, "Die Eingabe darf nur positive numerische Werte enthalten, z.B. 1, 5, 98, 2098...");
-						return;
-					}
-					if ( s.isEmpty() ) { // Check empty string.
-						JOptionPane.showMessageDialog(client, "<html>Bitte f&uuml;llen Sie alle Felder aus.</html>");
-						return;
-					}
-				}
-
-				if ( srcLager.equals(destLager) ) {
-					JOptionPane.showMessageDialog(client, "Es kann nichts umgebucht werden. Ursprungs- und Ziellager sind gleich.");
-					return;
-				}
-
-				// Bestaende umbuchen.
-				int success = -999;
-				try {
-					success = db.bestandUmbuchen(srcLager, destLager, pid, Integer.parseInt(menge));
-				} catch ( NotExistInDatabaseException ne ) {
-					JOptionPane.showMessageDialog(client, "<html>Ursprungslager + " + srcLager + " oder Produkt " + pid + " ist nicht in der Datenbank vorhanden.</html>");
-					// ne.printStackTrace();
-					return;
-				} catch ( SQLException e ) {
-					e.printStackTrace();
-					return;
-				}
-
-				String msg = "";
-				if ( success != -999 ) {
-					msg = "<html>Bestand reicht nicht aus! Nur " + success + " St&uuml;ck vorr&auml;tig.</html>";
-				} else {
-					msg = "<html>Die Best&auml;nde wurden erfolgreich vom Lager " + srcLager + " auf Ziellager " + destLager + " umgebucht.</html>";
-				}
-				JOptionPane.showMessageDialog(client, msg);
-			}
+			/* ###############################*/
+			/* ######## Auswertungen  ########*/
+			/* ###############################*/
 
 			//----------------- PRODUKTANALYSE
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN ) {
@@ -1201,8 +1218,8 @@ public class MainController implements Configuration{
 					}
 				}
 				try {
-					if ( !db.checkIfElementExists(TABLE_PRODUKT, "name", "'"+produkt+"'") ) {
-						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Produkt mit dem Namen '" + produkt + "'.</html>");
+					if ( !db.checkIfElementExists(TABLE_PRODUKT, "pid", "'"+produkt+"'") ) {
+						JOptionPane.showMessageDialog(client, "<html>Es existiert kein Produkt mit der ID '" + produkt + "'.</html>");
 						return;
 					}
 				} catch (HeadlessException e) {
@@ -1236,6 +1253,10 @@ public class MainController implements Configuration{
 				client.setCursor(Cursor.getDefaultCursor());
 			}
 
+			/* ###############################*/
+			/* ########### MenuBar  ##########*/
+			/* ###############################*/
+
 			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_LOGOUT){
 				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie sich wirklich abmelden?", "Haufkof Client - Abmelden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 				client.repaint();
@@ -1262,6 +1283,10 @@ public class MainController implements Configuration{
 				JOptionPane.showMessageDialog(client, "<html>Haufkof-Client, Betaversion </html>", "Haufkof Client - Info", JOptionPane.INFORMATION_MESSAGE, null);
 				client.repaint();
 			}
+
+			/* ###############################*/
+			/* ########## DBOutput  ##########*/
+			/* ###############################*/
 
 			if (ae.getActionCommand() == "button_dboutput_filter"){
 				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -1301,7 +1326,7 @@ public class MainController implements Configuration{
 		}
 
 		/**
-		 * 
+		 *
 		 * @param input
 		 * @param msg
 		 * @return
@@ -1313,7 +1338,7 @@ public class MainController implements Configuration{
 			}
 			return result;
 		}
-		
+
 		/**
 		 * Diese Methode &uuml;berpr&uuml;ft, ob der Input sich nur aus numerischen Werte (Ziffern) besteht.
 		 * @param input
@@ -1552,9 +1577,14 @@ public class MainController implements Configuration{
 			}
 			return result;
 		}
-		
+
 	}
 
+	/**
+	 * Eigene Implemntierung einer ItemListner-Klasse, welche alle Itemevents abfaengt und verarbeitet.
+	 * @author borecki
+	 *
+	 */
 	class ItemEventListener implements ItemListener{
 	    @Override
 	    public void itemStateChanged(ItemEvent ie) {
@@ -1567,7 +1597,6 @@ public class MainController implements Configuration{
 	    		{
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).setText(""+db.getKundenID());
 	    			client.repaint();
-
 	    		}
 	    	}
 	    	else if (ie.getStateChange() == ItemEvent.SELECTED && ((Component) ie.getSource()).getName().equals(COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS)){
@@ -1591,8 +1620,12 @@ public class MainController implements Configuration{
 	    }
 	}
 
+	/**
+	 * Eigene Implemntierung einer TreeEventListener-Klasse, welche alle TreeSelectionEvents abfaengt und verarbeitet.
+	 * @author borecki
+	 *
+	 */
 	class TreeEventListener implements TreeSelectionListener{
-
 		@Override
 		public void valueChanged(TreeSelectionEvent te) {
 			DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) client.getExplorer().getTree().getLastSelectedPathComponent();
@@ -1615,6 +1648,5 @@ public class MainController implements Configuration{
 				client.setCursor(Cursor.getDefaultCursor());
 			}
 		}
-
 	}
 }

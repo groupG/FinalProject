@@ -21,6 +21,11 @@ import javax.swing.JTextField;
 
 import model.Configuration;
 
+/**
+ * Template-Klasse. Erzeugt alle Templates fuer die einzelnen Komponenten der View mit einem GridBagLayout.
+ * @author borecki
+ *
+ */
 public class GridBagTemplate extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 7966600021735934643L;
@@ -30,6 +35,13 @@ public class GridBagTemplate extends JPanel implements Configuration {
 	private String name;
 	private Bestellpositionen pos;
 
+	/**
+	 * Neues GridBagTemplate, ohne Bestellpositionen. Ueber einen zusaetzlichen Parameter kann man die Elemente auf einer Scrollpane anordnen.
+	 * @param type
+	 * @param title
+	 * @param name
+	 * @param isScrollPane
+	 */
 	public GridBagTemplate(int type, String title, String name, boolean isScrollPane) {
 		super(new GridBagLayout());
 		this.type = type;
@@ -42,8 +54,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		if (isScrollPane){
 			JScrollPane scrollPane = new JScrollPane(createPanel(new JPanel(new GridBagLayout()),type),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setMinimumSize(new Dimension(500,500));
-
-
 			addComponent(this,scrollPane, new Insets(0,0,0,0),0,0);
 		}
 		else {
@@ -53,6 +63,14 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		createComponentMap(this);
 	}
 
+	/**
+	 * Neues GridBagTemplate, mit Bestellpositionen. Ueber einen zusaetzlichen Parameter kann man die Elemente auf einer Scrollpane anordnen.
+	 * @param type
+	 * @param title
+	 * @param name
+	 * @param isScrollPane
+	 * @param pos
+	 */
 	public GridBagTemplate(int type, String title, String name, boolean isScrollPane, Bestellpositionen pos) {
 		super(new GridBagLayout());
 		this.type = type;
@@ -65,8 +83,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		if (isScrollPane){
 			JScrollPane scrollPane = new JScrollPane(createPanel(new JPanel(new GridBagLayout()),type),JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			scrollPane.setMinimumSize(new Dimension(500,500));
-
-
 			addComponent(this,scrollPane, new Insets(0,0,0,0),0,0);
 		}
 		else {
@@ -76,10 +92,26 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		createComponentMap(this);
 	}
 
+	/**
+	 * Initialisiert die geforderten Komponenten, je nach type und fuegt diese zum Panel hinzu.
+	 * Type = 0: Neuer Kunde
+	 * Type = 1: Kunde aendern
+	 * Type = 2: Zulieferung einbuchen
+	 * Type = 3: Bestaende umbuchen
+	 * Type = 4: Neue Bestellung
+	 * Type = 5: Bestellung aendern
+	 * Type = 6: Bestellung ausliefern
+	 * Type = 7: Produktanalyse
+	 * Type = 8: Senkung der Lieferkosten
+	 * Type = 9: Bestellposition (deprecated)
+	 * @param container
+	 * @param type
+	 * @return
+	 */
 	public JPanel createPanel(JPanel container, int type) {
 
 		switch (type) {
-		case 0: // Template: Kunden anlegen
+		case 0: // Template: Neuer Kunde
 		{
 			// KID, number, 10
 			JLabel label_kid = new JLabel(KUNDENPFLEGE_LABEL_KID);
@@ -150,7 +182,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_exec, new Insets(0,5,0,5), 2, 6);
 		}
 			return container;
-		case 1: // Template: Kunden aendern
+		case 1: // Template: Kunde aendern
 		{
 			// KID, number, 10
 			JLabel label_kid = new JLabel(KUNDENPFLEGE_LABEL_KID);
@@ -267,7 +299,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_exec, new Insets(0, 5, 0, 5), 2, 0);
 		}
 			return container;
-		case 3: // Template: Bestand umbuchen
+		case 3: // Template: Bestaende umbuchen
 		{
 			// Ursprungslager, number, 10
 			JLabel label_srcLager = new JLabel(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
@@ -304,14 +336,12 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_exec, new Insets(0, 5, 0, 5), 2, 3);
 		}
 			return container;
-		case 4: // Template, Bestellung Neu
+		case 4: // Template: Neue Bestellung
 		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
 			JTextField _bstid = new JTextField(10);
 			_bstid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID);
-//			addComponent(container, label_bstid, new Insets(0, 5, 0, 5), 0, 0, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.WEST);
-//			addComponent(container, _bstid, new Insets(0, 5, 0, 5), 1, 0, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.EAST);
 			addComponent(container, label_bstid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(container, _bstid, new Insets(0, 5, 0, 5), 1, 0);
 
@@ -326,8 +356,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_anleger = new JLabel(BESTELLVERWALTUNG_LABEL_ANLEGER);
 			JTextField _anleger = new JTextField(10);
 			_anleger.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER);
-//			addComponent(container, label_anleger, new Insets(0, 5, 0, 5), 0, 1, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.WEST);
-//			addComponent(container, _anleger, new Insets(0, 5, 0, 5), 1, 1, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.EAST);
 			addComponent(container, label_anleger, new Insets(0, 5, 0, 5), 0, 2);
 			addComponent(container, _anleger, new Insets(0, 5, 0, 5), 1, 2);
 
@@ -335,8 +363,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_bsttermin = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTERMIN);
 			JTextField _bsttermin = new JTextField(10);
 			_bsttermin.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTERMIN);
-//			addComponent(container, label_bsttermin, new Insets(0, 5, 0, 5), 0, 2, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.WEST);
-//			addComponent(container, _bsttermin, new Insets(0, 5, 0, 5), 1, 2, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.EAST);
 			addComponent(container, label_bsttermin, new Insets(0, 5, 0, 5), 0, 3);
 			addComponent(container, _bsttermin, new Insets(0, 5, 0, 5), 1, 3);
 
@@ -344,8 +370,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_bsttext = new JLabel(BESTELLVERWALTUNG_LABEL_BSTTEXT);
 			JTextField _bsttext = new JTextField(10);
 			_bsttext.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT);
-//			addComponent(container, label_bsttext, new Insets(0, 5, 0, 5), 0, 3, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.WEST);
-//			addComponent(container, _bsttext, new Insets(0, 5, 0, 5), 1, 3, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.EAST);
 			addComponent(container, label_bsttext, new Insets(0, 5, 0, 5), 0, 4);
 			addComponent(container, _bsttext, new Insets(0, 5, 0, 5), 1, 4);
 
@@ -381,9 +405,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, label_erledigttermin, new Insets(0, 5, 0, 5), 2, 3);
 			addComponent(container, _erledigttermin, new Insets(0, 5, 0, 5), 3, 3);
 
-			JButton button_abbrechen = new JButton("Abbrechen");
-//			addComponent(container, button_abbrechen, new Insets(0, 5, 0, 5), 1, 5);
-
 			// Speichern
 			JButton button_speichern = new JButton(BESTELLVERWALTUNG_BUTTON_SPEICHERN);
 			button_speichern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_SPEICHERN);
@@ -397,7 +418,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_bestaetigen, new Insets(0, 5, 0, 5), 3, 4);
 		}
 			return container;
-		case 5: // Template, Bestellung EDIT
+		case 5: // Template: Bestellung aendern
 		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
@@ -501,7 +522,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, button_exec_fertig, new Insets(0, 5, 0, 5), 2, 6, 2, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
 		}
 			return container;
-		case 6: // Template, Bestellung GO
+		case 6: // Template: Bestellung ausliefern
 		{
 			// BSTID, number, 10
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
@@ -515,8 +536,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			button_ausliefern.setName(COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN);
 			button_ausliefern.setActionCommand(COMPONENT_BUTTON_BESTELLVERWALTUNG_GO_AUSLIEFERN);
 			addComponent(container, button_ausliefern, new Insets(0, 5, 0, 5), 2, 0, 1, 1, GridBagConstraints.HORIZONTAL, GridBagConstraints.NORTH);
-
-
 		}
 			return container;
 		case 7: // Template: Produktanalyse
@@ -535,7 +554,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, label_groesse, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(container, _groesse, new Insets(0, 5, 0, 5), 1, 1);
 
-			// Ausfueren
+			// Ausfuehren
 			JButton button_exec = new JButton(ANALYSE_BUTTON_AUSFUEHREN);
 			button_exec.setName(COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN);
 			button_exec.setActionCommand(COMPONENT_BUTTON_PRODUKTANALYSE_AUSFUEHREN);
@@ -608,6 +627,10 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		}
 	}
 
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -621,6 +644,11 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
@@ -628,6 +656,18 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			return null;
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param fill
+	 * @param anchor
+	 */
 	public void addComponent(JPanel panel, Component c, Insets insets, int x, int y, int width, int height, int fill, int anchor) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.anchor = anchor;
@@ -642,6 +682,18 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param fill
+	 * @param anchor
+	 */
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -655,6 +707,10 @@ public class GridBagTemplate extends JPanel implements Configuration {
 		constraints.insets = insets;
 		panel.add(c, constraints);
 	}
+
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
 
 	public HashMap<String, Component> getComponentMap(){
 	    return this.componentMap;
@@ -675,5 +731,4 @@ public class GridBagTemplate extends JPanel implements Configuration {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 }
