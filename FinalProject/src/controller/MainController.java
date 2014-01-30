@@ -63,13 +63,18 @@ public class MainController implements Configuration{
 		this.db = db;
 		this.client = client;
 		this.componentMap = new HashMap<String, Component>();
+	}
+
+	/**
+	 * Intitialisiert alle EventListener.
+	 */
+	public void initListeners(){
 		addTransaktionenListeners(this.client.getTransaktionen());
 		addOutputListeners(this.client.getDBOutput());
 		addExplorerListeners(this.client.getExplorer());
 		addAuswertungenListeneres(this.client.getAuswertung());
 		addMenuListeners(this.client.getMenu());
 	}
-
 	/**
 	 * Registriert Listener fuer das Menue.
 	 * @param component

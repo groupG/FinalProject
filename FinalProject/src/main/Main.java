@@ -46,6 +46,7 @@ public class Main implements Configuration {
 				"dbprakt");
 		Client client = new Client(db,CLIENT_WIDTH, CLIENT_HEIGHT);
 		MainController controller = new MainController(db, client);
+		controller.initListeners();
 	}
 
 	public static void createAndBuildLoginGui() {

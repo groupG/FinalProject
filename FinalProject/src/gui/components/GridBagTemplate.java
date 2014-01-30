@@ -311,7 +311,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, _srcLager, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Ziellager, number, 10
-			JLabel label_destLager = new JLabel(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
+			JLabel label_destLager = new JLabel(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
 			JComboBox<String> _destLager = new JComboBox<String>(lager_strings);
 			_destLager.setName(COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_DESTLAGER);
 			_destLager.setSelectedIndex(0);

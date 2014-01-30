@@ -170,9 +170,9 @@ public class Login extends JFrame implements Configuration {
 						dispose();
 						Client client = new Client(db, CLIENT_WIDTH,
 								CLIENT_HEIGHT);
-						@SuppressWarnings("unused")
 						MainController controller = new MainController(db,
 								client);
+						controller.initListeners();
 					}
 				}
 			}
