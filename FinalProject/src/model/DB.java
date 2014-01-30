@@ -1038,7 +1038,6 @@ public class DB implements Configuration {
 										   + anzahl + ", "  // anzahl
 										   + preis + ", "  // preis
 										   + "'" + bpos[i][2] + "')";  // positionstext
-					System.out.println(sql_query);
 					stmt.executeUpdate(sql_query);
 				}
 			}
@@ -1082,7 +1081,6 @@ public class DB implements Configuration {
 			if ( !lieferterminHaltbar ) {
 				return false;
 			}
-			System.out.println("Lieferbar: " +lieferterminHaltbar);
 		}
 //		this.bestellungAendern(bstid, bestelltext, anleger, "BESTAETIGT", bestelltermin, kid, bpos); // Speichern mit dem Status BESTAETIGT.
 		Statement stmt = null;
@@ -1218,9 +1216,7 @@ public class DB implements Configuration {
 		try {
 			stmt = this.connection.createStatement();
 			sql_query = "SELECT bestelltermin, status FROM " + TABLE_OWNER + ".BESTELLUNG " +
-						"WHERE bstid = " + bstid + " FOR UPDATE";
-//						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
-
+						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
 
 			ResultSet rs = stmt.executeQuery(sql_query);
 			if ( !rs.next() ) {
@@ -1235,7 +1231,6 @@ public class DB implements Configuration {
 			if ( status.trim().equals("OFFEN") || status.trim().equals("ERLEDIGT") ) {
 				return false;
 			}
-			System.out.println("success after status: " + success);
 
 			// wenn der Bestelltermin (bzw. Liefertermin) schon vorbei ist, und der Kunde hat seine bestellte Ware
 			// noch nicht ausgeliefert bekommt. Tja not good babe :P
@@ -1245,28 +1240,19 @@ public class DB implements Configuration {
 				return false;
 			}
 
-			System.out.println("success after time: " + success);
-
-
-			// Setze den Status auf ERLEDIGT.
-			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
-						"SET status = 'ERLEDIGT', erledigt_termin = to_date('" + dateFormat(date_now, "dd.mm.yy") + "', 'dd.mm.yy') " +
-						"WHERE bstid = " + bstid;
-			stmt.executeUpdate(sql_query);
-			System.out.println(sql_query);
-
 			sql_query = "SELECT posnr, pid, anzahl FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
 						"WHERE bstid = " + bstid;
-			System.out.println(sql_query);
-			rs = stmt.executeQuery(sql_query);
-			while ( rs.next() ) {
-				int pid = rs.getInt("PID"); // Produkt-ID.
-				int menge = rs.getInt("ANZAHL"); // Zu lieferende Menge.
+			Statement stmt_while = this.connection.createStatement();
+			ResultSet rs_while = stmt_while.executeQuery(sql_query);
+
+			while ( rs_while.next() ) {
+				int pid = rs_while.getInt("PID"); // Produkt-ID.
+				int menge = rs_while.getInt("ANZAHL"); // Zu lieferende Menge.
 				sql_query = "SELECT lagid, pid, anzahl FROM " + TABLE_OWNER + ".LAGERT " +
 							"WHERE pid = " + pid;
-				System.out.println(sql_query);
-				ResultSet _rs_ = stmt.executeQuery(sql_query);
-				inner_while: while ( _rs_.next() ) {
+				Statement _stmt_ = this.connection.createStatement();
+				ResultSet _rs_ = _stmt_.executeQuery(sql_query);
+				while ( _rs_.next() ) {
 					int lagid = _rs_.getInt("LAGID");
 					int aktuellerBestand = _rs_.getInt("ANZAHL");
 					// UPDATE LAGERT.
@@ -1275,25 +1261,33 @@ public class DB implements Configuration {
 						sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " +
 									"SET anzahl = " + aktuellerBestand + " " +
 									"WHERE lagid = " + lagid + " AND pid = " + pid;
-						System.out.println(sql_query);
 						menge = 0;
-						stmt.executeUpdate(sql_query);
-						break inner_while;
+					} else {
+						continue;
 					}
-					else { // menge > aktuellerBestand
-						sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " +
-									"SET anzahl = 0 " +
-									"WHERE lagid = " + lagid + " AND pid = " + pid;
-						menge -= aktuellerBestand;
-					}
-					stmt.executeUpdate(sql_query);
+					_stmt_.executeUpdate(sql_query);
 				}
+
 				_rs_.close();
+				if ( _stmt_ != null ) {
+					_stmt_.close();
+				}
+
 				if ( menge > 0 ) {
 					return false; // Die bestellten Produkte koennen nicht genuegend beliefert werden.
 				}
-				System.out.println("success after menge: " + success);
 			}
+			rs_while.close();
+			if ( stmt_while != null ) {
+				stmt_while.close();
+			}
+
+			// Setze den Status auf ERLEDIGT.
+			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
+						"SET status = 'ERLEDIGT', erledigt_termin = to_date('" + dateFormat(date_now, "dd.mm.yy") + "', 'dd.mm.yy') " +
+						"WHERE bstid = " + bstid;
+			stmt.executeUpdate(sql_query);
+
 			rs.close();
 			this.connection.commit();
 		} catch ( SQLException e ) {
@@ -1313,7 +1307,7 @@ public class DB implements Configuration {
 		Savepoint savePoint1 = this.connection.setSavepoint();
 
 		Statement stmt = null;
-		String sql_query;
+		String sql_query = "";
 
 		boolean success = false;
 
