@@ -1202,6 +1202,7 @@ public class DB implements Configuration {
 						"',   aenderungsdatum = to_date('" + aenderungsdatum+ "', 'dd.mm.yy')" + ", bestelltermin = to_date('" + bestelltermin + "','dd.mm.yy') " +
 						"WHERE bstid = " + bstid;
 			stmt.executeQuery(sql_query);
+
 			/*
 			 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
 			 */

@@ -1125,10 +1125,15 @@ public class MainController implements Configuration{
 
 				// Trying to insert new order.
 				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				boolean success = false;
 				try {
-					db.bestellungAendern(bstid, bsttext, anleger, db.dateFormat(bsttermin), bstKid, bstpos);
-					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde ge&auml;ndert. </html>");
+					success = db.bestellungAendern(bstid, bsttext, anleger, db.dateFormat(bsttermin), bstKid, bstpos);
 
+					if (success == true){
+						JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde ge&auml;ndert. </html>");
+					} else {
+						JOptionPane.showMessageDialog(client, "<html>Die Bestellung konnte nicht ge&auml;ndert werden, da der Bestelltermin nicht eingehalten werden kann.</html>");
+					}
 
 					OutputTableModel tableModel = null;
 					String table = TABLE_BESTELLUNG;
@@ -1153,7 +1158,6 @@ public class MainController implements Configuration{
 					client.showException(e);
 				}
 				client.setCursor(Cursor.getDefaultCursor());
-//				this.clearInputComponentsOfBestellverwaltungEdit();
 			}
 
 			//----------------- BESTELLVERWALTUNG - BESTELLUNG AENDERN - BESTAETIGEN BUTTON
