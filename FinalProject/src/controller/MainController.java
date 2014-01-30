@@ -30,7 +30,6 @@ import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
-import javax.swing.AbstractButton;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -397,8 +396,8 @@ public class MainController implements Configuration{
 
 			//----------------- PRODUKTVERWALTUNG - BESTAND UMBUCHEN
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_PRODUKTVERWALTUNG_EDIT_UMBUCHEN ) {
-				String srcLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER)).getText();
-				String destLager = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER)).getText();
+				String srcLager = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_SRCLAGER)).getSelectedItem().toString();
+				String destLager = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_DESTLAGER)).getSelectedItem().toString();
 				String pid  = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT)).getText();
 				String menge = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE)).getText();
 
@@ -1280,7 +1279,7 @@ public class MainController implements Configuration{
 			}
 
 			if (ae.getActionCommand() == COMPONENT_ITEM_MENU_INFO){
-				JOptionPane.showMessageDialog(client, "<html>Haufkof-Client, Betaversion </html>", "Haufkof Client - Info", JOptionPane.INFORMATION_MESSAGE, null);
+				JOptionPane.showMessageDialog(client, "<html>Haufkof-Client, Finale Version <br><br> by Son Dang, <br> Darius Borecki, <br> Viktoria Pleintiger </html>", "Haufkof Client - Info", JOptionPane.INFORMATION_MESSAGE, null);
 				client.repaint();
 			}
 

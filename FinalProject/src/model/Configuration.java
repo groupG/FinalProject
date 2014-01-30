@@ -207,8 +207,6 @@ public interface Configuration {
 	// Produktverwaltung
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_NEU_ZLID = "textfeld_produktverwaltung_neu_zlid";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_ZLID = "textfeld_produktverwaltung_edit_zlid";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER = "textfield_produktverwaltugn_edit_srclager";
-	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER = "textfield_produktverwaltung_edit_destlager";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_PRODUKT = "textfield_produktverwaltung_edit_produkt";
 	static final String COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_MENGE = "textfield_produktverwaltung_edit_menge";
 	// Bestellverwaltung
@@ -261,6 +259,8 @@ public interface Configuration {
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE = "combo_kundenpflege_neu_branche";
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION = "combo_kundenpflege_edit_nation";
 	static final String COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE = "combo_kundenpflege_edit_branche";
+	static final String COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_SRCLAGER = "combo_produktverwaltugn_edit_srclager";
+	static final String COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_DESTLAGER = "combo_produktverwaltugn_edit_destlager";
 	static final String COMPONENT_COMBO_PRODUKTVERWALTUNG_ACTIONS = "combo_produktverwaltung_actions";
 	static final String COMPONENT_COMBO_BESTELLVERWALTUNG_ACTIONS = "combo_bestellverwaltung_actions";
 

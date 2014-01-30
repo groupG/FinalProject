@@ -165,7 +165,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, _branche, new Insets(0, 5, 0, 5), 1, 5);
 
 			// Nation, char, 25
-			// TODO: JComboBox mit Werten aus DB
 			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
 			String[] nation_strings = { "Jemen", "Belize", "Neuseeland" };
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
@@ -244,7 +243,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			addComponent(container, _branche, new Insets(0, 5, 0, 5), 1, 5);
 
 			// Nation, char, 25
-			// TODO: JComboBox mit Werten aus DB
 			JLabel label_nation = new JLabel(KUNDENPFLEGE_LABEL_NATION);
 			String[] nation_strings = { "Jemen", "Belize", "Neuseeland" };
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
@@ -301,17 +299,23 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			return container;
 		case 3: // Template: Bestaende umbuchen
 		{
+			String[] lager_strings = { "1", "2", "3" };
+
 			// Ursprungslager, number, 10
 			JLabel label_srcLager = new JLabel(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
-			JTextField _srcLager = new JTextField(10);
-			_srcLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_SRCLAGER);
+			JComboBox<String> _srcLager = new JComboBox<String>(lager_strings);
+			_srcLager.setName(COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_SRCLAGER);
+			_srcLager.setSelectedIndex(0);
+			_srcLager.setEditable(true);
 			addComponent(container, label_srcLager, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(container, _srcLager, new Insets(0, 5, 0, 5), 1, 0);
 
 			// Ziellager, number, 10
-			JLabel label_destLager = new JLabel(PRODUKTVERWALTUNG_LABEL_DESTLAGER);
-			JTextField _destLager = new JTextField(10);
-			_destLager.setName(COMPONENT_TEXTFIELD_PRODUKTVERWALTUNG_EDIT_DESTLAGER);
+			JLabel label_destLager = new JLabel(PRODUKTVERWALTUNG_LABEL_SRCLAGER);
+			JComboBox<String> _destLager = new JComboBox<String>(lager_strings);
+			_destLager.setName(COMPONENT_COMBO_PRODUKTVERWALTUNG_EDIT_DESTLAGER);
+			_destLager.setSelectedIndex(0);
+			_destLager.setEditable(true);
 			addComponent(container, label_destLager, new Insets(0, 5, 0, 5), 0, 1);
 			addComponent(container, _destLager, new Insets(0, 5, 0, 5), 1, 1);
 
@@ -382,7 +386,6 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_status = new JLabel(BESTELLVERWALTUNG_LABEL_STATUS);
 			JLabel _status = new JLabel("-");
 			_status.setName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS);
-			// TODO Farbe nach status vergeben
 			addComponent(container, label_status, new Insets(0, 5, 0, 5), 2, 0);
 			addComponent(container, _status, new Insets(0, 5, 0, 5), 3, 0);
 
