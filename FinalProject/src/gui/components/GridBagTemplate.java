@@ -170,7 +170,7 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JComboBox<String> _nation = new JComboBox<String>(nation_strings);
 			_nation.setName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_NATION);
 			_nation.setSelectedIndex(0);
-			_nation.setEditable(true);
+			_nation.setEditable(false);
 			addComponent(container, label_nation, new Insets(0, 5, 0, 5), 0, 6);
 			addComponent(container, _nation, new Insets(0, 5, 0, 5), 1, 6);
 
