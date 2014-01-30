@@ -537,11 +537,11 @@ public class MainController implements Configuration{
 					}
 				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
-				if (bsttext.length() > 0) {
-					if(!isValidInput(bsttext)){
-						return;
-					}
-				}
+//				if (bsttext.length() > 0) {
+//					if(!isValidInput(bsttext)){
+//						return;
+//					}
+//				} // Auskommentiert, weil sonst man keine andere Zeichen wie Punkte (.) oder Kommas (,) eingeben kann.
 
 				try {
 					if ( db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstid) ) {
@@ -597,7 +597,6 @@ public class MainController implements Configuration{
 
 				if ( Integer.parseInt(bstid) == db.getBufferedBestellungsID() )
 					db.needNextBestellungsID(true); // DB darf wieder naechsten bstID liefern.
-
 
 				// Check, if the textfields are empty and have to be filled.
 				String[] bestellDaten = { bstid, bstKid, anleger, bsttermin };
