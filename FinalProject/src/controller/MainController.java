@@ -537,11 +537,11 @@ public class MainController implements Configuration{
 					}
 				}
 				String bsttext = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTTEXT)).getText();
-//				if (bsttext.length() > 0) {
-//					if(!isValidInput(bsttext)){
-//						return;
-//					}
-//				} // Auskommentiert, weil sonst man keine andere Zeichen wie Punkte (.) oder Kommas (,) eingeben kann.
+				if (bsttext.length() > 0) {
+					if(!isValidInput(bsttext)){
+						return;
+					}
+				}
 
 				try {
 					if ( db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstid) ) {
