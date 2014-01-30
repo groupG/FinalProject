@@ -1218,7 +1218,9 @@ public class DB implements Configuration {
 		try {
 			stmt = this.connection.createStatement();
 			sql_query = "SELECT bestelltermin, status FROM " + TABLE_OWNER + ".BESTELLUNG " +
-						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
+						"WHERE bstid = " + bstid + " FOR UPDATE";
+//						"WHERE bstid = " + bstid + " FOR UPDATE NOWAIT";
+
 
 			ResultSet rs = stmt.executeQuery(sql_query);
 			if ( !rs.next() ) {
