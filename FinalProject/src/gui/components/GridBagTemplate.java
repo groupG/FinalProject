@@ -342,6 +342,8 @@ public class GridBagTemplate extends JPanel implements Configuration {
 			JLabel label_bstid = new JLabel(BESTELLVERWALTUNG_LABEL_BSTID);
 			JTextField _bstid = new JTextField(10);
 			_bstid.setName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_BSTID);
+			_bstid.setEditable(false);
+			_bstid.setEnabled(false);
 			addComponent(container, label_bstid, new Insets(0, 5, 0, 5), 0, 0);
 			addComponent(container, _bstid, new Insets(0, 5, 0, 5), 1, 0);
 

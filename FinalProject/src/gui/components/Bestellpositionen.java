@@ -18,7 +18,6 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -31,6 +30,11 @@ import javax.swing.event.ListSelectionListener;
 
 import model.Configuration;
 
+/**
+ * Bestellpositionen-Klasse. JList-Objekt, welches die Bestellpositionen einer Bestellungen aufnimmt.
+ * @author borecki
+ *
+ */
 public class Bestellpositionen extends JPanel implements Configuration,
 		ListSelectionListener {
 
@@ -38,8 +42,10 @@ public class Bestellpositionen extends JPanel implements Configuration,
 	protected HashMap<String, Component> componentMap;
 	private JList<String> list;
 	private DefaultListModel<String> listModel;
+	@SuppressWarnings("unused")
 	private String tooltip;
 	private List<String> tooltips;
+	@SuppressWarnings("unused")
 	private int selectedIndex;
 
 	private static final String add = "Hinzufügen";
@@ -50,11 +56,18 @@ public class Bestellpositionen extends JPanel implements Configuration,
 
 	private JTextField txtInput;
 
+	/**
+	 * Neues Bestellpositionen-Panel.
+	 * @param name
+	 * @param nameList
+	 * @param nameAdd
+	 * @param nameDel
+	 * @param nameInp
+	 */
 	public Bestellpositionen(String name, String nameList, String nameAdd, String nameDel, String nameInp) {
 		super(new GridBagLayout());
 		this.setName(name);
 		setModel(null);
-
 
 		this.btnAdd = new JButton(Bestellpositionen.add);
 		AddListener addListener = new AddListener(this.btnAdd);
@@ -92,23 +105,6 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		createComponentMap(this);
 	}
 
-	public JList getList(){
-		return this.list;
-	}
-
-	public DefaultListModel getListModel(){
-		return this.listModel;
-	}
-
-	public void setModel(DefaultListModel listModel){
-		if (listModel == null){
-			this.listModel = new DefaultListModel();
-		}
-		else {
-			this.listModel = listModel;
-		}
-	}
-
 	public void addModel(){
 		this.list.setModel(this.listModel);
 	}
@@ -120,6 +116,10 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		this.repaint();
 	}
 
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -133,6 +133,11 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
@@ -142,10 +147,6 @@ public class Bestellpositionen extends JPanel implements Configuration,
 
 	public void addToolTips(List<String> tooltips){
 		this.tooltips = tooltips;
-	}
-
-	public List<String> getToolTips(){
-		return this.tooltips;
 	}
 
 	public void addListToPane(String nameList, int selectedIndex){
@@ -165,8 +166,9 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		this.list.addMouseMotionListener(new MouseMotionAdapter() {
 	        @Override
 	        public void mouseMoved(MouseEvent e) {
-	            JList l = (JList)e.getSource();
-	            ListModel m = l.getModel();
+	            JList<?> l = (JList<?>)e.getSource();
+	            @SuppressWarnings("unused")
+				ListModel<?> m = l.getModel();
 	            int index = l.locationToIndex(e.getPoint());
 	            if( index>-1 ) {
 //	                l.setToolTipText("Preis: "+m.getElementAt(index).toString());
@@ -177,6 +179,14 @@ public class Bestellpositionen extends JPanel implements Configuration,
 	    });
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 */
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -192,6 +202,18 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param weightx
+	 * @param weighty
+	 */
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y, int width, int height, double weightx,
 			double weighty) {
@@ -208,6 +230,36 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		panel.add(c, constraints);
 	}
 
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
+
+	public JList<String> getList(){
+		return this.list;
+	}
+
+	public DefaultListModel<String> getListModel(){
+		return this.listModel;
+	}
+
+	public void setModel(DefaultListModel<String> listModel){
+		if (listModel == null){
+			this.listModel = new DefaultListModel<String>();
+		}
+		else {
+			this.listModel = listModel;
+		}
+	}
+
+	public List<String> getToolTips(){
+		return this.tooltips;
+	}
+
+	/**
+	 * Innere Klasse, die einen DeleteListener enthaelt, der Eintraege aus der Liste loescht, wenn man den Entfernen-Button klickt.
+	 * @author borecki
+	 *
+	 */
 	class DeleteListener implements ActionListener {
 		public void actionPerformed(ActionEvent ae) {
 			int index = list.getSelectedIndex();
@@ -226,6 +278,11 @@ public class Bestellpositionen extends JPanel implements Configuration,
 		}
 	}
 
+	/**
+	 * Innere Klasse, die einen AddListener enthaelt, der Eintraege aus dem Textfeld in die Liste uebernimmt, wenn man auf den Hinzufuegen-Button klickt.
+	 * @author borecki
+	 *
+	 */
 	class AddListener implements ActionListener, DocumentListener {
 		private boolean alreadyEnabled = false;
 		private JButton button;
