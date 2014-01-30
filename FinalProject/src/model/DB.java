@@ -1346,6 +1346,7 @@ public class DB implements Configuration {
 		Savepoint savePoint1 = this.connection.setSavepoint();
 
 		Statement stmt = null;
+		@SuppressWarnings("unused")
 		String sql_query = "";
 
 		boolean success = false;
