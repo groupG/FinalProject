@@ -1296,6 +1296,8 @@ public class MainController implements Configuration{
 				try {
 					if (query.length() == 0)
 				        tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 1000");
+					else if (query.contains("select") && query.contains("from"))
+						tableModel = (OutputTableModel) client.getDBOutput().populateTable(query);
 					else
 						tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE " + query);
 				} catch (SQLException e) {
