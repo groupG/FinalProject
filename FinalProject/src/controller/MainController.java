@@ -178,6 +178,8 @@ public class MainController implements Configuration{
 		public void actionPerformed(ActionEvent ae) {
 
 			//-----------------  KUNDENPFLEGE - NEUEN KUNDEN ANLEGEN - AUSFUEHREN BUTTON
+			String msg_invalid_customerName = "<html>Der Kundenname darf nur Buchstaben enthalten, z.B. Konrad Zuse, Alibaba usw.<br />"
+					+ "Wortkombinationen wie '3ZF8', 'X11', 'S0loX' und Sonderzeichen sind unterbunden.</html>";
 			if ( ae.getActionCommand() == COMPONENT_BUTTON_KUNDENPFLEGE_NEU_AUSFUEHREN ) {
 				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).getText();
 				if ( !isValidKID(kID) )
@@ -201,16 +203,16 @@ public class MainController implements Configuration{
 
 				String kName = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_NAME)).getText();
 				if (kName.length() > 0) {
-					if(!isValidInput(kName)){
+					if(!isValidName(kName, msg_invalid_customerName)){
 						return;
 					}
 				}
 				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText();
-				if (kAdresse.length() > 0) {
-					if(!isValidInput(kAdresse)){
-						return;
-					}
-				}
+//				if (kAdresse.length() > 0) {
+//					if(!isValidInput(kAdresse)){
+//						return;
+//					}
+//				}
 				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText();
 				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString();
 				if (kBranche.length() > 0) {
@@ -995,16 +997,16 @@ public class MainController implements Configuration{
 				String kID = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KID)).getText();
 				String kName = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_NAME)).getText();
 				if (kName.length() > 0) {
-					if(!isValidInput(kName)){
+					if(!isValidName(kName, msg_invalid_customerName)){
 						return;
 					}
 				}
 				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).getText();
-				if (kAdresse.length() > 0) {
-					if(!isValidInput(kAdresse)){
-						return;
-					}
-				}
+//				if (kAdresse.length() > 0) {
+//					if(!isValidInput(kAdresse)){
+//						return;
+//					}
+//				}
 				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).getText();
 				double kKonto = ((Number) ((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).getValue()).doubleValue();
 				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getSelectedItem().toString();
@@ -1299,6 +1301,20 @@ public class MainController implements Configuration{
 		}
 
 		/**
+		 * 
+		 * @param input
+		 * @param msg
+		 * @return
+		 */
+		public boolean isValidName(String input, String msg) {
+			boolean result = Pattern.matches("(\\p{Alpha}+\\s*)+", input);
+			if ( !result ) {
+				JOptionPane.showMessageDialog(client, msg);
+			}
+			return result;
+		}
+		
+		/**
 		 * Diese Methode &uuml;berpr&uuml;ft, ob der Input sich nur aus numerischen Werte (Ziffern) besteht.
 		 * @param input
 		 * @return <i>true</i>, falls der Input nur numerische Werte hat. Sonst <i>false</i>.
@@ -1536,6 +1552,7 @@ public class MainController implements Configuration{
 			}
 			return result;
 		}
+		
 	}
 
 	class ItemEventListener implements ItemListener{
