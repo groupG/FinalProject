@@ -957,27 +957,66 @@ public class DB implements Configuration {
 	 *
 	 * @return a self generated bstid (Bestellungs-ID)
 	 */
+//	public int generateBSTID() {
+//		if ( needNextBSTID ) {
+//			String sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_BESTELLUNG_BSTID + ".NEXTVAL FROM DUAL";
+//			Statement stmt = null;
+//			try {
+//				stmt = this.connection.createStatement();
+//				ResultSet rs = stmt.executeQuery(sql_query);
+//				rs.next();
+//				this.bstid_buffered = rs.getInt(1);
+//				rs.close();
+//			} catch ( SQLException e ) {
+//				e.printStackTrace();
+//			} finally {
+//				if ( stmt != null) {
+//					try {
+//						stmt.close();
+//					} catch ( SQLException e ) {
+//						e.printStackTrace();
+//					}
+//				}
+//				this.needNextBSTID = false;
+//			}
+//		}
+//		return this.bstid_buffered;
+//	}
 	public int generateBSTID() {
 		if ( needNextBSTID ) {
-			String sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_BESTELLUNG_BSTID + ".NEXTVAL FROM DUAL";
 			Statement stmt = null;
+			String sql_query;
 			try {
-				stmt = this.connection.createStatement();
-				ResultSet rs = stmt.executeQuery(sql_query);
-				rs.next();
-				this.bstid_buffered = rs.getInt(1);
+				stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+				ResultSet rs = null;
+				int tmp_bstid = -1;
+
+				do {
+					sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_BESTELLUNG_BSTID + ".NEXTVAL FROM DUAL";
+					rs = stmt.executeQuery(sql_query);
+					//rs.beforeFirst();
+					rs.next();
+					tmp_bstid = rs.getInt(1);
+					sql_query = "SELECT * FROM " + TABLE_OWNER + ".BESTELLUNG " +
+								"WHERE bstid = " + tmp_bstid;
+					rs = stmt.executeQuery(sql_query);
+				} while ( rs.next() );
+
 				rs.close();
-			} catch ( SQLException e ) {
+				this.bstid_buffered = tmp_bstid;
+			}
+			catch ( SQLException e ) {
 				e.printStackTrace();
-			} finally {
-				if ( stmt != null) {
+			}
+			finally {
+				if ( stmt != null ) {
 					try {
 						stmt.close();
-					} catch ( SQLException e ) {
+					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}
-				this.needNextBSTID = false;
+				this.needNextBSTID = false; // ab hier werden voruebergehend keine weitere BSTIDs vorgeschlagen.
 			}
 		}
 		return this.bstid_buffered;
