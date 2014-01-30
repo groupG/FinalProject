@@ -253,7 +253,7 @@ public class DB implements Configuration {
 //				stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 //				ResultSet rs = stmt.executeQuery(sql_query);
 //				//rs.beforeFirst();
-//				rs.next();				
+//				rs.next();
 //				this.kid_buffered = rs.getInt(1);
 //				rs.close();
 //			}
@@ -273,7 +273,7 @@ public class DB implements Configuration {
 //		}
 //		return kid_buffered;
 //	}
-	
+
 	public int getKundenID() {
 		if ( needNextKID ) {
 			Statement stmt = null;
@@ -282,18 +282,18 @@ public class DB implements Configuration {
 				stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 				ResultSet rs = null;
 				int tmp_kid = -1;
-				
+
 				do {
 					sql_query = "SELECT " + TABLE_OWNER + "." + SEQUENCE_KUNDE_KID + ".NEXTVAL FROM DUAL";
 					rs = stmt.executeQuery(sql_query);
 					//rs.beforeFirst();
-					rs.next();				
-					tmp_kid = rs.getInt(1);				
-					sql_query = "SELECT * FROM " + TABLE_OWNER + ".KUNDE " + 
+					rs.next();
+					tmp_kid = rs.getInt(1);
+					sql_query = "SELECT * FROM " + TABLE_OWNER + ".KUNDE " +
 								"WHERE kid = " + tmp_kid;
 					rs = stmt.executeQuery(sql_query);
 				} while ( rs.next() );
-				
+
 				rs.close();
 				this.kid_buffered = tmp_kid;
 			}
@@ -1013,7 +1013,7 @@ public class DB implements Configuration {
 	 */
 	public boolean bestellungBestaetigen(String bstid, String bestelltext, String anleger,
 										 String bestelltermin, String kid, String[][] bpos ) throws SQLException, NotExistInDatabaseException {
-		boolean success = false;
+		boolean lieferterminHaltbar = false;
 		/*
 		 * BESTELLPOSITION : [POSNR], Anzahl, Preis, Positionstext, BSTID, PID
 		 */
@@ -1021,7 +1021,7 @@ public class DB implements Configuration {
 			// [pid, menge, text]
 			int pid = Integer.parseInt(bpos[i][0]);
 			int menge = Integer.parseInt(bpos[i][1]);
-			boolean lieferterminHaltbar = this.callProcedureCheckLiefertermin(pid, menge, bestelltermin);
+			lieferterminHaltbar = this.callProcedureCheckLiefertermin(pid, menge, bestelltermin);
 			if ( !lieferterminHaltbar ) {
 				return false;
 			}
@@ -1045,7 +1045,7 @@ public class DB implements Configuration {
 				stmt.close();
 			}
 		}
-		return success;
+		return lieferterminHaltbar;
 	}
 
 	/**
