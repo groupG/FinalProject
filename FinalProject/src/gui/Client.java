@@ -9,13 +9,14 @@ import gui.components.Transaktionen;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
-import javax.swing.WindowConstants;
 
 import model.Configuration;
 import model.DB;
@@ -47,7 +48,13 @@ public class Client extends JFrame implements Configuration {
 	public Client(DB db, int width, int height) {
 		setTitle(TITLE);
 		setSize(new Dimension(width, height));
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent event) {
+				close();
+				System.exit(0);
+			}
+		});
 		setResizable(false);
 		this.menu = new MainMenuBar(COMPONENT_MENU);
 		setJMenuBar(this.menu);
@@ -110,6 +117,23 @@ public class Client extends JFrame implements Configuration {
 	public void showException(Exception e) {
 		JOptionPane.showMessageDialog(this.getContentPane(), new String[] {
 				e.getClass().getName() + ": ", e.getMessage() });
+	}
+
+	/**
+	 * Schliesst die bestehende Datenbankverbindung.
+	 */
+	public void close() {
+		try {
+			if (this.db.getConnection() != null) {
+				try {
+					this.db.getConnection().close();
+				} catch (SQLException e) {
+					showException(e);
+				}
+			}
+		} catch (NullPointerException e) {
+			showException(e);
+		}
 	}
 
 	/**

@@ -1261,6 +1261,7 @@ public class MainController implements Configuration{
 				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie sich wirklich abmelden?", "Haufkof Client - Abmelden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 				client.repaint();
 				if (inputPrompt == 0){
+					client.close();
 					client.dispose();
 					try {
 						db._DB();
@@ -1275,6 +1276,7 @@ public class MainController implements Configuration{
 				int inputPrompt = JOptionPane.showConfirmDialog(client, "Wollen Sie die Anwendung wirklich beenden?", "Haufkof Client - Beenden", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 				client.repaint();
 				if (inputPrompt == 0){
+					client.close();
 					System.exit(0);
 				}
 			}

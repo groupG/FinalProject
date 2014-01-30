@@ -23,18 +23,13 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.SpinnerListModel;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-import controller.MainController;
-
 import model.Configuration;
 import model.DB;
+import controller.MainController;
 
 /**
  * Login-View. Ermoeglicht es dem Nutzer, sich bei der Datenbank anzumelden und
@@ -175,6 +170,7 @@ public class Login extends JFrame implements Configuration {
 						dispose();
 						Client client = new Client(db, CLIENT_WIDTH,
 								CLIENT_HEIGHT);
+						@SuppressWarnings("unused")
 						MainController controller = new MainController(db,
 								client);
 					}
