@@ -20,6 +20,12 @@ import javax.swing.WindowConstants;
 import model.Configuration;
 import model.DB;
 
+/**
+ * View-Klasse. Erzeugt die Client-View, die es dem Kunden ermoeglicht, Transaktionen und Analysen auf der Projekt-Datenbank auszufuehren.
+ * Die Klasse haelt Instanzen der Objekte Explorer, DBOutput, Transaktionen und Auswertungen.
+ * @author borecki
+ *
+ */
 public class Client extends JFrame implements Configuration {
 
 	private static final long serialVersionUID = 6212400999089087362L;
@@ -32,6 +38,12 @@ public class Client extends JFrame implements Configuration {
 	private Auswertung auswertung;
 	private MainMenuBar menu;
 
+	/**
+	 * Neuer Client-Frame.
+	 * @param db
+	 * @param width
+	 * @param height
+	 */
 	public Client(DB db, int width, int height) {
 		setTitle(TITLE);
 		setSize(new Dimension(width, height));
@@ -49,6 +61,14 @@ public class Client extends JFrame implements Configuration {
 		setLocationRelativeTo(null);
 	}
 
+	/**
+	 * Intitialsiert alle eingebetteten Kompononten mit Defaultvalues und ordnet die Elemente in 2 SplitPanes an.
+	 * Die vertikale SplitPane trennt den Explorer und den DBOutput von den Transaktionen und Auswertungen ab.
+	 * Die SplitPane selbst ist wiederrum in horizontale SplitPanes unterteilt.
+	 * @param width
+	 * @param height
+	 * @return
+	 */
 	public Component initComponents(int width, int height){
 		try {
 			this.explorer = new Explorer(this.db, TABLE_OWNER);
@@ -83,15 +103,27 @@ public class Client extends JFrame implements Configuration {
 		return mainSplitPane;
 	}
 
+	/**
+	 * Zeigt eine Fehlermeldung an.
+	 * @param e
+	 */
 	public void showException(Exception e) {
 		JOptionPane.showMessageDialog(this.getContentPane(), new String[] {
 				e.getClass().getName() + ": ", e.getMessage() });
 	}
 
+	/**
+	 * Zeigt einen Dialog an.
+	 * @param obj
+	 */
 	public void showDialog(Object obj){
 		JOptionPane.showMessageDialog(this.getContentPane(), obj);
 	}
 
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -105,12 +137,21 @@ public class Client extends JFrame implements Configuration {
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
 		} else
 			return null;
 	}
+
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
 
 	public Explorer getExplorer() {
 		return this.explorer;

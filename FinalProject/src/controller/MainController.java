@@ -833,6 +833,7 @@ public class MainController implements Configuration{
 					if ( !db.checkIfElementExists(TABLE_BESTELLUNG, "bstid", bstID) ) {
 						JOptionPane.showMessageDialog(client, "<html>Es ist keine Bestellung mit der ID " + bstID + " in der Datenbank vorhanden.</html>");
 						this.setInputComponentsOfBestellverwaltungEditEnabled(false);
+						this.clearInputComponentsOfBestellverwaltungEdit();
 						return;
 					}
 
@@ -1636,7 +1637,7 @@ public class MainController implements Configuration{
 				OutputTableModel tableModel = null;
 				String table = selectedNode.getUserObject().toString();
 				try {
-				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 1000 ORDER BY 1 DESC");
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
 				} catch (SQLException e) {
 					client.showException(e);
 				}

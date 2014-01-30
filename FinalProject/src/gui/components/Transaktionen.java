@@ -17,11 +17,18 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import model.Configuration;
 
+/**
+ * Transaktionen-Klasse. Enthaelt alle Transaktionen, die der Client dem Kunden anbietet.
+ * Kundenpflege zum Anlegen und Aendern von Kunden,
+ * Produktverwaltung zum Ein- und Umbuchen von Bestaenden in die Lager und
+ * Bestellverwaltung zum Anlegen, Aendern und Ausliefern von Bestellungen.
+ * @author borecki
+ *
+ */
 public class Transaktionen extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 5054965523548199842L;
@@ -29,6 +36,9 @@ public class Transaktionen extends JPanel implements Configuration {
 	private Bestellpositionen posEdit;
 	protected HashMap<String, Component> componentMap;
 
+	/**
+	 * Neues Transaktionen-Panel.
+	 */
 	public Transaktionen() {
 		super(new GridBagLayout());
 		this.posNeu = new Bestellpositionen("bestellPosListNeu", "listNeu", "addNeu", "delNeu", "inpNeu");
@@ -38,17 +48,31 @@ public class Transaktionen extends JPanel implements Configuration {
 		createComponentMap(this);
 	}
 
+	/**
+	 * Registriert einen ActionListener.
+	 * @param component
+	 * @param ae
+	 */
 	public void addActionListeners(Component component, ActionListener ae){
 		((AbstractButton) component).addActionListener(ae);
 	}
 
+	/**
+	 * Registriert einen ItemListener.
+	 * @param component
+	 * @param ie
+	 */
 	public void addItemListeners(Component component, ItemListener ie){
 		((JComboBox<?>) component).addItemListener(ie);
 	}
 
+	/**
+	 * Erzeugt alle 3 Transaktionen-Panels und ordnet sie in einer TabbedPane an.
+	 * Jede TabbedPane selbst enthaelt ein CardLayout, in dem die einzelnen Transaktionen angelegt und aufrufbar sind.
+	 * @return
+	 */
 	public Component createTransactionsPanel() {
 		JTabbedPane tabbedPane = new JTabbedPane();
-		// TODO: Tooltips, Shortcuts, PreferredSize dynamisch?
 
 		// Tab1 - Kundenpflege
 		JPanel panel_tab_1 = createCardKunden();
@@ -68,6 +92,10 @@ public class Transaktionen extends JPanel implements Configuration {
 		return tabbedPane;
 	}
 
+	/**
+	 * Erzeugt das Card-Panel fuer die Kundenpflege.
+	 * @return
+	 */
 	public JPanel createCardKunden(){
 		JPanel actions = new JPanel();
 		actions.setBorder(BorderFactory.createTitledBorder(KUNDENPFLEGE_CARD_TITLE));
@@ -90,6 +118,10 @@ public class Transaktionen extends JPanel implements Configuration {
 		return panel;
 	}
 
+	/**
+	 * Erzeugt das Card-Panel fuer die Produktverwaltung.
+	 * @return
+	 */
 	public JPanel createCardProdukte(){
 		JPanel actions = new JPanel();
 		actions.setBorder(BorderFactory.createTitledBorder(PRODUKTVERWALTUNG_CARD_TITLE));
@@ -112,6 +144,10 @@ public class Transaktionen extends JPanel implements Configuration {
 		return panel;
 	}
 
+	/**
+	 * Erzeugt das Card-Panel fuer die Bestellverwaltung.
+	 * @return
+	 */
 	public JPanel createCardBestellungen(){
 		JPanel actions = new JPanel();
 		actions.setBorder(BorderFactory.createTitledBorder(BESTELLVERWALTUNG_CARD_TITLE));
@@ -147,14 +183,18 @@ public class Transaktionen extends JPanel implements Configuration {
 		return panel;
 	}
 
-	public Bestellpositionen getPosNeu(){
-		return this.posNeu;
-	}
-
-	public Bestellpositionen getPosEdit(){
-		return this.posEdit;
-	}
-
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param fill
+	 * @param anchor
+	 */
 	public void addComponent(JPanel panel, Component c, Insets insets, int x, int y, int width, int height, int fill, int anchor) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.anchor = anchor;
@@ -169,6 +209,14 @@ public class Transaktionen extends JPanel implements Configuration {
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 */
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -184,6 +232,10 @@ public class Transaktionen extends JPanel implements Configuration {
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -197,6 +249,11 @@ public class Transaktionen extends JPanel implements Configuration {
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
@@ -204,7 +261,19 @@ public class Transaktionen extends JPanel implements Configuration {
 			return null;
 	}
 
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
+
 	public HashMap<String, Component> getComponentMap(){
 	    return this.componentMap;
     }
+
+	public Bestellpositionen getPosNeu(){
+		return this.posNeu;
+	}
+
+	public Bestellpositionen getPosEdit(){
+		return this.posEdit;
+	}
 }

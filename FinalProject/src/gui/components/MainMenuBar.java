@@ -1,11 +1,8 @@
 package gui.components;
 
-import gui.Login;
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
@@ -17,12 +14,20 @@ import javax.swing.JMenuItem;
 
 import model.Configuration;
 
-
+/**
+ * Menue-Leiste, ueber die man sich im Client Ausloggen bzw. die Anwendung beenden kann.
+ * @author dang, borecki
+ *
+ */
 public class MainMenuBar extends JMenuBar implements Configuration{
 
 	private static final long serialVersionUID = -6476913133727030324L;
 	protected HashMap<String, Component> componentMap;
 
+	/**
+	 * Neue Menue-Leiste.
+	 * @param name
+	 */
 	public MainMenuBar(String name) {
 		this.componentMap = new HashMap<String, Component>();
 
@@ -41,18 +46,6 @@ public class MainMenuBar extends JMenuBar implements Configuration{
 		menu_options.add(menuItem_logOut);
 		menu_options.add(menuItem_exit);
 
-		// Add actionListeners to the menu items.
-//		menuItem_logOut.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				// Fuer LoginView
-//				Login loginView = new Login();
-//				loginView.pack();
-//				loginView.setLocationRelativeTo(null);
-//				loginView.setVisible(true);
-//			}
-//		});
-
 		// Create menu 'Hilfe'.
 		JMenu menu_about = new JMenu(MENU_ABOUT);
 		JMenuItem menuItem_hilfe = new JMenuItem(ITEM_INFO);
@@ -60,7 +53,6 @@ public class MainMenuBar extends JMenuBar implements Configuration{
 		menuItem_hilfe.setActionCommand(COMPONENT_ITEM_MENU_INFO);
 		this.componentMap.put(menuItem_hilfe.getName(), menuItem_hilfe);
 		menu_about.add(menuItem_hilfe);
-
 
 		// set name
 		this.setName(name);
@@ -76,10 +68,19 @@ public class MainMenuBar extends JMenuBar implements Configuration{
 		createComponentMap(this);
 	}
 
+	/**
+	 * Registriert einen ActionListener.
+	 * @param component
+	 * @param ae
+	 */
 	public void addActionListeners(Component component, ActionListener ae){
 		((AbstractButton) component).addActionListener(ae);
 	}
 
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -93,12 +94,21 @@ public class MainMenuBar extends JMenuBar implements Configuration{
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
 		} else
 			return null;
 	}
+
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
 
 	public HashMap<String, Component> getComponentMap(){
 	    return this.componentMap;

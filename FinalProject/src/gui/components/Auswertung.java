@@ -14,11 +14,21 @@ import javax.swing.JTabbedPane;
 
 import model.Configuration;
 
+/**
+ * Analyse-Klasse. Enthaelt alle Auswertungen, die der Client dem Kunden zur Ausfuehrung anbietet.
+ * Produktanalyse zum Auswerten von Produktentypen und Groessen und
+ * Lieferkostenanalyse zum Auswerten der Lieferkosten fuer die Bestaende eines gegeben Produkts.
+ * @author borecki
+ *
+ */
 public class Auswertung extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = 2973871514227057444L;
 	protected HashMap<String, Component> componentMap;
 
+	/**
+	 * Neues Auswertungen-Panel.
+	 */
 	public Auswertung() {
 		super(new GridBagLayout());
 		addComponent(this, createAnalysisPanel(), new Insets(0, 5, 0, 5), 0, 0);
@@ -26,14 +36,22 @@ public class Auswertung extends JPanel implements Configuration {
 		createComponentMap(this);
 	}
 
+	/**
+	 * Registriert einen ActionListener.
+	 * @param component
+	 * @param ae
+	 */
 	public void addActionListeners(Component component, ActionListener ae){
 		((AbstractButton) component).addActionListener(ae);
 	}
 
+	/**
+	 * Erzeugt beide Analyse-Panels und ordnet sie in einer TabbedPane an.
+	 * @return
+	 */
 	public Component createAnalysisPanel()
 	{
 		JTabbedPane tabbedPane = new JTabbedPane();
-		// TODO: Tooltips, Shortcuts, PreferredSize dynamisch?
 
 		// Tab1 - Produktanalyse
 		JPanel panel_tab_1 = new GridBagTemplate(7, ANALYSE_TITLE_PRODUKTANALYSE, COMPONENT_PANEL_PRODUKTANALYSE, false);
@@ -48,6 +66,10 @@ public class Auswertung extends JPanel implements Configuration {
 		return tabbedPane;
 	}
 
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component)
 	{
 		this.componentMap.put(component.getName(), component);
@@ -61,6 +83,11 @@ public class Auswertung extends JPanel implements Configuration {
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
@@ -68,6 +95,18 @@ public class Auswertung extends JPanel implements Configuration {
 			return null;
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param weightx
+	 * @param weighty
+	 */
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y, int width, int height, double weightx,
 			double weighty) {
@@ -84,6 +123,14 @@ public class Auswertung extends JPanel implements Configuration {
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 */
 	public void addComponent(JPanel panel, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -98,6 +145,10 @@ public class Auswertung extends JPanel implements Configuration {
 		constraints.insets = insets;
 		panel.add(c, constraints);
 	}
+
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
 
 	public HashMap<String, Component> getComponentMap(){
 	    return this.componentMap;

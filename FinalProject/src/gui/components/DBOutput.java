@@ -25,6 +25,11 @@ import model.Configuration;
 import model.DB;
 import model.OutputTableModel;
 
+/**
+ * Output-Klasse zum Anzeigen von Daten aus der Datenbank.
+ * @author borecki
+ *
+ */
 public class DBOutput extends JPanel implements Configuration {
 
 	private static final long serialVersionUID = -57138235195624646L;
@@ -38,6 +43,12 @@ public class DBOutput extends JPanel implements Configuration {
 	protected HashMap<String, Component> componentMap;
 	private String filterTable;
 
+	/**
+	 * Neues DBOutput-Objekt zum Anzeigen von Daten aus der Datenbank.
+	 * @param db
+	 * @param query
+	 * @throws SQLException
+	 */
 	public DBOutput(DB db, String query) throws SQLException {
 		super(new GridBagLayout());
 		this.db = db;
@@ -49,10 +60,21 @@ public class DBOutput extends JPanel implements Configuration {
 		createComponentMap(this);
 	}
 
+	/**
+	 * Registriert einen ActionListener.
+	 * @param component
+	 * @param ae
+	 */
 	public void addActionListeners(Component component, ActionListener ae){
 		((AbstractButton) component).addActionListener(ae);
 	}
 
+	/**
+	 * Fuellt die Tabelle mit den Daten, die die gegeben Query zurueckliefert.
+	 * @param query
+	 * @return
+	 * @throws SQLException
+	 */
 	public TableModel populateTable(String query) throws SQLException {
 		if (query == null) {
 			query = new String("");
@@ -64,6 +86,10 @@ public class DBOutput extends JPanel implements Configuration {
 		return new OutputTableModel(this.rowset);
 	}
 
+	/**
+	 * Erstellt eine neue Tabelle und initialisiert sie mit dem gegebenen TableModel.
+	 * @param model
+	 */
 	public void addTableModel(TableModel model) {
 		this.table = new JTable(model);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
@@ -75,6 +101,9 @@ public class DBOutput extends JPanel implements Configuration {
 		this.table.getTableHeader().setBackground(Color.YELLOW);
 	}
 
+	/**
+	 * Fuegt das Suchen/Filter-Panel zum Hauptpanel hinzu.
+	 */
 	public void addFilterToPane(){
 		JLabel filter = new JLabel("Filter");
 		JTextField filterText = new JTextField(70);
@@ -92,6 +121,9 @@ public class DBOutput extends JPanel implements Configuration {
 		addComponent(this, filterPanel, new Insets(0, 5, 0, 5), 0, 1, 2, GridBagConstraints.REMAINDER, GridBagConstraints.HORIZONTAL, GridBagConstraints.LAST_LINE_START);
 	}
 
+	/**
+	 * Fuegt die Scrollpane zum Hauptpanel hinzu.
+	 */
 	public void addTableToPane() {
 		this.scrollPane = new JScrollPane(this.table,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -101,11 +133,17 @@ public class DBOutput extends JPanel implements Configuration {
 		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0, 1, GridBagConstraints.RELATIVE, GridBagConstraints.BOTH, GridBagConstraints.FIRST_LINE_START);
 	}
 
+	/**
+	 * Entfernt die Scrollpane vom Hauptpanel.
+	 */
 	public void removeScrollPane() {
 		this.remove(this.scrollPane);
 	}
 
-
+	/**
+	 * Erstellt eine Map mit allen Componenten des Containers.
+	 * @param component
+	 */
 	public void createComponentMap(Component component) {
 		this.componentMap.put(component.getName(), component);
 		if (component instanceof Container) {
@@ -117,6 +155,11 @@ public class DBOutput extends JPanel implements Configuration {
 		}
 	}
 
+	/**
+	 * Gibt die Componente zurueck, die den Namen name hat.
+	 * @param name
+	 * @return
+	 */
 	public Component getComponentByName(String name) {
 		if (this.componentMap.containsKey(name)) {
 			return (Component) this.componentMap.get(name);
@@ -124,10 +167,14 @@ public class DBOutput extends JPanel implements Configuration {
 			return null;
 	}
 
-	public HashMap<String, Component> getComponentMap() {
-		return this.componentMap;
-	}
-
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 */
 	public void addComponent(JPanel panel, Component c, Insets insets, int x,
 			int y) {
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -143,6 +190,18 @@ public class DBOutput extends JPanel implements Configuration {
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param fill
+	 * @param anchor
+	 */
 	public void addComponent(JPanel panel, Component c, Insets insets, int x, int y, int width, int height, int fill, int anchor) {
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.anchor = anchor;
@@ -155,6 +214,14 @@ public class DBOutput extends JPanel implements Configuration {
 		constraints.weighty = 1.0;
 		constraints.insets = insets;
 		panel.add(c, constraints);
+	}
+
+	/* ############################*/
+	/* ##### Getter & Setter  #####*/
+	/* ############################*/
+
+	public HashMap<String, Component> getComponentMap() {
+		return this.componentMap;
 	}
 
 	public CachedRowSet getRowset() {

@@ -273,6 +273,19 @@ public class Login extends JFrame implements Configuration {
 				e.getClass().getName() + ": ", e.getMessage() });
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param gbl
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 * @param weightx
+	 * @param weighty
+	 */
 	public void addComponent(JPanel panel, GridBagLayout gbl, Component c,
 			Insets insets, int x, int y, int width, int height, double weightx,
 			double weighty) {
@@ -288,6 +301,15 @@ public class Login extends JFrame implements Configuration {
 		panel.add(c, constraints);
 	}
 
+	/**
+	 * Fuegt eine Komponente dem GridBagLayout hinzu.
+	 * @param panel
+	 * @param layout
+	 * @param c
+	 * @param insets
+	 * @param x
+	 * @param y
+	 */
 	public void addComponent(JPanel panel, GridBagLayout layout, Component c,
 			Insets insets, int x, int y) {
 		GridBagConstraints constraints = new GridBagConstraints();

@@ -13,14 +13,12 @@ public interface Configuration {
 	static final String DRIVER = "oracle.jdbc.OracleDriver";
 	static final String CONNECTION_THIN = "jdbc:oracle:thin:@flores.dbs.ifi.lmu.de:1521:";
 	static final String CONNECTION_THIN_LOCALHOST = "jdbc:oracle:thin:@localhost:1521:";
-	// static final String CONNECTION_OCI = "jdbc:oracle:oci@flores.dbs.ifi.lmu.de:1521:";
 
 	// Allgemein
 	static final String BORDER_TITLE_INFO = "Info";
 	static final String BORDER_TITLE_WARNING = "Warnung";
 	static final String BORDER_TITLE_SUCCESS = "Erfolg";
 	static final String LABEL_DELIMITER = ": ";
-//	static final String TABLE_OWNER = "BORECKI";
 	static final String TABLE_OWNER = "PROJEKT_2013_G";
 	static final int CLIENT_WIDTH = 1280;
 	static final int CLIENT_HEIGHT = 900;
@@ -152,7 +150,7 @@ public interface Configuration {
 	static final String ANALYSE_TITLE_LIEFERKOSTENSENKUNG = "<html>Senken der Lieferkosten</html>";
 	static final String ANALYSE_LABEL_TYP = "<html>Typ</html>";
 	static final String ANALYSE_LABEL_GROESSE = "<html>Gr&ouml;&szlig;e</html>";
-	static final String ANALYSE_LABEL_PRODUKT = "<html>Produkt-Name</html>";
+	static final String ANALYSE_LABEL_PRODUKT = "<html>Produkt-ID</html>";
 	static final String ANALYSE_BUTTON_AUSFUEHREN = "<html>Ausf&uuml;hren</html>";
 
 	/* ##### Senkung der Lieferkosten  #####*/

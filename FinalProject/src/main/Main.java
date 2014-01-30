@@ -10,7 +10,6 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 import model.Configuration;
 import model.DB;
-import controller.LoginController;
 import controller.MainController;
 
 /**
@@ -43,15 +42,13 @@ public class Main implements Configuration {
 	}
 
 	public static void createAndBuildGUI() throws Exception {
-		DB db = new DB(DRIVER, CONNECTION_THIN + "dbprakt", "projekt_2013_g",
+		DB db = new DB(DRIVER, CONNECTION_THIN_LOCALHOST + "dbprakt", "projekt_2013_g",
 				"dbprakt");
 		Client client = new Client(db,CLIENT_WIDTH, CLIENT_HEIGHT);
 		MainController controller = new MainController(db, client);
 	}
 
 	public static void createAndBuildLoginGui() {
-		@SuppressWarnings("unused")
-		LoginController controller = new LoginController();
 		Login login = new Login();
 		login.setResizable(false);
 		login.pack();
