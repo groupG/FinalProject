@@ -67,6 +67,8 @@ public class DBOutput extends JPanel implements Configuration {
 	public void addTableModel(TableModel model) {
 		this.table = new JTable(model);
 		this.table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		this.table.setRowSelectionAllowed(false);
+		this.table.setColumnSelectionAllowed(true);
 		this.table.setFillsViewportHeight(true);
 		this.table.setAutoCreateRowSorter(true);
 		this.table.getTableHeader().setBackground(Color.YELLOW);
@@ -74,7 +76,7 @@ public class DBOutput extends JPanel implements Configuration {
 
 	public void addFilterToPane(){
 		JLabel filter = new JLabel("Filter");
-		JTextField filterText = new JTextField(50);
+		JTextField filterText = new JTextField(70);
 		filterText.setName("textfield_dboutput_filter");
 		JButton filterButton = new JButton("Suchen");
 		filterButton.setName("button_dboutput_filter");
@@ -87,7 +89,6 @@ public class DBOutput extends JPanel implements Configuration {
 
 		filterPanel.setMinimumSize(new Dimension(500,50));
 		addComponent(this, filterPanel, new Insets(0, 5, 0, 5), 0, 1, 2, GridBagConstraints.REMAINDER, GridBagConstraints.HORIZONTAL, GridBagConstraints.LAST_LINE_START);
-//		addComponent(this, filterPanel, new Insets(0, 5, 0, 5), 0, 0, 1, GridBagConstraints.RELATIVE, GridBagConstraints.HORIZONTAL, GridBagConstraints.FIRST_LINE_START);
 	}
 
 	public void addTableToPane() {
@@ -95,8 +96,7 @@ public class DBOutput extends JPanel implements Configuration {
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		this.scrollPane.setName(COMPONENT_SCROLLPANE_DBOUTPUT);
-//		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0);
-		this.scrollPane.setMinimumSize(new Dimension(500,350));
+		this.scrollPane.setMinimumSize(new Dimension(500,330));
 		addComponent(this, this.scrollPane, new Insets(0, 5, 0, 5), 0, 0, 1, GridBagConstraints.RELATIVE, GridBagConstraints.BOTH, GridBagConstraints.FIRST_LINE_START);
 	}
 

@@ -167,9 +167,9 @@ public class MainController implements Configuration{
 		} else
 			return null;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 *
 	 */
 	class ActionEventListener implements ActionListener {
@@ -1585,7 +1585,7 @@ public class MainController implements Configuration{
 				OutputTableModel tableModel = null;
 				String table = selectedNode.getUserObject().toString();
 				try {
-				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 10000");
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 1000 ORDER BY 1 DESC");
 				} catch (SQLException e) {
 					client.showException(e);
 				}

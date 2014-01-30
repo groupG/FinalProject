@@ -1,7 +1,6 @@
 package gui;
 
 import gui.components.Auswertung;
-import gui.components.Bestellpositionen;
 import gui.components.DBOutput;
 import gui.components.Explorer;
 import gui.components.MainMenuBar;
@@ -34,14 +33,12 @@ public class Client extends JFrame implements Configuration {
 	private MainMenuBar menu;
 
 	public Client(DB db, int width, int height) {
-
 		setTitle(TITLE);
 		setSize(new Dimension(width, height));
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setResizable(true);
+		setResizable(false);
 		this.menu = new MainMenuBar(COMPONENT_MENU);
 		setJMenuBar(this.menu);
-
 		this.db = db;
 		this.getContentPane().add(initComponents(width, height));
 		this.componentMap = new HashMap<String, Component>();
@@ -81,7 +78,7 @@ public class Client extends JFrame implements Configuration {
 		JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topSplitPane, bottomSplitPane);
 		mainSplitPane.setPreferredSize(new Dimension(width, height));
 		mainSplitPane.setOneTouchExpandable(true);
-		mainSplitPane.setDividerLocation((int)Math.round(height * 0.42));
+		mainSplitPane.setDividerLocation((int)Math.round(height * 0.40));
 
 		return mainSplitPane;
 	}
