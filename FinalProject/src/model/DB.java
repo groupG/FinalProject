@@ -501,6 +501,63 @@ public class DB implements Configuration {
 	}
 
 	/**
+	 * Diese Methode liefert eine Menge von Zeilen - in Form eines Vector<Vector<Object>> - als Ergebnis zur&umml;ck.
+	 *
+	 * @param table : Tabelle, in der gesucht wird.
+	 * @param columns : Menge von Spalten, die selektiert werden.
+	 * @param condition : Pr&auml;dikat oder Bedingung in WHERE-Klasuel.
+	 * @return Menge von Zeilen, die Bedingung <i>condition</i> erf&uuml;llen.
+	 * @throws SQLException
+	 */
+	public Vector<Vector<Object>> selectFromTable(String table, String[] columns, String condition)throws SQLException {
+		Vector<Vector<Object>> values = new Vector<Vector<Object>>();
+
+		Statement stmt = null;
+		String sql_query = "SELECT DISTINCT ";
+
+		if ( columns.length > 0 ) {
+			sql_query += columns[0];
+			for ( int i = 1; i < columns.length; i++ ) {
+				sql_query +=  ", " + columns[i];
+			}
+		} else { // columns is empty
+			sql_query += " * ";
+		}
+
+		sql_query += " FROM " + TABLE_OWNER + "." + table + " ";
+		if ( condition.length() > 0 ) { // condition is not empty
+			sql_query += "WHERE " + condition;
+		}
+
+		try {
+			stmt = this.connection.createStatement();
+			ResultSet rs = stmt.executeQuery(sql_query);
+			while ( rs.next() ) {
+				Vector<Object> v = new Vector<Object>();
+				int i = 1;
+				while ( i > 0 ) {
+					try {
+						v.add(rs.getObject(i));
+					} catch ( SQLException e ) {
+						break;
+					}
+					i++;
+				}
+				values.add(v);
+			}
+			rs.close();
+		} catch ( SQLException ex ) {
+			ex.printStackTrace();
+		} finally {
+			if ( stmt != null ) {
+				stmt.close();
+			}
+		}
+
+		return values;
+	}
+
+	/**
 	 * Diese Methode liefert eine Menge von Zeilen als Ergebnis der SELECT-Query mit der Bedingung <i>condition</i>.
 	 *
 	 * @param table : Tabelle, in der gesucht wird.

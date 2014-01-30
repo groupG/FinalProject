@@ -30,6 +30,7 @@ import java.util.Map.Entry;
 import java.util.Vector;
 import java.util.regex.Pattern;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -250,6 +251,23 @@ public class MainController implements Configuration{
 					client.showException(e);
 				}
 				this.clearInputComponentsOfKundeNeuPflege();
+
+    			// JComboBox 'Branche' aktualisieren, d.h. die Liste um neue (eingegebenen) Branchen erweitern.
+    			final DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>();
+    			Vector<Vector<Object>> values = null;
+    			try {
+    				values = db.selectFromTable(TABLE_KUNDE, new String[] {"Branche"}, "");
+    			} catch ( SQLException ex ) {
+    				ex.printStackTrace();
+    			}
+    			for ( int i = 0; i < values.size(); i++ ) {
+    				comboModel.addElement( values.get(i).get(0).toString().trim() );
+    				// Mit der unteren Zeile ist eleganter, die JComboBox-Liste zu erweitern. Aber da muessen wir die Struktur in GridBagTemplate aendern.
+    				// Und das wollten wir nicht. Daher die obere Zeile. Cheers.
+    				// ((JComboBox<String>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).addItem(values.get(i).get(0).toString());
+    			}
+    			((JComboBox<String>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).setModel(comboModel);
+    			client.repaint();
 			}
 
 			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
@@ -1568,9 +1586,26 @@ public class MainController implements Configuration{
 	    		CardLayout cl = (CardLayout) ((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)).getLayout();
 	    		cl.show(((Container) client.getTransaktionen().getComponentByName(COMPONENT_PANEL_KUNDENPFLEGE)), (String) ie.getItem());
 
+	    		// NEUEN KUNDEN ANLEGEN
 	    		if ((int) ((JComboBox<?>) ie.getSource()).getSelectedIndex() == 1)
 	    		{
+	    			// Neue KundenID vorschlagen.
 	    			((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_KID)).setText(""+db.getKundenID());
+	    			// JComboBox 'Branche' aktualisieren, d.h. die Liste um neue (eingegebenen) Branchen erweitern.
+	    			final DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>();
+	    			Vector<Vector<Object>> values = null;
+	    			try {
+	    				values = db.selectFromTable(TABLE_KUNDE, new String[] {"Branche"}, "");
+	    			} catch ( SQLException ex ) {
+	    				ex.printStackTrace();
+	    			}
+	    			for ( int i = 0; i < values.size(); i++ ) {
+	    				comboModel.addElement(values.get(i).get(0).toString().trim());
+	    				// Mit der unteren Zeile ist eleganter, die JComboBox-Liste zu erweitern. Aber da muessen wir die Struktur in GridBagTemplate aendern.
+	    				// Und das wollten wir nicht. Daher die obere Zeile. Cheers.
+	    				// ((JComboBox<String>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).addItem(values.get(i).get(0).toString());
+	    			}
+	    			((JComboBox<String>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).setModel(comboModel);
 	    			client.repaint();
 	    		}
 	    	}
