@@ -1016,7 +1016,7 @@ public class DB implements Configuration {
 			String aenderungsdatum = dateFormat(date, "dd.mm.yy");
 
 			sql_query = "INSERT INTO " + TABLE_OWNER + ".BESTELLUNG " +
-						"VALUES (" + bstid + ", '" + ((bestelltext.length() <= 0) ? "NULL" : bestelltext) + "', '" + anleger + "', "
+						"VALUES (" + bstid + ", '" + ((bestelltext.length() <= 0) ? "" : bestelltext) + "', '" + anleger + "', "
 								   + "to_date('" + anlagedatum + "', 'dd.mm.yy'), "
 								   + "to_date('" + aenderungsdatum + "', 'dd.mm.yy'), '"
 								   + status + "', to_date('" + bestelltermin + "', 'dd.mm.yy'), NULL, " + kid + ")";
@@ -1233,28 +1233,36 @@ public class DB implements Configuration {
 			if ( status.trim().equals("OFFEN") || status.trim().equals("ERLEDIGT") ) {
 				return false;
 			}
+			System.out.println("success after status: " + success);
 
 			// wenn der Bestelltermin (bzw. Liefertermin) schon vorbei ist, und der Kunde hat seine bestellte Ware
 			// noch nicht ausgeliefert bekommt. Tja not good babe :P
 			Date now = new Date(System.currentTimeMillis());
+			String date_now = dateFormat(now, "dd.mm.yy");
 			if ( bestelltermin.before(now) ) {
 				return false;
 			}
 
+			System.out.println("success after time: " + success);
+
+
 			// Setze den Status auf ERLEDIGT.
 			sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLUNG " +
-						"SET status = 'ERLEDIGT', erledigt_termin = to_date('" + dateFormat(now, "dd.MM.yy") + "', 'DD.MM.YY') " +
+						"SET status = 'ERLEDIGT', erledigt_termin = to_date('" + dateFormat(date_now, "dd.mm.yy") + "', 'dd.mm.yy') " +
 						"WHERE bstid = " + bstid;
 			stmt.executeUpdate(sql_query);
+			System.out.println(sql_query);
 
 			sql_query = "SELECT posnr, pid, anzahl FROM " + TABLE_OWNER + ".BESTELLPOSITION " +
 						"WHERE bstid = " + bstid;
+			System.out.println(sql_query);
 			rs = stmt.executeQuery(sql_query);
 			while ( rs.next() ) {
 				int pid = rs.getInt("PID"); // Produkt-ID.
 				int menge = rs.getInt("ANZAHL"); // Zu lieferende Menge.
 				sql_query = "SELECT lagid, pid, anzahl FROM " + TABLE_OWNER + ".LAGERT " +
 							"WHERE pid = " + pid;
+				System.out.println(sql_query);
 				ResultSet _rs_ = stmt.executeQuery(sql_query);
 				inner_while: while ( _rs_.next() ) {
 					int lagid = _rs_.getInt("LAGID");
@@ -1265,6 +1273,7 @@ public class DB implements Configuration {
 						sql_query = "UPDATE " + TABLE_OWNER + ".LAGERT " +
 									"SET anzahl = " + aktuellerBestand + " " +
 									"WHERE lagid = " + lagid + " AND pid = " + pid;
+						System.out.println(sql_query);
 						menge = 0;
 						stmt.executeUpdate(sql_query);
 						break inner_while;
@@ -1281,6 +1290,7 @@ public class DB implements Configuration {
 				if ( menge > 0 ) {
 					return false; // Die bestellten Produkte koennen nicht genuegend beliefert werden.
 				}
+				System.out.println("success after menge: " + success);
 			}
 			rs.close();
 			this.connection.commit();

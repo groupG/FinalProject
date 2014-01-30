@@ -185,6 +185,7 @@ public class MainController implements Configuration{
 	 */
 	class ActionEventListener implements ActionListener {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void actionPerformed(ActionEvent ae) {
 
@@ -267,7 +268,23 @@ public class MainController implements Configuration{
     				// ((JComboBox<String>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).addItem(values.get(i).get(0).toString());
     			}
     			((JComboBox<String>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).setModel(comboModel);
-    			client.repaint();
+
+
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				OutputTableModel tableModel = null;
+				String table = TABLE_KUNDE;
+				try {
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().setFilterTable(table);
+				client.getDBOutput().removeScrollPane();
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
 			}
 
 			//----------------- KUNDENPFLEGE - KUDNEN AENDERN - SUCHEN BUTTON
@@ -371,6 +388,22 @@ public class MainController implements Configuration{
 					this.setInputComponentsOfKudenpflegeEditEditable(false);
 					this.setInputComponentsOfKudenpflegeEditEnabled(false);
 				}
+
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				OutputTableModel tableModel = null;
+				String table = TABLE_KUNDE;
+				try {
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().setFilterTable(table);
+				client.getDBOutput().removeScrollPane();
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
 			}
 
 
@@ -415,6 +448,22 @@ public class MainController implements Configuration{
 					msg = "<html>Die Zuliefeung mit der ID " + zlid + " wurde erfolgreich eingebucht.</html>";
 				}
 				JOptionPane.showMessageDialog(client, msg);
+
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				OutputTableModel tableModel = null;
+				String table = TABLE_ZULIEFERUNG;
+				try {
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().setFilterTable(table);
+				client.getDBOutput().removeScrollPane();
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
 			}
 
 			//----------------- PRODUKTVERWALTUNG - BESTAND UMBUCHEN
@@ -481,6 +530,22 @@ public class MainController implements Configuration{
 					msg = "<html>Die Best&auml;nde wurden erfolgreich vom Lager " + srcLager + " auf Ziellager " + destLager + " umgebucht.</html>";
 				}
 				JOptionPane.showMessageDialog(client, msg);
+
+				client.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				OutputTableModel tableModel = null;
+				String table = TABLE_LAGERT;
+				try {
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE pid = " + pid + " AND ROWNUM <= 100 ORDER BY 1 DESC");
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().setFilterTable(table);
+				client.getDBOutput().removeScrollPane();
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().addTableToPane();
+				client.revalidate();
+				client.repaint();
+				client.setCursor(Cursor.getDefaultCursor());
 			}
 
 			/* ###############################*/
@@ -659,6 +724,19 @@ public class MainController implements Configuration{
 					((JLabel) client.getComponentByName(COMPONENT_LABEL_BESTELLVERWALTUNG_NEU_STATUS)).setText(""+v.get(5));
 				}
 				((JButton) client.getComponentByName(COMPONENT_BUTTON_BESTELLVERWALTUNG_NEU_BESTAETIGEN)).setEnabled(true);
+
+
+				OutputTableModel tableModel = null;
+				String table = TABLE_BESTELLUNG;
+				try {
+				    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+				} catch (SQLException e) {
+					client.showException(e);
+				}
+				client.getDBOutput().setFilterTable(table);
+				client.getDBOutput().removeScrollPane();
+				client.getDBOutput().addTableModel(tableModel);
+				client.getDBOutput().addTableToPane();
 				client.revalidate();
 				client.repaint();
 				client.setCursor(Cursor.getDefaultCursor());
@@ -764,6 +842,20 @@ public class MainController implements Configuration{
 				if (status){
 					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde bestaetigt. </html>");
 					clearInputComponentsOfBestellverwaltungNeu();
+
+					OutputTableModel tableModel = null;
+					String table = TABLE_BESTELLUNG;
+					try {
+					    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					client.getDBOutput().setFilterTable(table);
+					client.getDBOutput().removeScrollPane();
+					client.getDBOutput().addTableModel(tableModel);
+					client.getDBOutput().addTableToPane();
+					client.revalidate();
+					client.repaint();
 				} else {
 					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? <b>Vorsicht:</b> Falls nicht wird Ihre Bestellung verworfen.</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 					client.repaint();
@@ -1019,6 +1111,21 @@ public class MainController implements Configuration{
 				try {
 					db.bestellungAendern(bstid, bsttext, anleger, db.dateFormat(bsttermin), bstKid, bstpos);
 					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde ge&auml;ndert. </html>");
+
+
+					OutputTableModel tableModel = null;
+					String table = TABLE_BESTELLUNG;
+					try {
+					    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					client.getDBOutput().setFilterTable(table);
+					client.getDBOutput().removeScrollPane();
+					client.getDBOutput().addTableModel(tableModel);
+					client.getDBOutput().addTableToPane();
+					client.revalidate();
+					client.repaint();
 				} catch (SQLException e) {
 					client.showException(e);
 					return;
@@ -1128,6 +1235,21 @@ public class MainController implements Configuration{
 				if (status){
 					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde bestaetigt. </html>");
 					this.clearInputComponentsOfBestellverwaltungEdit();
+
+					OutputTableModel tableModel = null;
+					String table = TABLE_BESTELLUNG;
+					try {
+					    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+					} catch (SQLException e) {
+						client.showException(e);
+					}
+					client.getDBOutput().setFilterTable(table);
+					client.getDBOutput().removeScrollPane();
+					client.getDBOutput().addTableModel(tableModel);
+					client.getDBOutput().addTableToPane();
+					client.revalidate();
+					client.repaint();
+
 				} else {
 					int inputPrompt = JOptionPane.showConfirmDialog(client, "<html>Wir k&ouml;nnen den von Ihnen gew&uuml;nschten Lieferungstermin leider nicht best&auml;tigen. <br><br> Wollen Sie Ihren Liefertermin nach hinten verschieben? <b>Vorsicht:</b> Falls nicht wird Ihre Bestellung verworfen!</html>", "Bestellbestätigung", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
 					client.repaint();
@@ -1164,11 +1286,28 @@ public class MainController implements Configuration{
 					}
 
 					boolean success = db.bestellungAusliefern(bstid);
+					System.out.println("success: " + success);
+
 					String msg = "";
 					if ( !success ) {
 						msg = "<html>Die Bestellung mit der ID " + bstid + " kann nicht beliefert werden.</html>";
 					} else {
 						msg = "<html>Die Bestellung mit der ID " + bstid + " wurde erfolgreich beliefert.</html>";
+
+						OutputTableModel tableModel = null;
+						String table = TABLE_BESTELLUNG;
+						try {
+						    tableModel = (OutputTableModel) client.getDBOutput().populateTable("SELECT * FROM " +TABLE_OWNER+ "." + table + " WHERE ROWNUM <= 100 ORDER BY 1 DESC");
+						} catch (SQLException e) {
+							client.showException(e);
+						}
+						client.getDBOutput().setFilterTable(table);
+						client.getDBOutput().removeScrollPane();
+						client.getDBOutput().addTableModel(tableModel);
+						client.getDBOutput().addTableToPane();
+						client.revalidate();
+						client.repaint();
+
 					}
 					JOptionPane.showMessageDialog(client, msg);
 				} catch (SQLException e) {

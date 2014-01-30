@@ -57,7 +57,8 @@ public interface Configuration {
 			+ "<br><br>"
 			+ "<p>Wenn Sie einen Kunden editieren wollen, dann geben Sie zuerst die gew&uuml;nschte Kunden-ID in das vorgesehene Feld ein und dr&uuml;cken Sie den 'Suchen & &auml;ndern'-Button." +
 			" Wenn es sich um eine g&uuml;tige Kunden-ID handelt, dann werden die entsprechenden Daten aus der Datenbank direkt in die vorgesehenen Felder eingelesen und sie k&ouml;nnen diese bearbeiten." +
-			" Ein Klick auf den 'Ausf&uuml;hren'-Button sperrt die entsprechende Zeile in der Datenbank und der 'Fertig'-Button f&uuml;hrt die &Auml;nderungen aus.</p>"
+			" Beim Editieren k&ouml;nnen Sie auch den Kontostand des Kunden anpassen. Achten Sie hierbei bitte darauf, dass Sie Nachkommastellen mit einem Komma <i>','</i> einleiten. " +
+			"Ein Klick auf den 'Ausf&uuml;hren'-Button sperrt die entsprechende Zeile in der Datenbank und der 'Fertig'-Button f&uuml;hrt die &Auml;nderungen aus.</p>"
 			+ "</div></html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_NEU = "<html>Neuen Kunden anlegen</html>";
 	static final String KUNDENPFLEGE_TITLE_KUNDE_EDIT = "<html>Vorhandenen Kunden editieren</html>";
@@ -309,6 +310,8 @@ public interface Configuration {
 	static final String TABLE_BESTELLPOSITION = "BESTELLPOSITION";
 	static final String TABLE_PRODUKT = "PRODUKT";
 	static final String TABLE_LAGER = "LAGER";
+	static final String TABLE_LAGERT = "LAGERT";
+	static final String TABLE_ZULIEFERUNG = "ZULIEFERUNG";
 	static final String SEQUENCE_KUNDE_KID = "SEQ_KUNDE_KID";
 	static final String SEQUENCE_BESTELLUNG_BSTID = "SEQ_BESTELLUNG_BSTID";
 
