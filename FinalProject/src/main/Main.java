@@ -32,21 +32,12 @@ public class Main implements Configuration {
 							break;
 						}
 					}
-					createAndBuildGUI();
-//					createAndBuildLoginGui();
+					createAndBuildLoginGui();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
-	}
-
-	public static void createAndBuildGUI() throws Exception {
-		DB db = new DB(DRIVER, CONNECTION_THIN_LOCALHOST + "dbprakt", "projekt_2013_g",
-				"dbprakt");
-		Client client = new Client(db,CLIENT_WIDTH, CLIENT_HEIGHT);
-		MainController controller = new MainController(db, client);
-		controller.initListeners();
 	}
 
 	public static void createAndBuildLoginGui() {

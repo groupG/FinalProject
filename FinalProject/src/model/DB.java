@@ -1216,7 +1216,7 @@ public class DB implements Configuration {
 					sql_query = "UPDATE " + TABLE_OWNER + ".BESTELLPOSITION " +
 								"SET anzahl = " + anzahl + ", " +
 									"preis = "	+ preis + ", " +
-									"positionstext = " + positionstext +  ", " +
+									"positionstext = '" + positionstext +  "', " +
 									"pid = " + pid + " " +
 								"WHERE posnr = " + i + " AND bstid = " + bstid;
 					stmt.executeUpdate(sql_query);

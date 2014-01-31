@@ -222,12 +222,28 @@ public class MainController implements Configuration{
 					if(!isValidName(kName, msg_invalid_customerName)){
 						return;
 					}
+					if(!checkStringLength(kName,25)){
+						return;
+					}
 				}
 				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_ADRESSE)).getText();
+				if (kAdresse.length() > 0){
+					if(!checkStringLength(kAdresse,40)){
+						return;
+					}
+				}
 				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_NEU_TEL)).getText();
+				if (kTelNr.length() > 0){
+					if(!checkStringLength(kTelNr,15)){
+						return;
+					}
+				}
 				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_NEU_BRANCHE)).getSelectedItem().toString();
 				if (kBranche.length() > 0) {
-					if(!isValidInput(kBranche)){
+					if(!isValidBranche(kBranche)){
+						return;
+					}
+					if(!checkStringLength(kBranche,30)){
 						return;
 					}
 				}
@@ -324,7 +340,13 @@ public class MainController implements Configuration{
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).setText((String) values.get(2));
 					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).setText((String) values.get(3));
 					((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).setText("" +  (BigDecimal) values.get(4));
-					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedItem((String) values.get(5));
+					System.out.println(((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getItemCount());
+					for (int i = 0; i < ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getItemCount(); i++){
+						if (((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getItemAt(i).equals(((String) values.get(5)).trim())){
+							((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).setSelectedIndex(i);
+						}
+					}
+
 					((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_NATION)).setSelectedItem(mapToName(((BigDecimal) values.get(6)).intValue()));
 
 					this.setInputComponentsOfKudenpflegeEditEditable(true);
@@ -367,18 +389,29 @@ public class MainController implements Configuration{
 					if(!isValidName(kName, msg_invalid_customerName)){
 						return;
 					}
+					if(!checkStringLength(kName, 25)){
+						return;
+					}
 				}
 				String kAdresse = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_ADRESSE)).getText();
-//				if (kAdresse.length() > 0) {
-//					if(!isValidInput(kAdresse)){
-//						return;
-//					}
-//				}
+				if (kAdresse.length() > 0) {
+					if(!checkStringLength(kAdresse, 40)){
+						return;
+					}
+				}
 				String kTelNr = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_TEL)).getText();
+				if (kTelNr.length() > 0) {
+					if(!checkStringLength(kTelNr, 15)){
+						return;
+					}
+				}
 				double kKonto = ((Number) ((JFormattedTextField) client.getComponentByName(COMPONENT_TEXTFIELD_KUNDENPFLEGE_EDIT_KONTO)).getValue()).doubleValue();
 				String kBranche = ((JComboBox<?>) client.getComponentByName(COMPONENT_COMBO_KUNDENPFLEGE_EDIT_BRANCHE)).getSelectedItem().toString();
 				if (kBranche.length() > 0) {
-					if(!isValidInput(kBranche)){
+					if(!isValidBranche(kBranche)){
+						return;
+					}
+					if(!checkStringLength(kBranche, 30)){
 						return;
 					}
 				}
@@ -632,6 +665,9 @@ public class MainController implements Configuration{
 				String anleger = ((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_NEU_ANLEGER)).getText();
 				if (anleger.length() > 0) {
 					if(!isValidInput(anleger)){
+						return;
+					}
+					if(!checkStringLength(anleger, 12)){
 						return;
 					}
 				}
@@ -1256,6 +1292,8 @@ public class MainController implements Configuration{
 				if (status){
 					JOptionPane.showMessageDialog(client, "<html>Die Bestellung mit der ID " + bstid + " wurde bestaetigt. </html>");
 					this.clearInputComponentsOfBestellverwaltungEdit();
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setEditable(true);
+					((JTextField) client.getComponentByName(COMPONENT_TEXTFIELD_BESTELLVERWALTUNG_EDIT_ANLEGER)).setEnabled(true);
 
 					OutputTableModel tableModel = null;
 					String table = TABLE_BESTELLUNG;
@@ -1307,7 +1345,6 @@ public class MainController implements Configuration{
 					}
 
 					boolean success = db.bestellungAusliefern(bstid);
-					System.out.println("success: " + success);
 					String msg = "";
 					if ( !success ) {
 						msg = "<html>Die Bestellung mit der ID " + bstid + " kann nicht beliefert werden.</html>";
@@ -1729,6 +1766,21 @@ public class MainController implements Configuration{
 			return result;
 		}
 
+		private boolean isValidBranche(String input){
+			boolean result = Pattern.matches("[A-Z]*",input);
+			if ( !result ){
+				JOptionPane.showMessageDialog(client, "<html>Bitte verwenden Sie nur Gro&szlig;buchstaben f&uuml;r die Eingabe der Branche.</html>");
+			}
+			return result;
+		}
+
+		private boolean checkStringLength(String input, int length){
+			boolean result = (input.length() > length);
+			if ( result ){
+				JOptionPane.showMessageDialog(client, "<html>Der Input '" + input + "' &uuml;berschreitet die maxile L&auml;nge von " + length + " Zeichen.</html>");
+			}
+			return !result;
+		}
 	}
 
 	/**
@@ -1785,7 +1837,8 @@ public class MainController implements Configuration{
 	     *
 	     * @param type : 0 f&uuml;r den JComboBox im Reiter "Neuen Kunden anlegen", 1 f&uuml;r den JComboBox im Reiter "Kunden &auml;ndern".
 	     */
-	    public void refreshComboBoxBranche(int type) {
+	    @SuppressWarnings("unchecked")
+		public void refreshComboBoxBranche(int type) {
 			// JComboBox 'Branche' aktualisieren, d.h. die Liste um neue (eingegebenen) Branchen erweitern.
 			final DefaultComboBoxModel<String> comboModel = new DefaultComboBoxModel<String>();
 			Vector<Vector<Object>> values = null;
