@@ -1,16 +1,12 @@
 package main;
 
-import gui.Client;
 import gui.Login;
 
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import model.Configuration;
-import model.DB;
-import controller.MainController;
 
 /**
  * Klasse zum Starten des Clients. Initialisert einen LoginDialog, ueber welchen
